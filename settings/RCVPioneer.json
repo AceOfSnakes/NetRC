@@ -1,0 +1,9 @@
+{  
+   "pingCommands":[  
+      "?RGD"
+   ],
+   "pingResponseErr":"E0",
+   "pingResponseOk":"RGD",
+   "crlf": true,
+   "family": "Pioneer Receiver till 2016"
+}

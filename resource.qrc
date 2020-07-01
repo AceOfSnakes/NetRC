@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/Built_with_Qt_RGB_logo.png</file>
+        <file>images/gallery-1.png</file>
+        <file>images/icon_power.ico</file>
+        <file>images/icon-power.png</file>
+        <file>images/sierd.png</file>
+        <file>images/Info.png</file>
+        <file>images/18px-Unicode_POWER_SYMBOL.png</file>
+    </qresource>
+</RCC>
