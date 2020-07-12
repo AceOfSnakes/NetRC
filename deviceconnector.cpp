@@ -62,7 +62,7 @@ void DeviceConnector::on_pushButtonAuto_clicked() {
                                                 settings.toMap().value("pingResponseOk").toString(),
                                                 settings.toMap().value("pingResponseErr").toString());
         autoSearchDialog->setWindowTitle(qApp->applicationName()
-                                         .append(". Auto Search Device \"")
+                                         .append(". Auto Search \"")
                                          .append(settings.toMap().value("family").toString()
                                                  .append("\"")));
         autoSearchDialog->exec();

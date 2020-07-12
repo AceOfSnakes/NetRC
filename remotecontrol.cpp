@@ -44,9 +44,9 @@ RemoteControl::RemoteControl(QWidget *parent) :
     ui->setupUi(this);
     ui->mainWidget->setVisible(true);
     addPanel(QString("Custom Panel 1"));
-    //addPanel(QString("Custom Panel 2"));
-   // addPanel(QString("Custom Panel 3"));
-   // addPanel(QString("Custom Panel 4"));
+    addPanel(QString("Custom Panel 2"));
+    addPanel(QString("Custom Panel 3"));
+    addPanel(QString("Custom Panel 4"));
     loadSettings();
     m_tray_icon = new QSystemTrayIcon(QIcon(QString(":/images/").append("icon-power").append(".png")), this);
 
