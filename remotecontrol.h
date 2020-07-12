@@ -3,7 +3,10 @@
 
 #include <QMainWindow>
 #include <QRegularExpression>
+#include <QSignalMapper>
 #include <QSystemTrayIcon>
+#include "deviceinterface.h"
+
 namespace Ui {
 class RemoteControl;
 }
@@ -13,6 +16,16 @@ class RemoteControl : public QMainWindow
     Q_OBJECT
     QVariant settings;
     QRegularExpression regx;//(".*");
+    // MIGRATION
+    DeviceInterface deviceInterface;
+    void ConnectPlayer();
+    bool            offlineStatus;
+    bool            deviceOnline;
+    QSignalMapper*  signalMapper;
+    int             deviceIpPort;
+    QString         deviceIpAddress;
+
+    // MIGRATION END
 public:
     explicit RemoteControl(QWidget *parent = 0);
     ~RemoteControl();
@@ -36,7 +49,19 @@ private slots:
     void on_btn_Connect_clicked();
 
     void on_btn_Connect_customContextMenuRequested(const QPoint &pos);
-
+    // MIGRATION
+    void PlayerOffline(bool);
+    void UpdateDisplayInfo (QRegExp &rx);
+    void EnableControls(bool enable);
+    void CheckOnline();
+    void CheckOnlineInternal();
+    void CommConnected();
+    void ChangeSettings();
+    void CommDisconnected();
+    void CommError(QString socketError);
+    bool SendCmd(const QString& cmd);
+    void onConnect();
+    // MIGRATION END
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;

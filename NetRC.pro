@@ -24,20 +24,18 @@ SOURCES += main.cpp\
         aboutdialog.cpp \
         autosearchdialog.cpp \
         deviceconnector.cpp \
+        deviceinterface.cpp \
         discoverydevice.cpp \
-        playerinterface.cpp \
         rcsettings.cpp \
-        receivedobjectbase.cpp \
         remotecontrol.cpp
 
 HEADERS  += remotecontrol.h \
     aboutdialog.h \
     autosearchdialog.h \
     deviceconnector.h \
+    deviceinterface.h \
     discoverydevice.h \
-    playerinterface.h \
-    rcsettings.h \
-    receivedobjectbase.h
+    rcsettings.h
 
 FORMS    += remotecontrol.ui \
     aboutdialog.ui \

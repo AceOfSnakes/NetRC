@@ -8,7 +8,6 @@
 #include <QLibrary>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QSslSocket>
-//#include "logger.h"
 #include <QUdpSocket>
 #include <QSettings>
 
@@ -59,15 +58,14 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-    QString m_pingCommand;
-    QString m_pingResponseStart;
-    QString m_pingResponseStartOff;
+    QString pingCommand;
+    QString pingResponseStart;
+    QString pingResponseStartOff;
 
-    QMap<QString,RemoteDevice*>  m_RemoteDevices;
-    QVector<QUdpSocket*>    m_MulticatsSockets;
-    QHostAddress            m_GroupAddress;
-    bool                    m_FindReceivers;
-    QString removeDevice(QMap<QString,RemoteDevice*>  &m_RemoteDevices,RemoteDevice* device);
+    QMap<QString,RemoteDevice*>  remoteDevices;
+    QVector<QUdpSocket*>    multicatsSockets;
+    QHostAddress            groupAddress;
+    QString removeDevice(QMap<QString,RemoteDevice*>  &remoteDevices,RemoteDevice* device);
     void SendMsg();
     void reconnect(QString & key,QString & ip,int port,RemoteDevice* device);
 private slots:

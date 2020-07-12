@@ -1,7 +1,6 @@
 #include "autosearchdialog.h"
 #include <string>
 #include "ui_autosearchdialog.h"
-//#include "logger.h"
 #include <QHostAddress>
 #include <QThread>
 #include <QClipboard>
@@ -54,10 +53,10 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand, QString
     QDialog(parent),
     result(0),
     selectedPort(0),
-    m_pingCommand(pingCommand),
-    m_pingResponseStart(pingResponseStart),
-    m_pingResponseStartOff(pingResponseStartOff),
-    m_GroupAddress("239.255.255.250"),
+    pingCommand(pingCommand),
+    pingResponseStart(pingResponseStart),
+    pingResponseStartOff(pingResponseStartOff),
+    groupAddress("239.255.255.250"),
     ui(new Ui::AutoSearchDialog)
 {
     setWindowFlags(windowFlags() & (~Qt::WindowContextHelpButtonHint));
@@ -74,7 +73,7 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand, QString
                 delete socket;
                 continue;
             }
-            if (!socket->joinMulticastGroup(m_GroupAddress)) {
+            if (!socket->joinMulticastGroup(groupAddress)) {
                 qDebug("2: Error %s", socket->errorString().toStdString().c_str());
                 delete socket;
                 continue;
@@ -84,17 +83,17 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand, QString
 
             connect(socket, SIGNAL(readyRead()),
                     this, SLOT(ProcessPendingDatagrams()));
-            m_MulticatsSockets.push_back(socket);
+            multicatsSockets.push_back(socket);
         }
     }
     SendMsg();
 }
 
 AutoSearchDialog::~AutoSearchDialog() {
-    foreach (RemoteDevice* tmp, m_RemoteDevices) {
+    foreach (RemoteDevice* tmp, remoteDevices) {
         delete tmp;
     }
-    m_RemoteDevices.clear();
+    remoteDevices.clear();
     foreach (RemoteDevice* tmp, deviceInList) {
         delete tmp;
     }
@@ -174,7 +173,7 @@ void AutoSearchDialog::NewDevice(QString , QString ip, QString location) {
         delete reply;
     }
     else {
-        delete reply;\
+        delete reply;
         eventLoop.quit();
         return;
     }
@@ -186,14 +185,14 @@ void AutoSearchDialog::NewDevice(QString , QString ip, QString location) {
     connect((device), SIGNAL(DataAvailable()), this, SLOT(ReadString()));
     connect((device), SIGNAL(TcpError(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
     device->Connect(ip, url.port());
-    m_RemoteDevices.insert(deviceKey,device);
+    remoteDevices.insert(deviceKey,device);
 }
 
 void AutoSearchDialog::TcpConnected()
 {
     QObject* sender = QObject::sender();
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
-    device->socket->write(QString().append(m_pingCommand).append("\r\n").toLatin1().data());
+    device->socket->write(QString().append(pingCommand).append("\r\n").toLatin1().data());
 }
 
 void AutoSearchDialog::TcpDisconnected()
@@ -221,10 +220,10 @@ void AutoSearchDialog::reconnect(QString & key,QString & ip,int port,RemoteDevic
         connect((device), SIGNAL(TcpError(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
         if(port == 23) {
             device->Connect(ip, 8102);
-            m_RemoteDevices.insert(key.append("/8102"), device);
+            remoteDevices.insert(key.append("/8102"), device);
         } else {
             device->Connect(ip, 23);
-            m_RemoteDevices.insert(key.append("/23"), device);
+            remoteDevices.insert(key.append("/23"), device);
         }
     }
 }
@@ -242,8 +241,8 @@ void AutoSearchDialog::ReadString() {
     m_ReceivedString = trim(m_ReceivedString, "\n");
     QString str;
     str = str.fromUtf8(m_ReceivedString.c_str());
-    if (str.contains(m_pingResponseStart)||
-            (!m_pingResponseStartOff.isEmpty() && str.contains(m_pingResponseStartOff))) {
+    if (str.contains(pingResponseStart)||
+            (!pingResponseStartOff.isEmpty() && str.contains(pingResponseStartOff))) {
         foreach(RemoteDevice *dev ,deviceInList) {
             if(QString::compare(device->ip,dev->ip)==0 && device->port == dev->port) {
                 qDebug()<<"already in list"<<device->ip<<device->port;
@@ -258,7 +257,7 @@ void AutoSearchDialog::ReadString() {
         RemoteDevice* rd = new RemoteDevice();
         rd->ip = device->ip;
         rd->port = device->port;
-        QString key = removeDevice(m_RemoteDevices, device);
+        QString key = removeDevice(remoteDevices, device);
         deviceInList.append(rd);
         ui->listWidget->addItem(QString("%1 (%2:%3)").arg(key).arg(device->ip).arg(device->port));
         if (ui->listWidget->count() == 1) {
@@ -279,7 +278,7 @@ void AutoSearchDialog::ReadString() {
 
     int port = device->port;
     QString ip = device->ip;
-    QString key = removeDevice(m_RemoteDevices,device);
+    QString key = removeDevice(remoteDevices,device);
     reconnect(key,ip,port,device);
 }
 
@@ -302,7 +301,7 @@ void AutoSearchDialog::TcpError(QAbstractSocket::SocketError socketError) {
     }
     int port = device->port;
     QString ip = device->ip;
-    QString key = removeDevice(m_RemoteDevices,device);
+    QString key = removeDevice(remoteDevices,device);
     device->deleteLater();
     reconnect(key,ip,port,device);
 }
@@ -344,17 +343,17 @@ void AutoSearchDialog::on_listWidget_doubleClicked(const QModelIndex &index) {
 }
 
 void AutoSearchDialog::closeEvent(QCloseEvent *event) {
-    foreach(QUdpSocket* socket, m_MulticatsSockets) {
-        socket->leaveMulticastGroup(m_GroupAddress);
+    foreach(QUdpSocket* socket, multicatsSockets) {
+        socket->leaveMulticastGroup(groupAddress);
         socket->close();
         delete socket;
     }
-    m_MulticatsSockets.clear();
+    multicatsSockets.clear();
     QWidget::closeEvent(event);
 }
 
 void AutoSearchDialog::ProcessPendingDatagrams() {
-    foreach( QUdpSocket* socket, m_MulticatsSockets) {
+    foreach( QUdpSocket* socket, multicatsSockets) {
         while (socket->hasPendingDatagrams()) {
             QByteArray datagram;
             QHostAddress remoteAddr;
@@ -364,10 +363,8 @@ void AutoSearchDialog::ProcessPendingDatagrams() {
             if (data.contains("200 OK", Qt::CaseInsensitive) && data.contains("rootdevice", Qt::CaseInsensitive)) {
                 QStringList ll = data.split(QRegExp("[\n\r]"), Qt::SkipEmptyParts);
                 QString location;
-                foreach (QString s, ll)
-                {
-                    if (s.startsWith("LOCATION: ", Qt::CaseInsensitive))
-                    {
+                foreach (QString s, ll) {
+                    if (s.startsWith("LOCATION: ", Qt::CaseInsensitive)) {
                         location = s.mid(10);
                         break;
                     }
@@ -388,8 +385,8 @@ void AutoSearchDialog::SendMsg() {
             .append(qAppName())
             .append("\r\n\r\n\r\n");
 
-    foreach(QUdpSocket* socket, m_MulticatsSockets) {
-        socket->writeDatagram(datagram.toUtf8(), m_GroupAddress, 1900);
+    foreach(QUdpSocket* socket, multicatsSockets) {
+        socket->writeDatagram(datagram.toUtf8(), groupAddress, 1900);
     }
 }
 

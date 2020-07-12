@@ -27,7 +27,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
             QStringList l = address.toString().split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
             if (l.size() == 4) {
-                SetIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(666));
+                SetIpAddress(l[0], l[1], l[2], l[3], "?");
                 break;
             }
         }
@@ -53,13 +53,16 @@ void DeviceConnector::on_pushButtonAuto_clicked() {
                                                  .append("\"")));
         autoSearchDialog->exec();
     } while(autoSearchDialog->result == 2);
+
     if(autoSearchDialog->result == 1) {
         QString ip = autoSearchDialog->selectedAddress;
         int port = autoSearchDialog->selectedPort;
         QStringList l = ip.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
         if (l.size() == 4) {
             SetIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
+            deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]).arg(port);
         }
+
         device = autoSearchDialog->selectedDevice;
         deviceFamily = settings.toMap().value("family").toString();
         ui->line_DeviceName->setText(autoSearchDialog->selectedDevice);
