@@ -5,10 +5,6 @@
 #include <QJsonDocument>
 #include <QRegExp>
 
-
-
-//string trim(const string &t, const string &ws);
-
 DeviceInterface::DeviceInterface():errorCount(0) {
     rxBD.setPattern(deviceSettings.value("timeRegExp").toString());
     connected = false;
