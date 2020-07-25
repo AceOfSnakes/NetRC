@@ -28,16 +28,23 @@ class RemoteControl;
 class RemoteControl : public QMainWindow
 {
     Q_OBJECT
-    QVariant settings;
+    QVariant           settings;
     QRegularExpression regx;//(".*");
     // MIGRATION
-    DeviceInterface deviceInterface;
-    void ConnectPlayer();
-    bool            offlineStatus;
-    bool            deviceOnline;
-    QSignalMapper*  signalMapper;
-    int             deviceIpPort;
-    QString         deviceIpAddress;
+    DeviceInterface    deviceInterface;
+    bool               offlineStatus;
+    bool               deviceOnline;
+    QSignalMapper*     signalMapper;
+    int                deviceIpPort;
+    QString            deviceIpAddress;
+
+    void ConnectDevice();
+
+    QIcon           powerButtonOnIcon;
+    QIcon           powerButtonOffIcon;
+    QIcon           connectButtonOnIcon;
+    QIcon           connectButtonOffIcon;
+
 
     // MIGRATION END
 public:
@@ -64,7 +71,7 @@ private slots:
 
     void on_btn_Connect_customContextMenuRequested(const QPoint &pos);
     // MIGRATION
-    void PlayerOffline(bool);
+    void DeviceOffline(bool);
     void UpdateDisplayInfo (QRegExp &rx);
     void EnableControls(bool enable);
     void CheckOnline();
@@ -76,6 +83,8 @@ private slots:
     bool SendCmd(const QString& cmd);
     void onConnect();
     // MIGRATION END
+    void on_btn_Power_clicked();
+
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;

@@ -27,10 +27,10 @@ DeviceInterface::DeviceInterface():errorCount(0) {
     connect((&socket), SIGNAL(disconnected()), this, SLOT(TcpDisconnected()));
     connect((&socket), SIGNAL(readyRead()), this, SLOT(ReadString()));
     connect((&socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
-    reloadPlayerSettings(deviceSettings);
+    reloadDeviceSettings(deviceSettings);
 }
 
-void DeviceInterface::reloadPlayerSettings(QVariantMap  settings) {
+void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
     deviceSettings.clear();
     deviceSettings.unite(settings);
     pingCommands.clear();
@@ -39,7 +39,7 @@ void DeviceInterface::reloadPlayerSettings(QVariantMap  settings) {
     emit SettingsChanged();
 }
 
-void DeviceInterface::ConnectToPlayer(const QString& PlayerIpAddress, const int PlayerIpPort) {
+void DeviceInterface::ConnectToDevice(const QString& PlayerIpAddress, const int PlayerIpPort) {
     socket.connectToHost(PlayerIpAddress, PlayerIpPort);
 }
 
@@ -131,11 +131,11 @@ void DeviceInterface::InterpretString(const QString& data) {
         if(!deviceSettings.value("initCmd").isNull()) {
             SendCmd(deviceSettings.value("initCmd").toString());
         }
-        emit PlayerOffline(false);
+        emit DeviceOffline(false);
     } else if(data.contains(deviceSettings.value("pingResponseErr").toString())) {
         errorCount ++;
         if(errorCount == pingCommands.size()) {
-            emit PlayerOffline(true);
+            emit DeviceOffline(true);
         }
         else if(errorCount > pingCommands.size()) {
             errorCount = pingCommands.size();

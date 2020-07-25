@@ -83,12 +83,10 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand, QString
         if (iface.flags() & QNetworkInterface::IsUp && !(iface.flags() & QNetworkInterface::IsLoopBack)) {
             QUdpSocket* socket = new QUdpSocket(this);
             if (!socket->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
-                qDebug("1: Error %s", socket->errorString().toStdString().c_str());
                 delete socket;
                 continue;
             }
             if (!socket->joinMulticastGroup(groupAddress)) {
-                qDebug("2: Error %s", socket->errorString().toStdString().c_str());
                 delete socket;
                 continue;
             }
@@ -338,7 +336,6 @@ void AutoSearchDialog::on_repeatButton_clicked()
     close();
 }
 void AutoSearchDialog::loadRowData(int row) {
-    qDebug()<<row;
     if(row >= 0 ) {
         selectedAddress = ui->listWidget->item(row)->data(Qt::UserRole).toString();
         selectedPort = ui->listWidget->item(row)->data(Qt::UserRole + 1).toInt();

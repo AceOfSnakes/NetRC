@@ -1,45 +1,57 @@
-{
-   "Bd0Button":"REMOTE NU0",
-   "Bd1Button":"REMOTE NU1",
-   "Bd2Button":"REMOTE NU2",
-   "Bd3Button":"REMOTE NU3",
-   "Bd4Button":"REMOTE NU4",
-   "Bd5Button":"REMOTE NU5",
-   "Bd6Button":"REMOTE NU6",
-   "Bd7Button":"REMOTE NU7",
-   "Bd8Button":"REMOTE NU8",
-   "Bd9Button":"REMOTE NU9",
+{  
    "BdFlDimmerButton":"REMOTE DIM",
-   "BdPowerOffButton":"REMOTE POW",
-   "BdPowerOnButton":"REMOTE POW",
    "BdClearButton":"REMOTE CLR",
    "BdTopMenuButton":"REMOTE TTL",
-   "CursorDownButton":"REMOTE NDN",
-   "CursorEnterButton":"REMOTE SEL",
-   "CursorLeftButton":"REMOTE NLT",
-   "CursorRightButton":"REMOTE NRT",
-   "CursorUpButton":"REMOTE NUP",
    "BdPopUpMenuButton":"REMOTE MNU",
    "BdReturnButton":"REMOTE RET",
-   "BdPauseButton":"REMOTE PAU",
-   "BdPlayButton":"REMOTE PLA",
-   "BdStopButton":"REMOTE STP",
-   "BdPrevButton":"REMOTE PRE",
-   "BdRevButton":"REMOTE REV",
-   "BdFwdButton":"REMOTE FWD",
    "BdNextButton":"REMOTE NXT",
    "BdZoomButton":"REMOTE ZOM",
    "Bd2AudioButton":"REMOTE SAP",
    "BdAngleButton":"REMOTE ANG",
    "BdHomeMenuButton":"REMOTE HOM",
    "BdOpen_CloseButton":"REMOTE EJT",
-   "BdEnterButton":"REMOTE SEL",
    "BdSubtitleButton":"REMOTE SUB",
    "BdAudioButton":"REMOTE AUD",
    "BdRepeatButton":"REMOTE RPT",
    "BdHDMIButton":"REMOTE HDM",
-   "pingCommands":[
-      "#QPW"
+
+   "colorRed": "REMOTE RED",
+   "colorBlue": "REMOTE BLU",
+   "colorGreen": "REMOTE GRN",
+   "colorYellow": "REMOTE YLW",
+
+   "number0":"REMOTE NU0",
+   "number1":"REMOTE NU1",
+   "number2":"REMOTE NU2",
+   "number3":"REMOTE NU3",
+   "number4":"REMOTE NU4",
+   "number5":"REMOTE NU5",
+   "number6":"REMOTE NU6",
+   "number7":"REMOTE NU7",
+   "number8":"REMOTE NU8",
+   "number9":"REMOTE NU9",
+
+   "navPause":"REMOTE PAU",
+   "navPlay":"REMOTE PLA",
+   "navStop":"REMOTE STP",
+   "navBackward":"REMOTE REV",
+   "navForward":"REMOTE FWD",
+   "navFastForward":"REMOTE NXT",
+   "navFastBackward":"REMOTE PRE",
+   "navStop":"REMOTE STP",
+
+   "down":"REMOTE NDN",
+   "left":"REMOTE NLT",
+   "right":"REMOTE NRT",
+   "up":"REMOTE NUP",
+   "ok":"REMOTE SEL",
+
+   "powerOff":"REMOTE POW",
+   "powerOn":"REMOTE POW",
+
+
+   "pingCommands":[  
+      "REMOTE QPW"
    ],
    "initCmd":"REMOTE SVM 3",
    "pingResponseErr":"OK OFF",
@@ -48,4 +60,4 @@
    "prefferedPort": 48360,
    "crlf": false,
    "family": "Oppo Blu-ray Disc Player 10X"
-}
+}}

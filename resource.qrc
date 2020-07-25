@@ -7,5 +7,9 @@
         <file>images/sierd.png</file>
         <file>images/Info.png</file>
         <file>images/18px-Unicode_POWER_SYMBOL.png</file>
+        <file>images/power_green.png</file>
+        <file>images/power_red.png</file>
+        <file>images/connect-green.png</file>
+        <file>images/connect-red.png</file>
     </qresource>
 </RCC>

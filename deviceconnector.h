@@ -27,14 +27,15 @@ class DeviceConnector : public QDialog
 {
     Q_OBJECT
 private:
-    QVariant settings;
 public:
     explicit DeviceConnector(QVariant & sets, QWidget *parent = nullptr);
     ~DeviceConnector();
-    QString device;
-    QString deviceAddress;
-    QString deviceFamily;
-
+    QString  device;
+    QString  deviceAddress;
+    QString  deviceIPAddress;
+    int      devicePort;
+    QString  deviceFamily;
+    QVariant settings;
 private slots:
     void on_pushButtonAuto_clicked();
     void on_closeButton_clicked();

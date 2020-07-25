@@ -75,6 +75,8 @@ void DeviceConnector::on_pushButtonAuto_clicked() {
         if (l.size() == 4) {
             SetIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
             deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]).arg(port);
+            deviceIPAddress = QString("%1.%2.%3.%4").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]);
+            devicePort = port;
         }
 
         device = autoSearchDialog->selectedDevice;
@@ -116,6 +118,7 @@ void DeviceConnector::select(QVariant vars) {
         ui->line_DeviceName->setEnabled(true);
         QString family = settings.toMap().value("family").toString();
         setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
+        //on_comboBox_activated(family);
 
 }
 
@@ -124,8 +127,16 @@ void DeviceConnector::reloadDevicesFamily() {
     saved.sort();
     ui->comboBox->clear();
     ui->comboBox->addItems(saved);
-    if(!saved.isEmpty()) {
-        on_comboBox_activated(saved.at(0));
+    QString family = settings.toMap().value("family").toString();
+    qDebug()<<"Selected"<<family ;
+    on_comboBox_activated(family );
+    qDebug()<<ui->comboBox->findText(family );
+    if(ui->comboBox->findText(family )>0) {
+        ui->comboBox->setCurrentIndex(ui->comboBox->findText(family ));
+    } else {
+        if(!saved.isEmpty()) {
+            on_comboBox_activated(saved.at(0));
+        }
     }
 }
 

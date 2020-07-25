@@ -1,9 +1,13 @@
-{  
+{ 
+   "powerOff":"PF",
+   "powerOn":"PO",
+ 
    "pingCommands":[  
       "?RGD"
    ],
    "pingResponseErr":"E0",
    "pingResponseOk":"RGD",
-   "crlf": true,
+   "crlf": false,
+   "prefferedPort": 23,
    "family": "Pioneer Receiver till 2016"
 }

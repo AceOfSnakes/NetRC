@@ -36,6 +36,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     QMainWindow(parent),
     settings(),
     regx(".*"),
+    deviceInterface(),
     ui(new Ui::RemoteControl)
 {
     signalMapper = new QSignalMapper(this);
@@ -43,10 +44,12 @@ RemoteControl::RemoteControl(QWidget *parent) :
     setWindowFlags(windowFlags() & (~Qt::WindowContextHelpButtonHint) &(~Qt::WindowMaximizeButtonHint));
     ui->setupUi(this);
     ui->mainWidget->setVisible(true);
+    /*
     addPanel(QString("Custom Panel 1"));
     addPanel(QString("Custom Panel 2"));
     addPanel(QString("Custom Panel 3"));
     addPanel(QString("Custom Panel 4"));
+    */
     loadSettings();
     m_tray_icon = new QSystemTrayIcon(QIcon(QString(":/images/").append("icon-power").append(".png")), this);
 
@@ -62,17 +65,40 @@ RemoteControl::RemoteControl(QWidget *parent) :
     tray_icon_menu->addAction( hide_action );
     tray_icon_menu->addAction( quit_action );
 
+    powerButtonOnIcon.addFile( ":/images/power_green.png", QSize(128, 128));
+    powerButtonOffIcon.addFile( ":/images/power_red.png", QSize(128, 128));
+
+    connectButtonOnIcon.addFile( ":/images/connect-green.png", QSize(128, 128));
+    connectButtonOffIcon.addFile( ":/images/connect-red.png", QSize(128, 128));
+
+
     m_tray_icon->setContextMenu( tray_icon_menu );
     if(ui->actionMinimize_To_Tray->isChecked()) {
         m_tray_icon->show();
     }
     ui->btn_Connect->setEnabled(true);
     connect(ui->actionMinimize_To_Tray,SIGNAL(changed()), this, SLOT(on_MinimizeToTrayChanged()));
+
+
+    connect((&deviceInterface), SIGNAL(Connected()), this, SLOT(CommConnected()));
+    connect((&deviceInterface), SIGNAL(Disconnected()), this, SLOT(CommDisconnected()));
+    connect((&deviceInterface), SIGNAL(CommError(QString)), this,  SLOT(CommError(QString)));
+    connect((&deviceInterface), SIGNAL(DeviceOffline(bool)), this,  SLOT(DeviceOffline(bool)));
+    connect((&deviceInterface), SIGNAL(SettingsChanged()), this,  SLOT(ChangeSettings()));
+    connect((&deviceInterface), SIGNAL(UpdateDisplayInfo(QRegExp &)), this,  SLOT(UpdateDisplayInfo(QRegExp &)));
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(CheckOnlineInternal()));
+    timer->start(1000);
+
+
     reloadMenu();
     show();
     ui->btn_Connect->setEnabled(true);
+    connect(signalMapper, SIGNAL(mapped(QString)),
+            this, SLOT(SendCmd(QString)));
+
     redraw();
-     //QObject::connect(ui->btn_Connect, SIGNAL(customContextMenuRequested(QPoint)), qApp, SLOT(aboutQt()));
 }
 
 void RemoteControl::reloadMenu() {
@@ -247,9 +273,7 @@ void RemoteControl::on_show_hide(QSystemTrayIcon::ActivationReason reason) {
 }
 
 void RemoteControl::changeEvent(QEvent *e) {
-    qDebug() <<"changeEvent Sender "<< sender();
     e->accept();
-    qDebug() << "changeEvent" << e << e->type()<<e->spontaneous();
     QMainWindow::changeEvent(e);
     switch (e->type()) {
     case QEvent::WindowStateChange:
@@ -276,22 +300,25 @@ void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &/*po
 
     deviceConnector.exec();
     if(!deviceConnector.deviceFamily.isEmpty()) {
-    //ui->listWidget->item(1)->setFlags(Hidden(true);
         ui->listWidget->item(1)->setText(deviceConnector.deviceFamily);
         ui->listWidget->item(2)->setText(deviceConnector.device);
         ui->listWidget->item(3)->setText(deviceConnector.deviceAddress);
+        settings.swap(deviceConnector.settings);
+        deviceInterface.reloadDeviceSettings(settings.toMap());
+        deviceInterface.ConnectToDevice(deviceConnector.deviceIPAddress, deviceConnector.devicePort);
+        CheckOnline();
     }
 }
 
 
 
 // MIGRATION
-void RemoteControl::ConnectPlayer()
+void RemoteControl::ConnectDevice()
 {
     // TODO ui->pushButtonConnect->setEnabled(false);
     // TODO m_SettingsDialog->EnableIPInputBD(false);
     if (!deviceInterface.IsConnected()) {
-        deviceInterface.ConnectToPlayer(deviceIpAddress, deviceIpPort);
+        deviceInterface.ConnectToDevice(deviceIpAddress, deviceIpPort);
     }
 }
 
@@ -306,14 +333,14 @@ void RemoteControl::UpdateDisplayInfo (QRegExp &rx) {
         }
         track.append(rx.cap(2));
     }
+    ui->listWidget->item(5)->setText(QString("Track ").append(track).append(" Time ").append(time));
     // TODO ui->BdTrackLabel->setText(track);
     // TODO ui->BdTimeLabel->setText(time);
 }
 
-void RemoteControl::PlayerOffline(bool offline) {
-    // TODO ui->BdPowerButton->setIcon((offline) ? m_PowerButtonOffIcon : m_PowerButtonOnIcon);
+void RemoteControl::DeviceOffline(bool offline) {
+    ui->btn_Power->setIcon((offline) ? powerButtonOffIcon : powerButtonOnIcon);
     if(offline) {
-        this->setWindowTitle(tr("Blu-Ray player"));
         QRegExp qre;
         UpdateDisplayInfo(qre);
     }
@@ -326,8 +353,9 @@ void RemoteControl::EnableControls(bool enable)
 {
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     foreach (QPushButton *button, allPButtons) {
-        if(button->objectName().startsWith("Bd")||button->objectName().startsWith("Cursor")) {
-            if(deviceInterface.deviceSettings.contains(button->objectName())) {
+        if(button->objectName().startsWith("rc_btn_")) {
+            QString btnName = button->objectName().replace("rc_btn_","");
+            if(deviceInterface.deviceSettings.contains(btnName)) {
                 button->setEnabled(enable);
             } else {
                 button->setEnabled(false);
@@ -338,6 +366,7 @@ void RemoteControl::EnableControls(bool enable)
 
 void RemoteControl::onConnect()
 {
+    qDebug()<<"deviceInterface.IsConnected()"<<deviceInterface.IsConnected();
     if (!deviceInterface.IsConnected()) {
         // connect
         // read settings from the line edits
@@ -370,7 +399,7 @@ void RemoteControl::onConnect()
         // TODO m_Settings.setValue("Player_IP/4", ip4);
         // TODO m_Settings.setValue("Player_IP/PORT", ip_port);
 
-        ConnectPlayer();
+        ConnectDevice();
 
     }
     else {
@@ -396,36 +425,36 @@ void RemoteControl::CheckOnlineInternal() {
 
 void RemoteControl::CheckOnline() {
     offlineStatus = true;
-    PlayerOffline(true);
+    DeviceOffline(true);
 }
+
 void RemoteControl::CommConnected() {
-    // TODO ui->pushButtonConnect->setEnabled(true);
-    // TODO ui->pushButtonConnect->setText(tr("Disconnect"));
-    // TODO ui->pushButtonConnect->setChecked(true);
+    ui->btn_Connect->setToolTip(tr("Disconnect Device"));
+    ui->btn_Connect->setText(tr("Disconnect"));
+    ui->btn_Connect->setChecked(true);
+    ui->btn_Connect->setEnabled(true);
+    //ui->btn_Connect->adjustSize();
     ui->btn_Power->setEnabled(true);
     deviceOnline = true;
     EnableControls(true);
+    ui->btn_Connect->setIcon(connectButtonOnIcon);
     CheckOnline();
 }
 
 void RemoteControl::CommDisconnected() {
-    // TODO ui->pushButtonConnect->setText(tr("Connect to Player"));
-    // TODO ui->pushButtonConnect->setEnabled(true);
-    // TODO ui->pushButtonConnect->setChecked(false);
+    ui->btn_Connect->setToolTip(tr("Connect To Device"));
+    ui->btn_Connect->setText(tr("Connect"));
+    ui->btn_Connect->setEnabled(true);
+    ui->btn_Connect->setChecked(false);
     // TODO m_SettingsDialog->EnableIPInputBD(true);
     EnableControls(false);
     ui->btn_Power->setEnabled(false);
+    ui->btn_Connect->setIcon(connectButtonOffIcon);
     deviceOnline = false;
 }
 
 void RemoteControl::CommError(QString/* socketError*/) {
-    // TODO m_SettingsDialog->EnableIPInputBD(true);
-    // TODO ui->pushButtonConnect->setText(tr("Connect to Player"));
-    // TODO ui->pushButtonConnect->setEnabled(true);
-    // TODO ui->pushButtonConnect->setChecked(false);
-    // TODO m_SettingsDialog->EnableIPInputBD(true);
-    EnableControls(false);
-    deviceOnline = false;
+    CommDisconnected();
 }
 
 bool RemoteControl::SendCmd(const QString& cmd) {
@@ -435,11 +464,12 @@ bool RemoteControl::SendCmd(const QString& cmd) {
 void RemoteControl::ChangeSettings() {
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     foreach (QPushButton *button, allPButtons) {
-        if(button->objectName().startsWith("Bd") || button->objectName().startsWith("Cursor")) {
+        if(button->objectName().startsWith("rc_btn_")) {
             signalMapper->removeMappings(button);
             disconnect(button, SIGNAL(clicked()),signalMapper,SLOT(map()));
-            if(!deviceInterface.deviceSettings.value(button->objectName()).isNull()) {
-                signalMapper->setMapping(button,deviceInterface.deviceSettings.value(button->objectName()).toString());
+            QString btnName = button->objectName().replace("rc_btn_","");
+            if(!deviceInterface.deviceSettings.value(btnName).isNull()) {
+                signalMapper->setMapping(button,deviceInterface.deviceSettings.value(btnName).toString());
                 connect(button, SIGNAL(clicked())
                         ,signalMapper,SLOT(map()));
             }
@@ -447,3 +477,16 @@ void RemoteControl::ChangeSettings() {
     }
     // TODO m_Settings.setValue("PlayerSettings", m_PlayerInterface.m_PlayerSettings);
 }
+
+
+void RemoteControl::on_btn_Power_clicked()
+{
+    if (!deviceOnline) {
+        SendCmd(deviceInterface.deviceSettings.value("powerOn").toString());
+        //CheckOnline();
+    } else {
+        SendCmd(deviceInterface.deviceSettings.value("powerOff").toString());
+        //DeviceOffline(true);
+    }
+}
+

@@ -33,14 +33,14 @@ public:
 
     bool IsConnected();
     QVariantList   pingCommands = {"?P"};
-    QVariantMap deviceSettings;
+    QVariantMap    deviceSettings;
 private:
-    QTcpSocket      socket;
-    string          m_ReceivedString;
-    bool            connected;
-    bool            crlf;
-    int             errorCount;
-    QRegExp         rxBD;
+    QTcpSocket     socket;
+    string         m_ReceivedString;
+    bool           connected;
+    bool           crlf;
+    int            errorCount;
+    QRegExp        rxBD;
     void InterpretString(const QString& data);
 
 private slots:
@@ -50,14 +50,14 @@ private slots:
     void TcpDisconnected();
     void ReadString();
 public slots:
-    void ConnectToPlayer(const QString &PlayerIpAddress, const int PlayerIpPort);
+    void ConnectToDevice(const QString &PlayerIpAddress, const int PlayerIpPort);
     void Disconnect();
     bool SendCmd(const QString& cmd);
-    void reloadPlayerSettings(QVariantMap  settings);
+    void reloadDeviceSettings(QVariantMap settings);
 
 signals:
     void SettingsChanged();
-    void PlayerOffline(bool);
+    void DeviceOffline(bool);
     void CommError(QString error);
     void Connected();
     void Disconnected();
