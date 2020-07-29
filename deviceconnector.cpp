@@ -115,7 +115,7 @@ void DeviceConnector::on_loadConfig_clicked() {
 void DeviceConnector::select(QVariant vars) {
         settings.swap(vars);
         ui->groupBox_Connect->setEnabled(true);
-        ui->line_DeviceName->setEnabled(true);
+        ui->line_DeviceName->setEnabled(false);
         QString family = settings.toMap().value("family").toString();
         setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
         //on_comboBox_activated(family);

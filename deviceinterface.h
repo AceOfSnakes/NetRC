@@ -36,7 +36,7 @@ public:
     QVariantMap    deviceSettings;
 private:
     QTcpSocket     socket;
-    string         m_ReceivedString;
+    //string         receivedString;
     bool           connected;
     bool           crlf;
     int            errorCount;

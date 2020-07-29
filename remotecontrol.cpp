@@ -291,7 +291,16 @@ void RemoteControl::quit() {
 }
 
 void RemoteControl::on_btn_Connect_clicked() {
-    on_btn_Connect_customContextMenuRequested(QPoint());
+    if(deviceInterface.IsConnected()) {
+        deviceInterface.Disconnect();
+    } else {
+        qDebug()<<"Connect to"<<deviceIpAddress<<deviceIpPort;
+        if(deviceIpPort != -1) {
+            deviceInterface.ConnectToDevice(deviceIpAddress, deviceIpPort);
+        } else {
+            on_btn_Connect_customContextMenuRequested(QPoint());
+        }
+    }
 }
 
 void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &/*pos*/)
@@ -306,6 +315,8 @@ void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &/*po
         settings.swap(deviceConnector.settings);
         deviceInterface.reloadDeviceSettings(settings.toMap());
         deviceInterface.ConnectToDevice(deviceConnector.deviceIPAddress, deviceConnector.devicePort);
+        deviceIpAddress = deviceConnector.deviceIPAddress;
+        deviceIpPort = deviceConnector.devicePort;
         CheckOnline();
     }
 }
@@ -334,18 +345,17 @@ void RemoteControl::UpdateDisplayInfo (QRegExp &rx) {
         track.append(rx.cap(2));
     }
     ui->listWidget->item(5)->setText(QString("Track ").append(track).append(" Time ").append(time));
-    // TODO ui->BdTrackLabel->setText(track);
-    // TODO ui->BdTimeLabel->setText(time);
 }
 
 void RemoteControl::DeviceOffline(bool offline) {
+    qDebug()<<"DeviceOffline(bool offline);"<<offline;
     ui->btn_Power->setIcon((offline) ? powerButtonOffIcon : powerButtonOnIcon);
     if(offline) {
         QRegExp qre;
         UpdateDisplayInfo(qre);
     }
-
     EnableControls(!offline);
+    //deviceOnline = !offline;
     offlineStatus = offline;
 }
 
@@ -410,11 +420,7 @@ void RemoteControl::onConnect()
     }
     CheckOnline();
 }
-/*
-void RemoteControl::SendCommand(DeviceInterface & devInterface, QString &str) {
-    devInterface.SendCmd(str);
-}
-*/
+
 void RemoteControl::CheckOnlineInternal() {
     if(deviceOnline) {
         foreach (QVariant ping_command, deviceInterface.pingCommands) {
@@ -429,7 +435,8 @@ void RemoteControl::CheckOnline() {
 }
 
 void RemoteControl::CommConnected() {
-    ui->btn_Connect->setToolTip(tr("Disconnect Device"));
+    ui->btn_Connect->setToolTip(tr("Disconnect Device ")
+                                .append(deviceIpAddress).append(QString().asprintf(":%d", deviceIpPort)));
     ui->btn_Connect->setText(tr("Disconnect"));
     ui->btn_Connect->setChecked(true);
     ui->btn_Connect->setEnabled(true);
@@ -442,7 +449,9 @@ void RemoteControl::CommConnected() {
 }
 
 void RemoteControl::CommDisconnected() {
-    ui->btn_Connect->setToolTip(tr("Connect To Device"));
+    ui->btn_Connect->setToolTip(tr("Connect To Device ")
+                                .append(deviceIpAddress).append(QString().asprintf(":%d", deviceIpPort))
+                                .append("\n\nRight click to connect to another device\n"));
     ui->btn_Connect->setText(tr("Connect"));
     ui->btn_Connect->setEnabled(true);
     ui->btn_Connect->setChecked(false);
@@ -481,12 +490,13 @@ void RemoteControl::ChangeSettings() {
 
 void RemoteControl::on_btn_Power_clicked()
 {
-    if (!deviceOnline) {
+    qDebug()<<"deviceOnline"<<deviceOnline;
+    if (!deviceOnline ) {
         SendCmd(deviceInterface.deviceSettings.value("powerOn").toString());
-        //CheckOnline();
+//        CheckOnline();
     } else {
         SendCmd(deviceInterface.deviceSettings.value("powerOff").toString());
-        //DeviceOffline(true);
+//        DeviceOffline(true);
     }
 }
 

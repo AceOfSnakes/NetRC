@@ -5,9 +5,11 @@
    "pingCommands":[  
       "?RGD"
    ],
-   "pingResponseErr":"E0",
+  "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}) :([0-9]{2}) :([0-9]{2})",
+   "pingResponseErr":"<00",
    "pingResponseOk":"RGD",
    "crlf": false,
    "prefferedPort": 23,
    "family": "Pioneer Receiver till 2016"
+
 }

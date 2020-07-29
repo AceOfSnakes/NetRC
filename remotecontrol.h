@@ -35,7 +35,7 @@ class RemoteControl : public QMainWindow
     bool               offlineStatus;
     bool               deviceOnline;
     QSignalMapper*     signalMapper;
-    int                deviceIpPort;
+    int                deviceIpPort = -1;
     QString            deviceIpAddress;
 
     void ConnectDevice();

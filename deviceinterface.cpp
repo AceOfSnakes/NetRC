@@ -18,7 +18,8 @@
 #include <QStringList>
 #include <QJsonDocument>
 #include <QRegExp>
-
+#include <QDebug>
+string trim(const string &t, const string &ws);
 DeviceInterface::DeviceInterface():errorCount(0) {
     rxBD.setPattern(deviceSettings.value("timeRegExp").toString());
     connected = false;
@@ -40,6 +41,7 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
 }
 
 void DeviceInterface::ConnectToDevice(const QString& PlayerIpAddress, const int PlayerIpPort) {
+    socket.disconnectFromHost();
     socket.connectToHost(PlayerIpAddress, PlayerIpPort);
 }
 
@@ -73,6 +75,7 @@ void DeviceInterface::ReadString() {
 
     // split lines
     int lineLength = 0;
+    string receivedString;
     int lineStartPos = 0;
     for(int i = 0; i < count; i++)
     {
@@ -83,22 +86,22 @@ void DeviceInterface::ReadString() {
         lineLength = i - lineStartPos;
         if (lineLength > 0)
         {
-            m_ReceivedString.append((const char*)&data[lineStartPos], 0, lineLength);
-            //m_ReceivedString = trim(m_ReceivedString, "\r");
-            //m_ReceivedString = trim(m_ReceivedString, "\n");
-            if (m_ReceivedString != "")
-            {
+            receivedString.append((const char*)&data[lineStartPos], 0, lineLength);
+            receivedString = trim(receivedString, "\r");
+            receivedString = trim(receivedString, "\n");
+            if (receivedString != "")             {
                 QString str;
-                str = str.fromUtf8(m_ReceivedString.c_str());
+                str = str.fromUtf8(receivedString.c_str());
+                qDebug() << QString("What %1 count %2").arg(str).arg(count);
                 InterpretString(str);
                 emit DataReceived(str);
             }
-            m_ReceivedString = "";
+            receivedString = "";
         }
         lineStartPos = i + 1;
     }
     if (lineStartPos < count)
-        m_ReceivedString.append((const char*)&data[lineStartPos]);
+        receivedString.append((const char*)&data[lineStartPos]);
 }
 
 void DeviceInterface::TcpError(QAbstractSocket::SocketError socketError) {
@@ -127,21 +130,26 @@ bool DeviceInterface::SendCmd(const QString& cmd) {
 
 void DeviceInterface::InterpretString(const QString& data) {
     bool timeMatch = rxBD.exactMatch(data);
-    if (data.contains(deviceSettings.value("pingResponseOk").toString())) {
+    //qDebug()<< "interpret" << data << deviceSettings.value("pingResponseErr").toString()<<"error count"<<errorCount ;
+    if(data.contains(deviceSettings.value("pingResponseErr").toString())) {
+        //qDebug()<< "error";
+        errorCount ++;
+        if(errorCount == pingCommands.size()) {
+            qDebug()<< "offline !!!";
+            emit DeviceOffline(true);
+        } else if(errorCount > pingCommands.size()) {
+            errorCount = pingCommands.size();
+        }
+        return;
+    } else if (data.contains(deviceSettings.value("pingResponseOk").toString())) {
+        //qDebug()<< "ok";
         if(!deviceSettings.value("initCmd").isNull()) {
             SendCmd(deviceSettings.value("initCmd").toString());
         }
         emit DeviceOffline(false);
-    } else if(data.contains(deviceSettings.value("pingResponseErr").toString())) {
-        errorCount ++;
-        if(errorCount == pingCommands.size()) {
-            emit DeviceOffline(true);
-        }
-        else if(errorCount > pingCommands.size()) {
-            errorCount = pingCommands.size();
-        }
         return;
     } else if(timeMatch) {
+        //qDebug()<< "time";{
         emit UpdateDisplayInfo(rxBD);
     }
     errorCount = 0;
