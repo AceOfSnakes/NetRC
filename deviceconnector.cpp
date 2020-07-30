@@ -33,7 +33,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     }
     if(settings.toMap().value("pingResponseOk").toString().isEmpty()) {
         ui->groupBox_Connect->setEnabled(false);
-        ui->line_DeviceName->setEnabled(false);
+        //ui->line_DeviceName->setEnabled(false);
         ui->comboBox->setEnabled(true);
     }
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
@@ -41,7 +41,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
             QStringList l = address.toString().split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
             if (l.size() == 4) {
-                SetIpAddress(l[0], l[1], l[2], l[3], "?");
+                setIpAddress(l[0], l[1], l[2], l[3], "?");
                 break;
             }
         }
@@ -51,6 +51,18 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
 
 DeviceConnector::~DeviceConnector() {
     delete ui;
+}
+
+void DeviceConnector::setDevice(QString device, QString address, int port) {
+    ui->line_DeviceName->setText(device);
+    QStringList l = address.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
+    if (l.size() == 4) {
+        if(port == -1) {
+            setIpAddress(l[0], l[1], l[2], l[3], "?");
+        } else {
+            setIpAddress(l[0], l[1], l[2], l[3], QString().asprintf("%d",port));
+        }
+    }
 }
 
 void DeviceConnector::on_pushButtonAuto_clicked() {
@@ -73,7 +85,7 @@ void DeviceConnector::on_pushButtonAuto_clicked() {
         int port = autoSearchDialog->selectedPort;
         QStringList l = ip.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
         if (l.size() == 4) {
-            SetIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
+            setIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
             deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]).arg(port);
             deviceIPAddress = QString("%1.%2.%3.%4").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]);
             devicePort = port;
@@ -85,8 +97,11 @@ void DeviceConnector::on_pushButtonAuto_clicked() {
     }
     delete autoSearchDialog;
 }
-
-void DeviceConnector::SetIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port) {
+QString DeviceConnector::getIpAddress() {
+    return ui->lineEditIP1->text().append(".").append(ui->lineEditIP2->text()).append(".")
+            .append(ui->lineEditIP3->text()).append(".").append(ui->lineEditIP4->text());
+}
+void DeviceConnector::setIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port) {
     ui->lineEditIP1->setText(ip1);
     ui->lineEditIP2->setText(ip2);
     ui->lineEditIP3->setText(ip3);
@@ -96,6 +111,12 @@ void DeviceConnector::SetIpAddress(QString ip1, QString ip2, QString ip3, QStrin
 
 void DeviceConnector::on_closeButton_clicked()
 {
+    QString addr = getIpAddress();
+    deviceIPAddress = addr;
+    deviceAddress = addr.append(":").append(ui->lineEditIPPort->text());
+    device = ui->line_DeviceName->text();
+    devicePort = ui->lineEditIPPort->text().toInt();
+    deviceFamily = settings.toMap().value("family").toString();
     close();
 }
 
@@ -115,7 +136,6 @@ void DeviceConnector::on_loadConfig_clicked() {
 void DeviceConnector::select(QVariant vars) {
         settings.swap(vars);
         ui->groupBox_Connect->setEnabled(true);
-        ui->line_DeviceName->setEnabled(false);
         QString family = settings.toMap().value("family").toString();
         setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
         //on_comboBox_activated(family);
@@ -141,7 +161,15 @@ void DeviceConnector::reloadDevicesFamily() {
 }
 
 void DeviceConnector::on_comboBox_activated(const QString &arg1) {
+
+}
+
+void DeviceConnector::on_comboBox_currentIndexChanged(const QString &arg1) {
+    qDebug() << "on_comboBox_activated" << device;
     select(RCSettings::load(arg1));
-    ui->line_DeviceName->setText("");
+    if(device.isEmpty()) {
+        ui->line_DeviceName->setText("");
+    }
+
     ui->lineEditIP4->setText("?");
 }

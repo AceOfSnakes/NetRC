@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -194,6 +194,7 @@
            </property>
            <property name="font">
             <font>
+             <pointsize>8</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -245,6 +246,7 @@
            </property>
            <property name="font">
             <font>
+             <pointsize>8</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -266,7 +268,7 @@
        <item>
         <widget class="QListWidget" name="listWidget">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -288,12 +290,17 @@
          </property>
          <property name="font">
           <font>
+           <family>Courier New</family>
+           <pointsize>7</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="uniformItemSizes">
+          <bool>false</bool>
          </property>
          <property name="itemAlignment">
           <set>Qt::AlignHCenter</set>

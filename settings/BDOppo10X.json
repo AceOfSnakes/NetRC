@@ -38,7 +38,6 @@
    "navForward":"REMOTE FWD",
    "navFastForward":"REMOTE NXT",
    "navFastBackward":"REMOTE PRE",
-   "navStop":"REMOTE STP",
 
    "down":"REMOTE NDN",
    "left":"REMOTE NLT",

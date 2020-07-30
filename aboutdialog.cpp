@@ -21,7 +21,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::AboutDialog) {
     QLocale myLoc;
     ui->setupUi(this);
-    ui->label->setText(qApp->applicationName()+". Version: " + qApp->applicationVersion());
+    ui->label->setText(qApp->applicationName() + ". Version: " + qApp->applicationVersion());
     QString compiler;
     ui->label_os->setText(
                 QString("OS: ")

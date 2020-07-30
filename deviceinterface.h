@@ -31,8 +31,8 @@ class DeviceInterface : public QObject
 public:
     DeviceInterface();
 
-    bool IsConnected();
-    QVariantList   pingCommands = {"?P"};
+    bool isConnected();
+    QVariantList   pingCommands = {};
     QVariantMap    deviceSettings;
 private:
     QTcpSocket     socket;
@@ -45,24 +45,24 @@ private:
 
 private slots:
 
-    void TcpError(QAbstractSocket::SocketError socketError);
-    void TcpConnected();
-    void TcpDisconnected();
-    void ReadString();
+    void tcpError(QAbstractSocket::SocketError socketError);
+    void tcpConnected();
+    void tcpDisconnected();
+    void readString();
 public slots:
-    void ConnectToDevice(const QString &PlayerIpAddress, const int PlayerIpPort);
-    void Disconnect();
-    bool SendCmd(const QString& cmd);
+    void connectToDevice(const QString &PlayerIpAddress, const int PlayerIpPort);
+    void disconnect();
+    bool sendCmd(const QString& cmd);
     void reloadDeviceSettings(QVariantMap settings);
 
 signals:
-    void SettingsChanged();
-    void DeviceOffline(bool);
-    void CommError(QString error);
-    void Connected();
-    void Disconnected();
-    void DataReceived(QString);
-    void UpdateDisplayInfo(QRegExp&);
+    void settingsChanged();
+    void deviceOffline(bool);
+    void commError(QString error);
+    void deviceConnected();
+    void deviceDisconnected();
+    void dataReceived(QString);
+    void updateDisplayInfo(QRegExp&);
 };
 
 #endif // PLAYERINTERFACE_H

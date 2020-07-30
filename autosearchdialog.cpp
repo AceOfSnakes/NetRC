@@ -46,15 +46,15 @@ RemoteDevice::RemoteDevice(QString &url):RemoteDevice()
     m_url = url;
 }
 
-void RemoteDevice::Connect(QString ip, int port) {
+void RemoteDevice::connectRemoteDevice(QString ip, int port) {
     this->port = port;
     this->ip = ip;
     delete socket;
     socket = new QTcpSocket();
-    connect((socket), SIGNAL(connected()), this, SLOT(_TcpConnected()));
-    connect((socket), SIGNAL(disconnected()), this, SLOT(_TcpDisconnected()));
-    connect((socket), SIGNAL(readyRead()), this, SLOT(_DataAvailable()));
-    connect((socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(_TcpError(QAbstractSocket::SocketError)));
+    connect((socket), SIGNAL(connected()), this, SLOT(_tcpConnected()));
+    connect((socket), SIGNAL(disconnected()), this, SLOT(_tcpDisconnected()));
+    connect((socket), SIGNAL(readyRead()), this, SLOT(_dataAvailable()));
+    connect((socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(_tcpError(QAbstractSocket::SocketError)));
     socket->connectToHost(ip, port);
 }
 
@@ -94,11 +94,11 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand, QString
             socket->setMulticastInterface(iface);
 
             connect(socket, SIGNAL(readyRead()),
-                    this, SLOT(ProcessPendingDatagrams()));
+                    this, SLOT(processPendingDatagrams()));
             multicatsSockets.push_back(socket);
         }
     }
-    SendMsg();
+    sendMsg();
 }
 
 AutoSearchDialog::~AutoSearchDialog() {
@@ -124,7 +124,7 @@ void AutoSearchDialog::changeEvent(QEvent *e) {
     }
 }
 
-void AutoSearchDialog::NewDevice(QString , QString ip, QString location) {
+void AutoSearchDialog::newDevice(QString , QString ip, QString location) {
     QUrl url = QUrl(location);
     QEventLoop eventLoop;
 
@@ -192,22 +192,22 @@ void AutoSearchDialog::NewDevice(QString , QString ip, QString location) {
     eventLoop.quit();
     QString deviceKey = modelName.append("/").append(QString::number(url.port()));
     RemoteDevice* device = new RemoteDevice(location);
-    connect((device), SIGNAL(TcpConnected()), this, SLOT(TcpConnected()));
-    connect((device), SIGNAL(TcpDisconnected()), this, SLOT(TcpDisconnected()));
-    connect((device), SIGNAL(DataAvailable()), this, SLOT(ReadString()));
-    connect((device), SIGNAL(TcpError(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
-    device->Connect(ip, url.port());
+    connect((device), SIGNAL(tcpConnected()), this, SLOT(tcpConnected()));
+    connect((device), SIGNAL(tcpDisconnected()), this, SLOT(tcpDisconnected()));
+    connect((device), SIGNAL(dataAvailable()), this, SLOT(readString()));
+    connect((device), SIGNAL(tcpError(QAbstractSocket::SocketError)), this,  SLOT(tcpError(QAbstractSocket::SocketError)));
+    device->connectRemoteDevice(ip, url.port());
     remoteDevices.insert(deviceKey,device);
 }
 
-void AutoSearchDialog::TcpConnected()
+void AutoSearchDialog::tcpConnected()
 {
     QObject* sender = QObject::sender();
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
     device->socket->write(QString().append(pingCommand).append("\r\n").toLatin1().data());
 }
 
-void AutoSearchDialog::TcpDisconnected()
+void AutoSearchDialog::tcpDisconnected()
 {
 }
 
@@ -226,20 +226,20 @@ void AutoSearchDialog::reconnect(QString & key,QString & ip,int port,RemoteDevic
     if (key != NULL && (port == 23 || port != 8102))
     {
         device = new RemoteDevice();
-        connect((device), SIGNAL(TcpConnected()), this, SLOT(TcpConnected()));
-        connect((device), SIGNAL(TcpDisconnected()), this, SLOT(TcpDisconnected()));
-        connect((device), SIGNAL(DataAvailable()), this, SLOT(ReadString()));
-        connect((device), SIGNAL(TcpError(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
+        connect((device), SIGNAL(tcpConnected()), this, SLOT(tcpConnected()));
+        connect((device), SIGNAL(tcpDisconnected()), this, SLOT(tcpDisconnected()));
+        connect((device), SIGNAL(dataAvailable()), this, SLOT(readString()));
+        connect((device), SIGNAL(tcpError(QAbstractSocket::SocketError)), this,  SLOT(tcpError(QAbstractSocket::SocketError)));
         if(port == 23) {
-            device->Connect(ip, 8102);
+            device->connectRemoteDevice(ip, 8102);
             remoteDevices.insert(key.append("/8102"), device);
         } else {
-            device->Connect(ip, 23);
+            device->connectRemoteDevice(ip, 23);
             remoteDevices.insert(key.append("/23"), device);
         }
     }
 }
-void AutoSearchDialog::ReadString() {
+void AutoSearchDialog::readString() {
     QObject* sender = QObject::sender();
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
     int count = device->socket->bytesAvailable();
@@ -294,7 +294,7 @@ void AutoSearchDialog::ReadString() {
     reconnect(key,ip,port,device);
 }
 
-void AutoSearchDialog::TcpError(QAbstractSocket::SocketError socketError) {
+void AutoSearchDialog::tcpError(QAbstractSocket::SocketError socketError) {
     QObject* sender = QObject::sender();
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
     QString str;
@@ -363,7 +363,7 @@ void AutoSearchDialog::closeEvent(QCloseEvent *event) {
     QWidget::closeEvent(event);
 }
 
-void AutoSearchDialog::ProcessPendingDatagrams() {
+void AutoSearchDialog::processPendingDatagrams() {
     foreach( QUdpSocket* socket, multicatsSockets) {
         while (socket->hasPendingDatagrams()) {
             QByteArray datagram;
@@ -380,15 +380,17 @@ void AutoSearchDialog::ProcessPendingDatagrams() {
                         break;
                     }
                 }
-                NewDevice("", remoteAddr.toString(), location);
+                newDevice("", remoteAddr.toString(), location);
             }
         }
     }
 }
 
-void AutoSearchDialog::SendMsg() {
+void AutoSearchDialog::sendMsg() {
     QString datagram;
-    datagram.append("M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\n"
+    datagram.append("M-SEARCH * HTTP/1.1\r\nHOST: ")
+            .append(groupAddress.toString())
+            .append(":1900\r\n"
                     "MAN: \"ssdp:discover\"\r\n"
                     "MX: 1\r\n"
                     "ST: upnp:rootdevice\r\n"

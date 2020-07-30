@@ -37,8 +37,9 @@ class RemoteControl : public QMainWindow
     QSignalMapper*     signalMapper;
     int                deviceIpPort = -1;
     QString            deviceIpAddress;
+    QString            deviceName;
 
-    void ConnectDevice();
+    void connectDevice();
 
     QIcon           powerButtonOnIcon;
     QIcon           powerButtonOffIcon;
@@ -71,16 +72,16 @@ private slots:
 
     void on_btn_Connect_customContextMenuRequested(const QPoint &pos);
     // MIGRATION
-    void DeviceOffline(bool);
-    void UpdateDisplayInfo (QRegExp &rx);
-    void EnableControls(bool enable);
-    void CheckOnline();
-    void CheckOnlineInternal();
-    void CommConnected();
-    void ChangeSettings();
-    void CommDisconnected();
-    void CommError(QString socketError);
-    bool SendCmd(const QString& cmd);
+    void deviceOffline(bool);
+    void updateDisplayInfo (QRegExp &rx);
+    void enableControls(bool enable);
+    void checkOnline();
+    void checkOnlineInternal();
+    void commConnected();
+    void changeSettings();
+    void commDisconnected();
+    void commError(QString socketError);
+    bool sendCmd(const QString& cmd);
     void onConnect();
     // MIGRATION END
     void on_btn_Power_clicked();

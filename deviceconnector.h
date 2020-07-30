@@ -36,6 +36,7 @@ public:
     int      devicePort;
     QString  deviceFamily;
     QVariant settings;
+    void setDevice(QString device, QString address, int port);
 private slots:
     void on_pushButtonAuto_clicked();
     void on_closeButton_clicked();
@@ -44,11 +45,14 @@ private slots:
 
     void on_comboBox_activated(const QString &arg1);
 
+    void on_comboBox_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::DeviceConnector *ui;
     void reloadDevicesFamily();
+    QString getIpAddress();
     void select(const QVariant action);
-    void SetIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port);
+    void setIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port);
 };
 
 #endif // DEVICECONNECTOR_H

@@ -37,21 +37,21 @@ class RemoteDevice : public QObject
 public:
     RemoteDevice();
     RemoteDevice(QString &url);
-    void Connect(QString ip, int port);
+    void connectRemoteDevice(QString ip, int port);
     ~RemoteDevice();
     QString ip;
     int port;
     QTcpSocket* socket;
 private slots:
-    void _DataAvailable(){emit DataAvailable();}
-    void _TcpError(QAbstractSocket::SocketError socketError){emit TcpError(socketError);}
-    void _TcpConnected(){emit TcpConnected();}
-    void _TcpDisconnected(){TcpDisconnected();}
+    void _dataAvailable(){emit dataAvailable();}
+    void _tcpError(QAbstractSocket::SocketError socketError){emit tcpError(socketError);}
+    void _tcpConnected(){emit tcpConnected();}
+    void _tcpDisconnected(){tcpDisconnected();}
 signals:
-    void DataAvailable();
-    void TcpError(QAbstractSocket::SocketError socketError);
-    void TcpConnected();
-    void TcpDisconnected();
+    void dataAvailable();
+    void tcpError(QAbstractSocket::SocketError socketError);
+    void tcpConnected();
+    void tcpDisconnected();
 };
 
 class AutoSearchDialog : public QDialog
@@ -80,15 +80,15 @@ protected:
     QVector<QUdpSocket*>    multicatsSockets;
     QHostAddress            groupAddress;
     QString removeDevice(QMap<QString,RemoteDevice*>  &remoteDevices,RemoteDevice* device);
-    void SendMsg();
+    void sendMsg();
     void reconnect(QString & key,QString & ip,int port,RemoteDevice* device);
 private slots:
-    void NewDevice(QString name, QString ip, QString location);
-    void ReadString();
-    void TcpError(QAbstractSocket::SocketError socketError);
-    void TcpConnected();
-    void TcpDisconnected();
-    void ProcessPendingDatagrams();
+    void newDevice(QString name, QString ip, QString location);
+    void readString();
+    void tcpError(QAbstractSocket::SocketError socketError);
+    void tcpConnected();
+    void tcpDisconnected();
+    void processPendingDatagrams();
     void on_CancelButton_clicked();
     void on_continueButton_clicked();
     void on_repeatButton_clicked();

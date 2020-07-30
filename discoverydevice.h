@@ -25,7 +25,7 @@ public:
     QString ip;
     int port;
     DiscoveryDevice();
-    virtual void Connect(QString ip, int port);
+    virtual void connectDevice(QString ip, int port);
     virtual int bytesAvailable();
     virtual int write(QString str);
     //virtual int read(char* data, quint64 maxSize);
@@ -35,17 +35,17 @@ public:
 protected:
     QTcpSocket* socket;
     virtual QString read();
-    virtual void NewDataToRead() = 0;
+    virtual void newDataToRead() = 0;
 protected slots:
-    void _NewDataToRead(){NewDataToRead();}
+    void _newDataToRead();
     //void _DataAvailable(){emit DataAvailable();}
-    void _TcpError(QAbstractSocket::SocketError socketError){emit TcpError(socketError);}
-    void _TcpConnected(){emit TcpConnected();}
-    void _TcpDisconnected(){TcpDisconnected();}
+    void _tcpError(QAbstractSocket::SocketError socketError){ emit tcpError(socketError); }
+    void _tcpConnected() { emit tcpConnected(); }
+    void _tcpDisconnected() { tcpDisconnected(); }
 signals:
-    void DataReceived(const QString&);
-    void TcpError(QAbstractSocket::SocketError socketError);
-    void TcpConnected();
-    void TcpDisconnected();
+    void dataReceived(const QString&);
+    void tcpError(QAbstractSocket::SocketError socketError);
+    void tcpConnected();
+    void tcpDisconnected();
 };
 #endif // DISCOVERYDEVICE_H

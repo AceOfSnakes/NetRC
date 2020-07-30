@@ -46,3 +46,10 @@ RESOURCES += \
     resource.qrc
 
 RC_ICONS = icon_power.ico
+
+DISTFILES += \
+    settings/BDOppo10X.json \
+    settings/BDOppo20X.json \
+    settings/BDOppo9X.json \
+    settings/BDPioneer.json \
+    settings/RCVPioneer.json

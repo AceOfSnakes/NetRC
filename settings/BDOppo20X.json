@@ -38,7 +38,6 @@
    "navForward":"#FWD",
    "navFastForward":"#NXT",
    "navFastBackward":"#PRE",
-   "navStop":"#STP",
 
    "down":"#NDN",
    "left":"#NLT",

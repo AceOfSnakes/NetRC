@@ -19,7 +19,11 @@
 #include <QDateTime>
 
 int main(int argc, char *argv[]) {
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+
     QApplication app(argc, argv);
+    qDebug()<<qApp->font().pixelSize();
+    //app.setAttribute(Qt::AA_DisableHighDpiScaling);
     app.setApplicationName("NetRC");
     app.setOrganizationName("Ace Of Snakes");
 
@@ -35,6 +39,6 @@ int main(int argc, char *argv[]) {
                               .append(" x64")
                           #endif
                               );
-    w.show();
+    //w.show();
     return app.exec();
 }

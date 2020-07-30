@@ -24,10 +24,10 @@ DeviceInterface::DeviceInterface():errorCount(0) {
     rxBD.setPattern(deviceSettings.value("timeRegExp").toString());
     connected = false;
     // socket
-    connect((&socket), SIGNAL(connected()), this, SLOT(TcpConnected()));
-    connect((&socket), SIGNAL(disconnected()), this, SLOT(TcpDisconnected()));
-    connect((&socket), SIGNAL(readyRead()), this, SLOT(ReadString()));
-    connect((&socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(TcpError(QAbstractSocket::SocketError)));
+    connect((&socket), SIGNAL(connected()), this, SLOT(tcpConnected()));
+    connect((&socket), SIGNAL(disconnected()), this, SLOT(tcpDisconnected()));
+    connect((&socket), SIGNAL(readyRead()), this, SLOT(readString()));
+    connect((&socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(tcpError(QAbstractSocket::SocketError)));
     reloadDeviceSettings(deviceSettings);
 }
 
@@ -37,35 +37,35 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
     pingCommands.clear();
     pingCommands.append(deviceSettings.value("pingCommands").toList());
     rxBD.setPattern(deviceSettings.value("timeRegExp").toString());
-    emit SettingsChanged();
+    emit settingsChanged();
 }
 
-void DeviceInterface::ConnectToDevice(const QString& PlayerIpAddress, const int PlayerIpPort) {
+void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const int PlayerIpPort) {
     socket.disconnectFromHost();
     socket.connectToHost(PlayerIpAddress, PlayerIpPort);
 }
 
-void DeviceInterface::Disconnect() {
+void DeviceInterface::disconnect() {
     connected = false;
     socket.disconnectFromHost();
     socket.close();
 }
 
-void DeviceInterface::TcpConnected() {
+void DeviceInterface::tcpConnected() {
     connected = true;
-    emit Connected();
+    emit deviceConnected();
 }
 
-void DeviceInterface::TcpDisconnected() {
+void DeviceInterface::tcpDisconnected() {
     connected = false;
-    emit Disconnected();
+    emit deviceDisconnected();
 }
 
-bool DeviceInterface::IsConnected() {
+bool DeviceInterface::isConnected() {
     return connected;
 }
 
-void DeviceInterface::ReadString() {
+void DeviceInterface::readString() {
     // read all available data
     int count = socket.bytesAvailable();
     std::vector<char> data;
@@ -94,7 +94,7 @@ void DeviceInterface::ReadString() {
                 str = str.fromUtf8(receivedString.c_str());
                 qDebug() << QString("What %1 count %2").arg(str).arg(count);
                 InterpretString(str);
-                emit DataReceived(str);
+                emit dataReceived(str);
             }
             receivedString = "";
         }
@@ -104,7 +104,7 @@ void DeviceInterface::ReadString() {
         receivedString.append((const char*)&data[lineStartPos]);
 }
 
-void DeviceInterface::TcpError(QAbstractSocket::SocketError socketError) {
+void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     QString str;
     switch (socketError) {
     case QAbstractSocket::RemoteHostClosedError:
@@ -119,10 +119,10 @@ void DeviceInterface::TcpError(QAbstractSocket::SocketError socketError) {
     default:
         str = QString("The following error occurred: %1.").arg(socket.errorString());
     }
-    emit CommError(str);
+    emit commError(str);
 }
 
-bool DeviceInterface::SendCmd(const QString& cmd) {
+bool DeviceInterface::sendCmd(const QString& cmd) {
     QString tmp = cmd + (deviceSettings.value("crlf",true).toBool()?"\r\n":"\r");
     qDebug()<<tmp;
     return socket.write(tmp.toLatin1(), tmp.length()) == tmp.length();
@@ -136,7 +136,7 @@ void DeviceInterface::InterpretString(const QString& data) {
         errorCount ++;
         if(errorCount == pingCommands.size()) {
             qDebug()<< "offline !!!";
-            emit DeviceOffline(true);
+            emit deviceOffline(true);
         } else if(errorCount > pingCommands.size()) {
             errorCount = pingCommands.size();
         }
@@ -144,13 +144,13 @@ void DeviceInterface::InterpretString(const QString& data) {
     } else if (data.contains(deviceSettings.value("pingResponseOk").toString())) {
         //qDebug()<< "ok";
         if(!deviceSettings.value("initCmd").isNull()) {
-            SendCmd(deviceSettings.value("initCmd").toString());
+            sendCmd(deviceSettings.value("initCmd").toString());
         }
-        emit DeviceOffline(false);
+        emit deviceOffline(false);
         return;
     } else if(timeMatch) {
         //qDebug()<< "time";{
-        emit UpdateDisplayInfo(rxBD);
+        emit updateDisplayInfo(rxBD);
     }
     errorCount = 0;
 }
