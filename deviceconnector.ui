@@ -198,6 +198,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLineEdit" name="lineEditIP1">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>41</width>
@@ -249,6 +252,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditIP2">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>41</width>
@@ -300,6 +306,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditIP3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>41</width>
@@ -351,6 +360,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditIP4">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>41</width>
@@ -402,6 +414,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditIPPort">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>41</width>
@@ -474,6 +489,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonConnect">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>130</width>

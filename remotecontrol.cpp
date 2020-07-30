@@ -490,8 +490,8 @@ void RemoteControl::ChangeSettings() {
 
 void RemoteControl::on_btn_Power_clicked()
 {
-    qDebug()<<"deviceOnline"<<deviceOnline;
-    if (!deviceOnline ) {
+    qDebug()<<"deviceOnline"<<deviceOnline<<"OFFLINE STATUS"<<offlineStatus;
+    if (offlineStatus ) {
         SendCmd(deviceInterface.deviceSettings.value("powerOn").toString());
 //        CheckOnline();
     } else {

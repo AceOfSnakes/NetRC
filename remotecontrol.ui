@@ -182,8 +182,8 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>0</height>
+             <width>100</width>
+             <height>32</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -217,7 +217,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>10</width>
+             <width>1</width>
              <height>20</height>
             </size>
            </property>
@@ -233,13 +233,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>0</height>
+             <width>100</width>
+             <height>32</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>400</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>

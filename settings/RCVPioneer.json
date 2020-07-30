@@ -3,11 +3,12 @@
    "powerOn":"PO",
  
    "pingCommands":[  
-      "?RGD"
+      "?P",
+      "?RGD" 
    ],
-  "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}) :([0-9]{2}) :([0-9]{2})",
-   "pingResponseErr":"<00",
-   "pingResponseOk":"RGD",
+   "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}) :([0-9]{2}) :([0-9]{2})",
+   "pingResponseErr":"PWR1",
+   "pingResponseOk":"PWR0",
    "crlf": false,
    "prefferedPort": 23,
    "family": "Pioneer Receiver till 2016"
