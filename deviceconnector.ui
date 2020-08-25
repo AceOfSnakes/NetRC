@@ -79,7 +79,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="deviceProtocol">
        <property name="minimumSize">
         <size>
          <width>205</width>
@@ -524,7 +524,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>8</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
@@ -559,9 +559,9 @@
     </spacer>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="rememberPermanently">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="text">
       <string>Remember device permanently</string>

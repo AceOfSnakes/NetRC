@@ -29,12 +29,12 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
     setWindowFlags(windowFlags() & (~Qt::WindowContextHelpButtonHint) &(~Qt::WindowMaximizeButtonHint));
     if(!family.isEmpty()) {
-        ui->comboBox->addItem(family);
+        ui->deviceProtocol->addItem(family);
     }
     if(settings.toMap().value("pingResponseOk").toString().isEmpty()) {
         ui->groupBox_Connect->setEnabled(false);
         //ui->line_DeviceName->setEnabled(false);
-        ui->comboBox->setEnabled(true);
+        ui->deviceProtocol->setEnabled(true);
     }
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
     for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
@@ -53,7 +53,8 @@ DeviceConnector::~DeviceConnector() {
     delete ui;
 }
 
-void DeviceConnector::setDevice(QString device, QString address, int port) {
+void DeviceConnector::setDevice(QString deviceFamily, QString device, QString address, int port) {
+    ui->deviceProtocol->setCurrentText(deviceFamily);
     ui->line_DeviceName->setText(device);
     QStringList l = address.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
     if (l.size() == 4) {
@@ -117,6 +118,19 @@ void DeviceConnector::on_closeButton_clicked()
     device = ui->line_DeviceName->text();
     devicePort = ui->lineEditIPPort->text().toInt();
     deviceFamily = settings.toMap().value("family").toString();
+    if(ui->rememberPermanently->isChecked()) {
+        QSettings sets(qApp->organizationName(),qApp->applicationName());
+        sets.beginGroup("global");
+        sets.beginGroup("devices");
+        sets.beginGroup(QString(device).replace("/","@@"));
+        sets.setValue("deviceName", device);
+        sets.setValue("deviceFamily", deviceFamily);
+        sets.setValue("devicePort", devicePort);
+        sets.setValue("deviceIPAddress", deviceIPAddress);
+        sets.endGroup();
+        sets.endGroup();
+        sets.endGroup();
+    }
     close();
 }
 
@@ -145,27 +159,25 @@ void DeviceConnector::select(QVariant vars) {
 void DeviceConnector::reloadDevicesFamily() {
     QStringList saved = RCSettings::settingsList();
     saved.sort();
-    ui->comboBox->clear();
-    ui->comboBox->addItems(saved);
+    ui->deviceProtocol->clear();
+    ui->deviceProtocol->addItems(saved);
     QString family = settings.toMap().value("family").toString();
-    qDebug()<<"Selected"<<family ;
-    on_comboBox_activated(family );
-    qDebug()<<ui->comboBox->findText(family );
-    if(ui->comboBox->findText(family )>0) {
-        ui->comboBox->setCurrentIndex(ui->comboBox->findText(family ));
+    on_deviceProtocol_activated(family );
+    qDebug()<<ui->deviceProtocol->findText(family );
+    if(ui->deviceProtocol->findText(family )>0) {
+        ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));
     } else {
         if(!saved.isEmpty()) {
-            on_comboBox_activated(saved.at(0));
+            on_deviceProtocol_activated(saved.at(0));
         }
     }
 }
 
-void DeviceConnector::on_comboBox_activated(const QString &arg1) {
+void DeviceConnector::on_deviceProtocol_activated(const QString &) {
 
 }
 
-void DeviceConnector::on_comboBox_currentIndexChanged(const QString &arg1) {
-    qDebug() << "on_comboBox_activated" << device;
+void DeviceConnector::on_deviceProtocol_currentIndexChanged(const QString &arg1) {
     select(RCSettings::load(arg1));
     if(device.isEmpty()) {
         ui->line_DeviceName->setText("");

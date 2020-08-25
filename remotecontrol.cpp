@@ -100,6 +100,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
 
     redraw();
     //ui->listView->row().
+    reloadLatestDevice();
     qDebug()<<"ui->listWidget->item(1)->font().pixelSize()"<< ui->listWidget->item(1)->font().weight();
 }
 
@@ -151,7 +152,8 @@ void RemoteControl::loadSettings() {
     sets.beginGroup("global");
     sets.beginGroup("view");
     ui->actionView_Enabled->setChecked(sets.value("showEnabled").toBool());
-    ui->actionMinimize_To_Tray->setChecked(sets.value("minimizeToTray").toBool());
+    ui->actionMinimize_To_Tray->setChecked(sets.value("minimizeToTray", true).toBool());
+    ui->actionSave_Latest_Device->setChecked(sets.value("saveLetestDevice", true).toBool());
     foreach(QWidget *action, ui->centralWidget->findChildren<QWidget*>(regx, Qt::FindDirectChildrenOnly)) {
         initSetting(action->objectName(), truex);
         action->setVisible(sets.value(action->objectName()).toBool());
@@ -166,6 +168,7 @@ void RemoteControl::saveSettings() {
     sets.beginGroup("view");
     sets.setValue("showEnabled", QVariant(ui->actionView_Enabled->isChecked()));
     sets.setValue("minimizeToTray", QVariant(ui->actionMinimize_To_Tray->isChecked()));
+    sets.setValue("saveLetestDevice", QVariant(ui->actionMinimize_To_Tray->isChecked()));
     foreach(QWidget *action, ui->centralWidget->findChildren<QWidget*>(regx, Qt::FindDirectChildrenOnly)) {
         if(!action->objectName().isEmpty()) {
             sets.setValue(action->objectName(), action->isVisible());
@@ -304,25 +307,48 @@ void RemoteControl::on_btn_Connect_clicked() {
         }
     }
 }
-
-void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &/*pos*/)
-{
+void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
-    deviceConnector.setDevice(deviceName, deviceIpAddress, deviceIpPort);
+    deviceConnector.setDevice(deviceFamily, deviceName, deviceIpAddress, deviceIpPort);
     qDebug() << deviceName << deviceIpAddress << deviceIpPort;
     deviceConnector.exec();
     qDebug () << deviceConnector.deviceFamily;
     if(!deviceConnector.deviceFamily.isEmpty()) {
-        ui->listWidget->item(1)->setText(deviceConnector.deviceFamily);
-        ui->listWidget->item(2)->setText(deviceConnector.device);
-        ui->listWidget->item(3)->setText(deviceConnector.deviceAddress);
         deviceName = deviceConnector.device;
         settings.swap(deviceConnector.settings);
-        deviceInterface.reloadDeviceSettings(settings.toMap());
-        deviceInterface.connectToDevice(deviceConnector.deviceIPAddress, deviceConnector.devicePort);
+        //deviceInterface.reloadDeviceSettings(settings.toMap());
+        //        deviceInterface.connectToDevice(deviceConnector.deviceIPAddress, deviceConnector.devicePort);
         deviceIpAddress = deviceConnector.deviceIPAddress;
+        deviceFamily = deviceConnector.deviceFamily;
         deviceIpPort = deviceConnector.devicePort;
+        reconnect();
         checkOnline();
+    }
+
+}
+void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &pos)
+{
+    QList<QString> devices;
+    QSettings sets(qApp->organizationName(),qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("devices");
+    devices = sets.childGroups();
+    sets.endGroup();
+    sets.endGroup();
+
+    qDebug() << devices;
+
+    if(devices.isEmpty()) {
+        newDevice();
+    }
+    else {
+        QMenu menu(ui->btn_Connect);
+        foreach(QString device, devices) {
+            menu.addAction(QString(device).replace("@@","/"), this,SLOT(reloadAndReconnect()) );
+        }
+        menu.addSeparator();
+        menu.addAction("New Device", this, SLOT(newDevice()));
+        menu.exec(this->mapToGlobal(pos));
     }
 }
 
@@ -353,14 +379,12 @@ void RemoteControl::updateDisplayInfo (QRegExp &rx) {
 }
 
 void RemoteControl::deviceOffline(bool offline) {
-    qDebug()<<"DeviceOffline(bool offline);"<<offline;
     ui->btn_Power->setIcon((offline) ? powerButtonOffIcon : powerButtonOnIcon);
     if(offline) {
         QRegExp qre;
         updateDisplayInfo(qre);
     }
     enableControls(!offline);
-    //deviceOnline = !offline;
     offlineStatus = offline;
 }
 
@@ -381,7 +405,7 @@ void RemoteControl::enableControls(bool enable)
 
 void RemoteControl::onConnect()
 {
-    qDebug()<<"deviceInterface.IsConnected()"<<deviceInterface.isConnected();
+    qDebug()<<"deviceInterface.IsConnected()" << deviceInterface.isConnected();
     if (!deviceInterface.isConnected()) {
         // connect
         // read settings from the line edits
@@ -406,14 +430,6 @@ void RemoteControl::onConnect()
             ip_port = "8102"; // set default
         }
         deviceIpPort = ip_port.toInt();
-        // save the ip address and port permanently
-        // TODO m_SettingsDialog->SetIpAddressBD(ip1, ip2, ip3, ip4, ip_port);
-        // TODO m_Settings.setValue("Player_IP/1", ip1);
-        // TODO m_Settings.setValue("Player_IP/2", ip2);
-        // TODO m_Settings.setValue("Player_IP/3", ip3);
-        // TODO m_Settings.setValue("Player_IP/4", ip4);
-        // TODO m_Settings.setValue("Player_IP/PORT", ip_port);
-
         connectDevice();
 
     }
@@ -446,7 +462,15 @@ void RemoteControl::commConnected() {
     ui->btn_Connect->setText(tr("Disconnect"));
     ui->btn_Connect->setChecked(true);
     ui->btn_Connect->setEnabled(true);
-    //ui->btn_Connect->adjustSize();
+
+    if(ui->actionSave_Latest_Device->isChecked()) {
+        QSettings sets(qApp->organizationName(),qApp->applicationName());
+        sets.beginGroup("global");
+        sets.beginGroup("devices");
+        sets.setValue("latestDevice", deviceName);
+        sets.endGroup();
+        sets.endGroup();
+    }
     ui->btn_Power->setEnabled(true);
     deviceOnline = true;
     enableControls(true);
@@ -460,7 +484,6 @@ void RemoteControl::commDisconnected() {
     ui->btn_Connect->setText(tr("Connect"));
     ui->btn_Connect->setEnabled(true);
     ui->btn_Connect->setChecked(false);
-    // TODO m_SettingsDialog->EnableIPInputBD(true);
     enableControls(false);
     ui->btn_Power->setEnabled(false);
     ui->btn_Connect->setIcon(connectButtonOffIcon);
@@ -489,19 +512,66 @@ void RemoteControl::changeSettings() {
             }
         }
     }
-    // TODO m_Settings.setValue("PlayerSettings", m_PlayerInterface.m_PlayerSettings);
 }
 
 
 void RemoteControl::on_btn_Power_clicked()
 {
-    qDebug()<<"deviceOnline"<<deviceOnline<<"OFFLINE STATUS"<<offlineStatus;
     if (offlineStatus ) {
         sendCmd(deviceInterface.deviceSettings.value("powerOn").toString());
-//        CheckOnline();
     } else {
         sendCmd(deviceInterface.deviceSettings.value("powerOff").toString());
-//        DeviceOffline(true);
     }
 }
 
+void RemoteControl::reconnect()
+{
+    ui->listWidget->item(1)->setText(deviceFamily);
+    ui->listWidget->item(2)->setText(deviceName);
+    ui->listWidget->item(3)->setText(QString(deviceIpAddress).append(QString().asprintf(":%d",deviceIpPort)));
+    if(deviceIpPort != -1) {
+        settings = RCSettings::load(deviceFamily);
+        deviceInterface.reloadDeviceSettings(settings.toMap());
+        deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
+    }
+}
+void RemoteControl::reloadAndReconnect() {
+        QAction *action = qobject_cast<QAction *> (sender());
+        qDebug() << "Action" << action;
+        if (action) {
+            reloadAndReconnect(QString(action->text()).replace("/","@@"));
+        }
+}
+
+void RemoteControl::reloadAndReconnect(QString device) {
+    QSettings sets(qApp->organizationName(),qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("devices");
+
+    sets.beginGroup(device);
+
+    deviceFamily = sets.value("deviceFamily", "").toString();
+    deviceName = sets.value("deviceName", "").toString();
+    deviceIpPort = sets.value("devicePort", deviceIpPort).toInt();
+    deviceIpAddress = sets.value("deviceIPAddress", deviceIpAddress).toString();
+
+    sets.endGroup();
+    sets.endGroup();
+    sets.endGroup();
+
+    qDebug() << "reconnect" << device << deviceFamily << deviceName << deviceIpAddress << deviceIpPort;
+    reconnect();
+}
+
+void RemoteControl::reloadLatestDevice() {
+    QSettings sets(qApp->organizationName(),qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("devices");
+    QString device = sets.value("latestDevice","").toString();
+    sets.endGroup();
+    sets.endGroup();
+
+    if(ui->actionSave_Latest_Device->isChecked()) {
+        reloadAndReconnect(QString(device).replace("/","@@"));
+    }
+}

@@ -37,6 +37,7 @@ class RemoteControl : public QMainWindow
     QSignalMapper*     signalMapper;
     int                deviceIpPort = -1;
     QString            deviceIpAddress;
+    QString            deviceFamily;
     QString            deviceName;
 
     void connectDevice();
@@ -51,6 +52,8 @@ class RemoteControl : public QMainWindow
 public:
     explicit RemoteControl(QWidget *parent = 0);
     ~RemoteControl();
+    void reconnect();
+
 protected:
      void changeEvent(QEvent *e);
 private slots:
@@ -83,9 +86,11 @@ private slots:
     void commError(QString socketError);
     bool sendCmd(const QString& cmd);
     void onConnect();
+    void newDevice();
     // MIGRATION END
     void on_btn_Power_clicked();
-
+    void reloadAndReconnect();
+    void reloadAndReconnect(QString );
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;
@@ -98,6 +103,7 @@ private:
     void select(const QVariant action);
     void redraw();
     void loadSettings();
+    void reloadLatestDevice();
     void initSetting(const QString & set, QVariant & value);
     void addPanel(QString style);
     void reloadMenu();

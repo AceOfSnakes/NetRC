@@ -36,16 +36,16 @@ public:
     int      devicePort;
     QString  deviceFamily;
     QVariant settings;
-    void setDevice(QString device, QString address, int port);
+    void setDevice(QString deviceFamily, QString device, QString address, int port);
 private slots:
     void on_pushButtonAuto_clicked();
     void on_closeButton_clicked();
 
     void on_loadConfig_clicked();
 
-    void on_comboBox_activated(const QString &arg1);
+    void on_deviceProtocol_activated(const QString &arg1);
 
-    void on_comboBox_currentIndexChanged(const QString &arg1);
+    void on_deviceProtocol_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::DeviceConnector *ui;
