@@ -102,6 +102,16 @@ RemoteControl::RemoteControl(QWidget *parent) :
     //ui->listView->row().
     reloadLatestDevice();
     qDebug()<<"ui->listWidget->item(1)->font().pixelSize()"<< ui->listWidget->item(1)->font().weight();
+//    ui->toolBar->addWidget(ui->colorWidget);
+//    ui->toolBar->adjustSize();
+////    addToolBar(ui->toolBar);
+//    ui->toolBar_2->addWidget(ui->numWidget);
+//    ui->toolBar_2->adjustSize();
+////    addToolBar(ui->toolBar_2);
+//    ui->toolBar_3->addWidget(ui->navigateWidget);
+////    addToolBar(ui->toolBar_3);
+//    ui->toolBar_4->addWidget(ui->menuWidget);
+////    addToolBar(ui->toolBar_4);
 }
 
 void RemoteControl::reloadMenu() {
@@ -213,7 +223,6 @@ void RemoteControl::on_actionView_Enabled_triggered() {
 void RemoteControl::switchPanel() {
     QAction *action = qobject_cast<QAction *> (sender());
     if (action) {
-        qDebug() << "action" << action->objectName();
         foreach(QWidget *action, ui->centralWidget->findChildren<QWidget*>(QRegularExpression(action->objectName().replace("action","")), Qt::FindDirectChildrenOnly)) {
             action->setVisible(!action->isVisible());
         }
@@ -347,7 +356,7 @@ void RemoteControl::on_btn_Connect_customContextMenuRequested(const QPoint &pos)
             menu.addAction(QString(device).replace("@@","/"), this,SLOT(reloadAndReconnect()) );
         }
         menu.addSeparator();
-        menu.addAction("New Device", this, SLOT(newDevice()));
+        menu.addAction("Device Management", this, SLOT(newDevice()));
         menu.exec(this->mapToGlobal(pos));
     }
 }
@@ -559,7 +568,7 @@ void RemoteControl::reloadAndReconnect(QString device) {
     sets.endGroup();
     sets.endGroup();
 
-    qDebug() << "reconnect" << device << deviceFamily << deviceName << deviceIpAddress << deviceIpPort;
+//    qDebug() << "reconnect" << device << deviceFamily << deviceName << deviceIpAddress << deviceIpPort;
     reconnect();
 }
 

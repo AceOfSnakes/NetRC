@@ -43,9 +43,13 @@ private slots:
 
     void on_loadConfig_clicked();
 
-    void on_deviceProtocol_activated(const QString &arg1);
+//    void on_deviceProtocol_activated(const QString &arg1);
 
     void on_deviceProtocol_currentIndexChanged(const QString &arg1);
+
+    void on_deleteFamily_clicked();
+
+    void on_deleteFamily_pressed();
 
 private:
     Ui::DeviceConnector *ui;

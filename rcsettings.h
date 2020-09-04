@@ -27,6 +27,7 @@ public:
     QVariant static load(QFile &file);
     QVariant static load(const QString family);
     QList<QString> static settingsList();
+    void static remove(QString family);
 };
 
 #endif // RCSETTINGS_H

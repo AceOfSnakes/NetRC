@@ -82,7 +82,7 @@
       <widget class="QComboBox" name="deviceProtocol">
        <property name="minimumSize">
         <size>
-         <width>205</width>
+         <width>182</width>
          <height>0</height>
         </size>
        </property>
@@ -99,8 +99,42 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>...</string>
+        <string>+</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deleteFamily">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>x</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -159,7 +193,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>240</width>
+         <width>250</width>
          <height>24</height>
         </size>
        </property>
@@ -366,7 +400,7 @@
            </font>
           </property>
           <property name="text">
-           <string>.</string>
+           <string>x</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -529,6 +563,9 @@
             <bold>false</bold>
            </font>
           </property>
+          <property name="inputMethodHints">
+           <set>Qt::ImhNone</set>
+          </property>
           <property name="text">
            <string>Connect to Device</string>
           </property>
@@ -536,6 +573,9 @@
            <bool>true</bool>
           </property>
           <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
            <bool>false</bool>
           </property>
          </widget>
@@ -564,7 +604,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>Remember device permanently</string>
+      <string>Remember device permanently. For devices with static IP</string>
      </property>
     </widget>
    </item>

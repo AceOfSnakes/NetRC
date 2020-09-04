@@ -1,7 +1,20 @@
 { 
    "powerOff":"PF",
    "powerOn":"PO",
- 
+   "powerOffPanel": [   
+         {
+            "title" : "Blu-Ray",
+             "command" : "Blu-Ray"
+         },
+         {
+             "title" : "HDMI",
+             "command" : "Blu-Ray"
+  	}
+               
+    ],
+   "panel":[   
+        
+    ],
    "pingCommands":[  
       "?P",
       "?RGD" 

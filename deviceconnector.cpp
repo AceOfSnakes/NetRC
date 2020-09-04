@@ -13,6 +13,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <QFileDialog>
+#include <QDebug>
+#include <QMessageBox>
 #include <QNetworkInterface>
 #include "deviceconnector.h"
 #include "autosearchdialog.h"
@@ -33,7 +35,6 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     }
     if(settings.toMap().value("pingResponseOk").toString().isEmpty()) {
         ui->groupBox_Connect->setEnabled(false);
-        //ui->line_DeviceName->setEnabled(false);
         ui->deviceProtocol->setEnabled(true);
     }
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
@@ -142,18 +143,21 @@ void DeviceConnector::on_loadConfig_clicked() {
                                                  .append(" (* *.*)"));
     if (!xfile.isEmpty()) {
         QFile file(xfile);
-        select(RCSettings::load(file));
+        QVariant var = RCSettings::load(file);
+        qDebug()<<var;
+        select(var);
+
         reloadDevicesFamily();
+        on_deviceProtocol_currentIndexChanged(var.toMap().value("family").toString());
     }
 }
 
 void DeviceConnector::select(QVariant vars) {
-        settings.swap(vars);
-        ui->groupBox_Connect->setEnabled(true);
-        QString family = settings.toMap().value("family").toString();
-        setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
-        //on_comboBox_activated(family);
-
+    settings.swap(vars);
+    ui->groupBox_Connect->setEnabled(true);
+    QString family = settings.toMap().value("family").toString();
+    deviceFamily = family;
+    setWindowTitle(qApp->applicationName().append(". Connect to ").append(family));
 }
 
 void DeviceConnector::reloadDevicesFamily() {
@@ -162,26 +166,40 @@ void DeviceConnector::reloadDevicesFamily() {
     ui->deviceProtocol->clear();
     ui->deviceProtocol->addItems(saved);
     QString family = settings.toMap().value("family").toString();
-    on_deviceProtocol_activated(family );
-    qDebug()<<ui->deviceProtocol->findText(family );
-    if(ui->deviceProtocol->findText(family )>0) {
+    if(ui->deviceProtocol->findText(family) > 0) {
         ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));
-    } else {
-        if(!saved.isEmpty()) {
-            on_deviceProtocol_activated(saved.at(0));
+    }
+}
+
+void DeviceConnector::on_deviceProtocol_currentIndexChanged(const QString &arg1) {
+    if(!arg1.isEmpty()) {
+        select(RCSettings::load(arg1));
+        ui->lineEditIPPort->setText(settings.toMap().value("prefferedPort").toString());
+        ui->line_DeviceName->setText("");
+        ui->lineEditIP4->setText("?");
+        if(ui->deviceProtocol->findText(arg1) > 0) {
+            ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
+        }
+
+    }
+}
+
+void DeviceConnector::on_deleteFamily_clicked() {
+    if(!ui->deviceProtocol->currentText().isEmpty()) {
+        QMessageBox::StandardButton button = QMessageBox::information(
+                    this,
+                    QString("Remove \"").append(ui->deviceProtocol->currentText()).append("\""),
+                    QString("Remove \"").append(ui->deviceProtocol->currentText()).append("\" from available device protocols?    ")
+                    .append("\nAll permanently saved assosiated devices will also be deleted    "),
+                    QMessageBox::Yes | QMessageBox::No ,
+                    QMessageBox::Yes);
+        if(button == QMessageBox::Yes) {
+            RCSettings::remove(ui->deviceProtocol->currentText());
+            reloadDevicesFamily();
         }
     }
 }
 
-void DeviceConnector::on_deviceProtocol_activated(const QString &) {
-
-}
-
-void DeviceConnector::on_deviceProtocol_currentIndexChanged(const QString &arg1) {
-    select(RCSettings::load(arg1));
-    if(device.isEmpty()) {
-        ui->line_DeviceName->setText("");
-    }
-
-    ui->lineEditIP4->setText("?");
+void DeviceConnector::on_deleteFamily_pressed() {
+    on_deleteFamily_clicked();
 }

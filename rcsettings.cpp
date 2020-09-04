@@ -22,16 +22,37 @@ RCSettings::RCSettings() {
 }
 
 QVariant RCSettings::load(QString family) {
-    QString result;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.beginGroup("family");
     QVariant val = sets.value(family);
-    result =  val.toMap().value("family").toString();
     sets.endGroup();
     sets.endGroup();
+    qDebug() << val;
     return val;
 }
+
+void RCSettings::remove(QString family) {
+    QString result;
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("family");
+    sets.remove(family);
+    sets.endGroup();
+    sets.beginGroup("devices");
+    foreach(QString key, sets.childGroups()) {
+        sets.beginGroup(key);
+        QString fam =sets.value("deviceFamily").toString();
+        sets.endGroup();
+        if(fam == family) {
+            qDebug()<< "remove"<<key;
+            sets.remove(key);
+        }
+    }
+    sets.endGroup();
+    sets.endGroup();
+}
+
 
 QVariant RCSettings::load(QFile &file) {
     if (file.open(QIODevice::ReadOnly)) {

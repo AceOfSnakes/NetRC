@@ -7,6 +7,7 @@
 QT       += core gui network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+#CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 static { # everything below takes effect with CONFIG += static
     CONFIG += static
