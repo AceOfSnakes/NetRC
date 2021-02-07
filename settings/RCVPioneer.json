@@ -1,0 +1,127 @@
+{ 
+   "panel":[   
+       [
+         {
+            "columns":4
+         },
+
+         {
+            "btn":"bd",
+            "title":"BD"
+         },
+         {
+            "btn":"dvd",
+            "title":"DVD"
+         },
+         {
+            "btn":"dvr",
+            "title":"DVR"
+         },
+         {
+            "btn":"hdmi",
+            "title":"HDMI"
+         },
+         {
+            "btn":"tv",
+            "title":"TV"
+         },
+         {
+            "btn":"cd",
+            "title":"CD"
+         },
+         {
+            "btn":"net",
+            "title":"NET"
+         },
+         {
+            "btn":"adpt",
+            "title":"ADPT"
+         },
+         {
+            "btn":"ipod",
+            "title":"iPod"
+         },
+         {
+            "btn":"sat",
+            "title":"SAT"
+         },
+         {
+            "btn":"mhl",
+            "title":"MHL"
+         },
+         {
+            "btn":"tuner",
+            "title":"TUNER"
+         },
+         {
+            "btn":"prevd",
+            "title":"<<"
+         },
+         {
+            "btn":"nextd",
+            "title":">>"
+         }
+
+      ]
+    ],
+    "bd": "25FN",
+    "dvd": "04FN",
+    "dvr": "15FN",
+    "hdmi": "31FN",
+    "tv": "05FN",
+    "cd": "01FN",
+    "net": "26FN",
+    "adpt": "33FN",
+    "ipod": "17FN",
+    "sat": "06FN",
+    "mhl": "48FN",
+    "tuner": "02FN",
+    "nextd": "FU",
+    "prevd": "FD",
+
+    "down":"CDN",
+    "left":"CLE",
+    "right":"CRI",
+    "up":"CUP",
+    "ok":"CEN",
+
+    "volUp":"VU",
+    "volDown":"VD",
+    "mute":"MZ",
+
+
+
+    "powerOff":"PF",
+    "powerOn":"PO",
+
+
+   "pingCommands":[  
+      "?P",
+      "?F"
+   ],
+   "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}) :([0-9]{2}) :([0-9]{2})",
+   "deviceIdRegExp":"FN([0-9]{2})",
+   "deviceNameRegExp":"RGB[0-9]{3}(.*)",
+   "deviceNameRq":"?RGB%s",
+   "pingResponseErr":"PWR1",
+   "pingResponseOk":"PWR0",
+
+   "standbyThroughResponseErr": ["STU00"],
+   "standbyThroughResponseOk": [
+        "STU01",
+        "STU02",
+        "STU03",
+        "STU04",
+        "STU05",
+        "STU06",
+        "STU07",
+        "STU08",
+        "STU09",
+        "STU10"
+    ],
+
+   "crlf": false,
+   "prefferedPort": 8102,
+   "family": "Pioneer Receiver till 2016"
+
+}
