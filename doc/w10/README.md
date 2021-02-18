@@ -2,7 +2,7 @@
     Windows
     Edition     Windows 10 Pro
     Version	    20H2
-    OS build    19042.782
+    OS build    19042.904
 
 ![About](./images/about.png)
 
