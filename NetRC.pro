@@ -21,6 +21,7 @@ TARGET = NetRC
 TEMPLATE = app
 
 SOURCES += main.cpp\
+        commons.cpp \
         debug.cpp \
         filedialogwithhistory.cpp \
         aboutdialog.cpp \
@@ -33,6 +34,7 @@ SOURCES += main.cpp\
         settings.cpp
 
 HEADERS  += remotecontrol.h \
+    commons.h \
     debug.h \
     filedialogwithhistory.h \
     aboutdialog.h \

@@ -190,15 +190,20 @@ QLabel#producer {
     color: #bbb;
 }
 
+
 QTreeView::branch:selected, QListView::item:selected,
 QTreeView::item:selected, QFileDialog::item:selected,
-QListView::item:selected:active 
-{
+QListView::item:selected:active,
+QComboBox::item:selected {
     background-color: #999;
     selection-background-color: #999;
-    color: white;
-    show-decoration-selected: 1;
+    color: black;
 }
+
+QComboBox::indicator {
+    image: none; 
+}
+
 QLineEdit {
     selection-background-color: #999;
 }

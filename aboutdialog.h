@@ -28,6 +28,8 @@ class AboutDialog : public QDialog
 public:
     explicit AboutDialog(QWidget *parent = 0);
     ~AboutDialog();
+    void compilerQString(QString compiler);
+    
 private:
     Ui::AboutDialog *ui;
 };

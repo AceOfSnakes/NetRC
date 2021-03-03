@@ -41,7 +41,7 @@
 void RemoteControl::restoreSettings()
 {
     QSettings settings(qApp->organizationName(),
-                     qApp->applicationName());
+                       qApp->applicationName());
 
     settings.beginGroup("global");
     setGeometry(settings.value("geometryX").toInt(),settings.value("geometryY").toInt(),0,0);
@@ -644,8 +644,12 @@ void RemoteControl::debugClicked() {
     }
     debugDialog = new Debug(&deviceInterface, this) ;
 
+    if(this->screen()->geometry().width() < (x() + width() + debugDialog->width()+6)) {
+        debugDialog->move(debugDialog->mapFromGlobal(QPoint(x() - 6 - debugDialog->width(), y())));
+    } else {
+        debugDialog->move(debugDialog->mapFromGlobal(QPoint(x() + width() + 6, y())));
+    }
 
-    debugDialog->move(debugDialog->mapFromGlobal(QPoint(x() + width() + 6, y())));
     ui->debugButton->setChecked(true);
     connect(&deviceInterface, SIGNAL(tx(const QString)), debugDialog, SLOT(write(const QString)));
     connect(&deviceInterface, SIGNAL(rx(const QString)), debugDialog, SLOT(read(const QString)));
