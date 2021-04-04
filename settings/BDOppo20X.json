@@ -32,18 +32,9 @@
       ],
       [
          {
-            "columns":4,
+            "columns":2,
             "position":2
-         },
-
-         {
-            "btn":"clear",
-            "title":"Clear"
-         },
-         {
-            "btn":"goto",
-            "title":"GoTo"
-         },
+        },
          {
             "btn":"info",
             "title":"Info"
@@ -147,6 +138,8 @@
    "number7":"#NU7",
    "number8":"#NU8",
    "number9":"#NU9",
+ 
+
    "navPause":"#PAU",
    "navPlay":"#PLA",
    "navStop":"#STP",
@@ -160,8 +153,8 @@
    "up":"#NUP",
    "ok":"#SEL",
 
-   "clear":"#CLR",
-   "goto":"#GOT",
+   "numberClear":"#CLR",
+   "numberGo":"#GOT",
    "info":"#OSD",
    "home":"#HOM",
 

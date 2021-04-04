@@ -425,6 +425,9 @@ void RemoteControl::checkOnlineInternal() {
         foreach (QVariant ping_command, deviceInterface.pingCommands) {
             sendCmd(ping_command.toString());
         }
+        if(!deviceInterface.deviceSettings.value("initCmd").isNull()) {
+            sendCmd(deviceInterface.deviceSettings.value("initCmd").toString());
+        }
     }
 }
 

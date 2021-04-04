@@ -37,5 +37,7 @@
         <file>style.qss</file>
         <file>images/ace.png</file>
         <file>images/about.png</file>
+        <file>images/nav/numbers/go.png</file>
+        <file>images/nav/numbers/go1.png</file>
     </qresource>
 </RCC>
