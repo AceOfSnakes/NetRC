@@ -1,7 +1,7 @@
 # Windows 10
     Windows
     Edition     Windows 10 Pro
-    Version	21H1
+    Version	    21H1
     OS build    19043.867
 
 ![About](./images/about.png)
