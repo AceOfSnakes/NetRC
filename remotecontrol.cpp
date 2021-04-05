@@ -28,6 +28,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QJsonObject>
+#include <QSpacerItem>
 #include <QJsonArray>
 #include <QNetworkAddressEntry>
 #include <QWidget>
@@ -214,12 +215,17 @@ void RemoteControl::switchPanel() {
 }
 
 void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
+
+//    ui->centralWidget->layout()->addWidget(
+//                new QSpacerItem(0,1000, QSizePolicy::Expanding, QSizePolicy::Expanding));
     QWidget *widInt = new QWidget(ui->centralWidget);
     widInt->setEnabled(true);
     widInt->setVisible(true);
     QString panelName = QString().asprintf("Panel_%d", panelIdx);
     widInt->setObjectName(panelName);
     QGridLayout* layout = new QGridLayout(widInt);
+//    layout->addWidget(
+//                    new QSpacerItem(0,1000, QSizePolicy::Expanding, QSizePolicy::Expanding));
     layout->setContentsMargins(9, 6, 9, 0);
     layout->setSpacing(3);
 

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>1032</height>
+    <height>1024</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>222</width>
-    <height>1000</height>
+    <height>1024</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>225</width>
-    <height>1032</height>
+    <height>1024</height>
    </size>
   </property>
   <property name="palette">
@@ -97,13 +97,13 @@
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>1000</height>
+     <height>1024</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>225</width>
-     <height>1000</height>
+     <height>1024</height>
     </size>
    </property>
    <property name="layoutDirection">
