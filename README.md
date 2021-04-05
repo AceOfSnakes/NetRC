@@ -18,6 +18,7 @@ Some useful files for make device protocol JSON configuration file can be found 
 
 # Known devices
 * [OPPO UDP-203](doc/OPPO_UDP-203/README.md)
+* [Pioneer BDP-140](doc/Pioneer_BDP-140/README.md)
 * [Pioneer VSX-923](doc/Pioneer_VSX923/README.md)
 
 # Tested Environment
