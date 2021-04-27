@@ -126,7 +126,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     defaultLabels.insert("volume", "Vol");
 
     signalMapper = new QSignalMapper(this);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Window | Qt::WindowMinimizeButtonHint);
     setAttribute(Qt::WA_TranslucentBackground);
     ui->setupUi(this);
 
@@ -282,7 +282,7 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
 
 void RemoteControl::showHide( ) {
     if (RCSettings::isMinimizeToTrayEnabled() ) {
-        isVisible() ? hide() : show();
+        isVisible() ? hide() : show(); activateWindow();
     }
 }
 
@@ -297,12 +297,12 @@ void RemoteControl::showHideWithReason(QSystemTrayIcon::ActivationReason reason)
 }
 
 void RemoteControl::changeEvent(QEvent *e) {
-    e->accept();
-    QMainWindow::changeEvent(e);
+    //e->accept();
+    //QMainWindow::changeEvent(e);
     switch (e->type()) {
     case QEvent::WindowStateChange:
         showHide();
-        e->accept();
+        //e->accept();
         break;
     default:
         break;
