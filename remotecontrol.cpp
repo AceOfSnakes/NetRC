@@ -95,7 +95,7 @@ void RemoteControl::initConnect()
 
 void RemoteControl::initTray() {
 
-    trayIcon = new QSystemTrayIcon(QIcon(QString(":/images/").append("icon-power").append(".png")), this);
+    trayIcon = new QSystemTrayIcon(QIcon(QString(":/images/").append("about").append(".png")), this);
     connect(trayIcon, &QSystemTrayIcon::activated, this, &RemoteControl::showHideWithReason);
 
     QAction *quitAction = new QAction( "Exit", trayIcon );
