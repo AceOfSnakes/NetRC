@@ -48,7 +48,7 @@ private slots:
     void _dataAvailable(){emit dataAvailable();}
     void _tcpError(QAbstractSocket::SocketError socketError){emit tcpError(socketError);}
     void _tcpConnected(){emit tcpConnected();}
-    void _tcpDisconnected(){tcpDisconnected();}
+    void _tcpDisconnected(){emit tcpDisconnected();}
 signals:
     void dataAvailable();
     void tcpError(QAbstractSocket::SocketError socketError);

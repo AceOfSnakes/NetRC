@@ -54,8 +54,7 @@ Settings::~Settings() {
     delete ui;
 }
 
-void Settings::saveSettings()
-{
+void Settings::saveSettings() {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.beginGroup("view");
@@ -92,7 +91,7 @@ void Settings::loadTheme() {
                                 .append(tr("All files"))
                                 .append(" (* *.*)"), "theme");
     if (!xfile.isEmpty()) {
-        QByteArray style = loadStyleSheet(xfile);
+        loadStyleSheet(xfile);
     }
 }
 

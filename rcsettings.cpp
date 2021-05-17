@@ -32,7 +32,6 @@ QVariant RCSettings::load(QString family) {
 }
 
 void RCSettings::remove(QString family) {
-    QString result;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.beginGroup("family");

@@ -41,7 +41,7 @@ protected slots:
     //void _DataAvailable(){emit DataAvailable();}
     void _tcpError(QAbstractSocket::SocketError socketError){ emit tcpError(socketError); }
     void _tcpConnected() { emit tcpConnected(); }
-    void _tcpDisconnected() { tcpDisconnected(); }
+    void _tcpDisconnected() { emit tcpDisconnected(); }
 signals:
     void dataReceived(const QString&);
     void tcpError(QAbstractSocket::SocketError socketError);
