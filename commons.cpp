@@ -12,7 +12,9 @@ QString Commons::compilerQString() {
     compiler.append(QString().asprintf("Compiler: gcc %s", __VERSION__));
 #elif defined _MSC_VER
     compiler.append("Compiler: Visual Studio");
-#if _MSC_VER >= 1928
+#if _MSC_VER >= 1929
+    compiler.append(" 2019 / MSVC++ 16.").append(QString().asprintf("%d",((_MSC_VER % 100) - 19)));
+#elif _MSC_VER >= 1928
 #if _MSC_FULL_VER >= 192829500
     // once more again M$ version out of control :(
     // https://developercommunity.visualstudio.com/t/the-169-cc-compiler-still-uses-the-same-version-nu/1335194#T-N1337120
