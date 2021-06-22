@@ -1,4 +1,4 @@
 *.user
 *.autosave
 NetRC.pro.user.*
-
+.git*
