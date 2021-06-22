@@ -19,39 +19,39 @@ static { # everything below takes effect with CONFIG += static
 
 TARGET = NetRC
 TEMPLATE = app
+INCLUDEPATH += src/include/
+SOURCES += src/main.cpp\
+        src/commons.cpp \
+        src/debug.cpp \
+        src/filedialogwithhistory.cpp \
+        src/aboutdialog.cpp \
+        src/autosearchdialog.cpp \
+        src/deviceconnector.cpp \
+        src/deviceinterface.cpp \
+        src/discoverydevice.cpp \
+        src/rcsettings.cpp \
+        src/remotecontrol.cpp \
+        src/settings.cpp
 
-SOURCES += main.cpp\
-        commons.cpp \
-        debug.cpp \
-        filedialogwithhistory.cpp \
-        aboutdialog.cpp \
-        autosearchdialog.cpp \
-        deviceconnector.cpp \
-        deviceinterface.cpp \
-        discoverydevice.cpp \
-        rcsettings.cpp \
-        remotecontrol.cpp \
-        settings.cpp
+HEADERS  += src/include/remotecontrol.h \
+    src/include/commons.h \
+    src/include/debug.h \
+    src/include/filedialogwithhistory.h \
+    src/include/aboutdialog.h \
+    src/include/autosearchdialog.h \
+    src/include/deviceconnector.h \
+    src/include/deviceinterface.h \
+    src/include/discoverydevice.h \
+    src/include/global.h \
+    src/include/rcsettings.h \
+    src/include/settings.h
 
-HEADERS  += remotecontrol.h \
-    commons.h \
-    debug.h \
-    filedialogwithhistory.h \
-    aboutdialog.h \
-    autosearchdialog.h \
-    deviceconnector.h \
-    deviceinterface.h \
-    discoverydevice.h \
-    global.h \
-    rcsettings.h \
-    settings.h
-
-FORMS    += remotecontrol.ui \
-    aboutdialog.ui \
-    autosearchdialog.ui \
-    debug.ui \
-    deviceconnector.ui \
-    settings.ui
+FORMS    += src/ui/remotecontrol.ui \
+    src/ui/aboutdialog.ui \
+    src/ui/autosearchdialog.ui \
+    src/ui/debug.ui \
+    src/ui/deviceconnector.ui \
+    src/ui/settings.ui
 
 RESOURCES += \
     resource.qrc
