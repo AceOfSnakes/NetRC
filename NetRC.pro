@@ -21,7 +21,7 @@ TARGET = NetRC
 TEMPLATE = app
 INCLUDEPATH += src/include/
 SOURCES += src/main.cpp\
-        src/commons.cpp \
+        src/commons/commons.cpp \
         src/debug.cpp \
         src/filedialogwithhistory.cpp \
         src/aboutdialog.cpp \
@@ -34,7 +34,7 @@ SOURCES += src/main.cpp\
         src/settings.cpp
 
 HEADERS  += src/include/remotecontrol.h \
-    src/include/commons.h \
+    src/commons/include/commons.h \
     src/include/debug.h \
     src/include/filedialogwithhistory.h \
     src/include/aboutdialog.h \
