@@ -20,6 +20,7 @@ static { # everything below takes effect with CONFIG += static
 TARGET = NetRC
 TEMPLATE = app
 INCLUDEPATH += src/include/
+INCLUDEPATH += src/commons/include/
 SOURCES += src/main.cpp\
         src/commons/commons.cpp \
         src/debug.cpp \
