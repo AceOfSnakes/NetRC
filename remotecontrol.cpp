@@ -506,6 +506,7 @@ void RemoteControl::removeEmpty()
 }
 
 void RemoteControl::changeSettings() {
+    clearInformationPanel();
     QList<QPushButton *> allPButtons =
             ui->centralWidget->findChildren<QPushButton*>(
                 QRegularExpression("rc_btn.*"), Qt::FindChildrenRecursively);
@@ -642,6 +643,7 @@ void RemoteControl::settingsClicked() {
 
 void RemoteControl::about() {
     AboutDialog about(this);
+    about.setModal(true);
     about.exec();
 
 }

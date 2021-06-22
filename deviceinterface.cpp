@@ -40,8 +40,8 @@ void DeviceInterface::reloadSettings() {
     deviceNameRegex.setPattern(deviceSettings.value("deviceNameRegExp").toString());
     pingResponseOk = deviceSettings.value("pingResponseOk").toString();
     pingResponseErr = deviceSettings.value("pingResponseErr").toString();
-    deviceId = "";
-    deviceName = "";
+    deviceId = QString();
+    deviceName = QString();
 }
 
 void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {

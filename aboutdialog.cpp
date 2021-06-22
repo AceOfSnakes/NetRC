@@ -17,6 +17,7 @@
 #include "global.h"
 #include "commons.h"
 #include <QImage>
+#include <QGraphicsOpacityEffect>
 #include <QtGui>
 
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -42,11 +43,43 @@ AboutDialog::AboutDialog(QWidget *parent) :
     connect(ui->qt, SIGNAL(customContextMenuRequested(QPoint)), qApp, SLOT(aboutQt()));
     ui->buttonBox->connect(ui->buttonBox->button(ui->buttonBox->Ok), SIGNAL(clicked(bool)), this,
                            SLOT(close()));
+    QDir info(":/images/contributors/");
+    contributors = info.entryInfoList(QDir::Files);
+    if(contributors.length() > 0) {
+        QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect();
+        ui->labelAuthor->setGraphicsEffect(effect);
+        QPropertyAnimation *anim = new QPropertyAnimation(effect,"opacity");
+        anim->setDuration(2500);
+        anim->setStartValue(1.0);
+        anim->setEndValue(0);
+        anim->setEasingCurve(QEasingCurve::InOutQuad);
+        anim->setLoopCount(-1);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+        connect(anim, &QPropertyAnimation::currentLoopChanged, [=]() {
+            changeContributor();
+        });
+        QDir info(":/images/contributors/author");
+        contributors.append(info.entryInfoList(QDir::Files));
+
+    }
+
 }
 
 AboutDialog::~AboutDialog() {
     delete ui;
 }
+void  AboutDialog::changeContributor() {
+    contributor++;
+    contributor = contributor % contributors.length();
+    QImage img;
+    QString x = contributors.at(contributor).canonicalFilePath();
+    //qDebug() << x;
+    img.load(x);
+    ui->label_4->setText(contributors.at(contributor).baseName());
+    ui->labelAuthor->setPixmap(QPixmap::fromImage(img));
+}
+
+
 
 
 

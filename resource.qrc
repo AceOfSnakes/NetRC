@@ -39,5 +39,7 @@
         <file>images/about.png</file>
         <file>images/nav/numbers/go.png</file>
         <file>images/nav/numbers/go1.png</file>
+        <file>images/contributors/author/Ace Of Snakes.png</file>
+        <file>images/contributors/Anonymous.png</file>
     </qresource>
 </RCC>

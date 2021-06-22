@@ -18,6 +18,7 @@
 
 #include <QDialog>
 #include <QPushButton>
+#include <QFileInfoList>
 namespace Ui {
 class AboutDialog;
 }
@@ -25,6 +26,9 @@ class AboutDialog;
 class AboutDialog : public QDialog
 {
     Q_OBJECT
+    QFileInfoList contributors;
+    int contributor = 1;
+
 public:
     explicit AboutDialog(QWidget *parent = 0);
     ~AboutDialog();
@@ -32,6 +36,8 @@ public:
     
 private:
     Ui::AboutDialog *ui;
+private slots:
+void changeContributor();
 };
 
 #endif // ABOUTDIALOG_H
