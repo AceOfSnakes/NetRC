@@ -1,0 +1,211 @@
+{
+   "panel":[
+      [
+         {
+            "columns":2,
+            "position":3
+         },
+
+         {
+            "btn":"homemenu",
+            "title":"HOME MENU"
+         },
+         {
+            "btn":"return",
+            "title":"RETURN"
+         }
+      ],
+      [
+         {
+            "columns":2,
+            "position":2
+         },
+
+         {
+            "btn":"mdgal",
+            "title":"MEDIA GALLERY"
+         },
+         {
+            "btn":"popupmnu",
+            "title":"POP-UP MENU"
+         }
+      ],
+      [
+         {
+            "columns":3,
+            "position":8
+         },
+         {
+            "btn":"2dvideo",
+            "title":"2ND VIDEO"
+         },
+
+         {
+            "btn":"2daudio",
+            "title":"2ND AUDIO"
+         },
+
+         {
+            "btn":"ab",
+            "title":"A-B"
+         },
+         {
+            "btn":"repeat",
+            "title":"REPEAT"
+         },
+         {
+            "btn":"display",
+            "title":"DISPLAY"
+         },
+         {
+            "btn":"keylock",
+            "title":"KEYLOCK"
+         },
+         {
+            "btn":"replay",
+            "title":"REPLAY"
+         },
+	{},	
+         {
+            "btn":"skipsearch",
+            "title":"SKIP SRCH"
+         }
+      ],      
+      [
+         {
+            "btn":"audio",
+            "title":"AUDIO"
+         },
+         {
+            "btn":"subtitle",
+            "title":"SUBTITLE"
+         },
+         {
+            "btn":"angle",
+            "title":"ANGLE"
+         },
+         {
+            "btn":"dim",
+            "title":"DIMMER"
+         },
+         {
+            "btn":"cdsacd",
+            "title":"CD / SACD"
+         },
+         {
+            "btn":"hdmi",
+            "title":"HDMI"
+         },
+         {
+            "btn":"topmenu",
+            "title":"TOP MENU"
+         },
+         {
+            "btn":"function",
+            "title":"FUNCTION"
+         },
+         {
+            "btn":"exit",
+            "title":"EXIT"
+         }
+
+      ],
+      [
+         {
+            "columns":2
+	 },
+         {
+            "btn":"continued",
+            "title":"CONTINUED"
+         },
+         {
+            "btn":"eject",
+            "title":"OPEN / CLOSE"
+         }
+      ]
+   ],
+   "labels": {
+       "channel": "Pg"
+   },
+   "tiles": {
+       "chUp": "Page Up",
+       "chDown": "Page Down"
+   },
+   "dim":"/A181AFF9/RU",
+   "zoom":"/A181AF62/RU",
+   "clear":"/A181AFE5/RU",
+   "enter":"/A181AFEF/RU",
+   "continued":"/A181AFAA/RU",
+   "eject":"/A181AFB6/RU",
+
+   "audio":"/A181AFBE/RU",
+   "subtitle":"/A181AF36/RU",
+   "angle":"/A181AFB5/RU",
+
+   "repeat":"/A181AFE8/RU",
+   "return":"/A181AFF4/RU",
+   "popupmnu":"/A181AFB9/RU",
+   "mdgal":"/A181AFF7/RU",
+   "homemenu":"/A181AFB0/RU",
+   "cdsacd":"/A181AF2A/RU",
+   "hdmi":"/A181AFF8/RU",
+   "topmenu":"/A181AFB4/RU",
+   "exit":"/A181AF20/RU",
+   "function":"/A181AFB3/RU",
+
+   "2daudio":"/A181AFBD/RU",
+   "2dvideo":"/A181AFBF/RU",
+   "ab":"/A181AFE4/RU",
+   "display":"/A181AFE3/RU",
+
+   "keylock":"/A181AF22/RU",
+   "replay":"/A181AF24/RU",
+   "skipsearch":"/A181AF25/RU",
+
+   "colorRed": "/A181AF60/RU",
+   "colorBlue": "/A181AF63/RU",
+   "colorGreen": "/A181AF61/RU",
+   "colorYellow": "/A181AF62/RU",
+
+   "number0":"/A181AFA0/RU",
+   "number1":"/A181AFA1/RU",
+   "number2":"/A181AFA2/RU",
+   "number3":"/A181AFA3/RU",
+   "number4":"/A181AFA4/RU",
+   "number5":"/A181AFA4/RU",
+   "number6":"/A181AFA6/RU",
+   "number7":"/A181AFA7/RU",
+   "number8":"/A181AFA8/RU",
+   "number9":"/A181AFA9/RU",
+   "numberClear":"/A181AFE5/RU",
+   "numberGo":"/A181AFEF/RU",
+
+   "navPause":"/A181AF3A/RU",
+   "navPlay":"/A181AF39/RU",
+   "navStop":"/A181AF38/RU",
+   "navBackward":"/A181AF3E/RU",
+   "navForward":"/A181AF3D/RU",
+   "navFastForward":"/A181AFE9/RU",
+   "navFastBackward":"/A181AFEA/RU",
+
+   "down":"/A185FFFF/RU",
+   "left":"/A187FFFF/RU",
+   "right":"A186FFFF/RU",
+   "up":"/A184FFFF/RU",
+   "ok":"/A181AFEF/RU",
+
+
+  "powerOff":"PF",
+  "powerOn":"PN",
+  "pingCommands":[  
+      "?P"
+   ],
+   "pingResponseErr":"E0",
+   "pingResponseOk":"P0",
+   "pingResponsePlay":"P04",
+   "pingPlayCommand" : "?A",
+   "timeRegExp":"^([0-9]{3})?([0-9]{2,3})([0-9]{2})([0-9]{2})([0-9]{2})$",
+   "prefferedPort": 8102,
+   "family": "Pioneer BD Player",
+   "crlf": true
+}

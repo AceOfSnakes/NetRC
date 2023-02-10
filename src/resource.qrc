@@ -1,0 +1,50 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/Built_with_Qt_RGB_logo.png</file>
+        <file>images/power_green.png</file>
+        <file>images/power_red.png</file>
+        <file>images/connect-green.png</file>
+        <file>images/connect-red.png</file>
+        <file>images/nav/circle/down.png</file>
+        <file>images/nav/circle/left.png</file>
+        <file>images/nav/circle/right.png</file>
+        <file>images/nav/circle/up.png</file>
+        <file>images/nav/play/backward.png</file>
+        <file>images/nav/play/fbackward.png</file>
+        <file>images/nav/play/fforward.png</file>
+        <file>images/nav/play/forward.png</file>
+        <file>images/nav/play/pause.png</file>
+        <file>images/nav/play/play.png</file>
+        <file>images/nav/play/stop.png</file>
+        <file>images/nav/other/volOff.png</file>
+        <file>images/nav/numbers/0.png</file>
+        <file>images/nav/numbers/1.png</file>
+        <file>images/nav/numbers/2.png</file>
+        <file>images/nav/numbers/3.png</file>
+        <file>images/nav/numbers/4.png</file>
+        <file>images/nav/numbers/5.png</file>
+        <file>images/nav/numbers/6.png</file>
+        <file>images/nav/numbers/7.png</file>
+        <file>images/nav/numbers/8.png</file>
+        <file>images/nav/numbers/9.png</file>
+        <file>images/nav/special/info.png</file>
+        <file>images/nav/special/settings.png</file>
+        <file>images/nav/special/debug.png</file>
+        <file>images/nav/special/erase.png</file>
+        <file>images/nav/special/close.png</file>
+        <file>images/nav/special/min.png</file>
+        <file>style.qss</file>
+        <file>images/ace.png</file>
+        <file>images/nav/numbers/go.png</file>
+        <file>images/nav/numbers/go1.png</file>
+        <file>images/contributors/author/Ace Of Snakes.png</file>
+        <file>images/nav/special/showHide.png</file>
+        <file>images/NetRC.png</file>
+        <file>images/tray/NetRC-Gray.png</file>
+        <file>images/tray/NetRC-Green.png</file>
+        <file>images/tray/NetRC-Red.png</file>
+        <file>images/contributors/AVRPioRemote.png</file>
+        <file>images/nav/special/plus.png</file>
+        <file>images/nav/special/x.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,233 @@
+/* Black theme */
+QMainWindow,
+QDialog,
+QMenuBar, QMenu,
+QFrame[frameShape="HLine"], QFrame[frameShape="4"],
+#centralWidget 
+
+{
+    background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #555, stop: 1 #111); spacing 0px; transparent;
+    color: white;
+}
+QMenu {
+    padding:5px;
+}
+QLabel {
+    color: black;
+}
+
+QListWidget {
+    text-transform: uppercase;
+    margin-top:6px;
+    margin-bottom:6px;
+    background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #999, stop: 1 #FFF); spacing 0px; transparent;
+    color: #333;
+    border: 2px solid #555;
+    border-style: inset;
+    border-radius: 5px;
+}
+AboutDialog QLabel {
+    font: bold 13px Arial;
+}
+#statusDisplayWidget {
+}
+Settings QCheckBox, Settings QGroupBox,
+Debug QCheckBox, Debug QGroupBox, Debug QLabel {
+     font: 13px Arial;
+}
+QTextBrowser, QLineEdit {
+    background: white;
+    color: black;
+}
+
+QMenu::active {
+    background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #999, stop: 1 #555); spacing 0px; transparent;
+}
+
+QFrame[frameShape="HLine"], QFrame[frameShape="4"] {
+    border: none;
+    min-height: 2px;
+}
+QLabel, QCheckBox, QGroupBox, QCheckBox {
+    color: #bbb;
+}
+
+QCheckBox::indicator {
+}
+
+RemoteControl QPushButton {
+        border: 2px solid #555;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-style: outset;
+        border-radius: 6px;
+        font: bold 11px Arial;
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #fff, stop: 1 #888);
+        padding: 5 px;
+}
+
+QGroupBox {
+    font-size: 12px;
+    border: 2px solid #999 transparent;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    padding: 0px
+}
+
+QGroupBox::title {
+    left: 10px;
+    top: -8px;
+}
+
+QListView::item:selected:active {
+    color:black;
+    background: qlineargradient(x1: 1, y1: 0, x2: 0, y2: 3, stop: 0 #fff, stop: 1 #ddd );
+}
+
+QPushButton {
+        border: 2px solid #555;
+        border-style: outset;
+        font: bold "Ariel";
+        color: black;
+        font-size:  10px;
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #fff, stop: 1 #888);
+        padding: 5 2 5 2 px;
+}
+
+QPushButton:hover {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #fff, stop: 1 #bbb);
+}
+
+QPushButton:pressed, QPushButton:checked {
+        border-style: inset;
+        background: qradialgradient( cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1, radius: 1.35, stop: 0 #fff, stop: 1 #ddd);
+}
+
+QPushButton:disabled {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ccc, stop: 1 #999);
+        color: #777;
+}
+QPushButton#rc_btn_colorGreen, QPushButton#rc_btn_colorRed, QPushButton#rc_btn_colorYellow, QPushButton#rc_btn_colorBlue {
+   border:  2px solid #bbb;
+}
+
+
+
+
+
+QPushButton#rc_btn_colorRed:enabled {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #f00, stop: 1 #800);
+}
+
+QPushButton#rc_btn_colorRed:hover {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #f00, stop: 1 #b00);
+}
+
+QPushButton#rc_btn_colorRed:pressed {
+        border-style: inset;
+        background: qradialgradient( cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1, radius: 1.35, stop: 0 #f00, stop: 1 #d00);
+}
+
+QPushButton#rc_btn_colorRed:disabled{
+       background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ddd, stop: 1 #999);
+}
+
+
+
+QPushButton#rc_btn_colorGreen:enabled {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #0f0, stop: 1 #080);
+}
+
+QPushButton#rc_btn_colorGreen:hover {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #0f0, stop: 1 #0b0);
+}
+
+QPushButton#rc_btn_colorGreen:pressed {
+        border-style: inset;
+        background: qradialgradient( cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1, radius: 1.35, stop: 0 #0f0, stop: 1 #0d0);
+}
+
+QPushButton#rc_btn_colorGreen:disabled{
+       background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ddd, stop: 1 #999);
+}
+
+QPushButton#rc_btn_colorBlue:enabled {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #2222ff, stop: 1 #222288);
+}
+
+QPushButton#rc_btn_colorBlue:hover {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #2222ff, stop: 1 #2222bb);
+}
+
+QPushButton#rc_btn_colorBlue:pressed {
+        border-style: inset;
+        background: qradialgradient( cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1, radius: 1.35, stop: 0 #2222ff, stop: 1 #2222dd);
+}
+
+QPushButton#rc_btn_colorBlue:disabled{
+       background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #dddddd, stop: 1 #999999);
+}
+
+
+QPushButton#rc_btn_colorYellow:enabled {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ff0, stop: 1 #880);
+}
+
+QPushButton#rc_btn_colorYellow:hover {
+        background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ff0, stop: 1 #bb0);
+}
+
+QPushButton#rc_btn_colorYellow:pressed {
+        border-style: inset;
+        background: qradialgradient( cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1, radius: 1.35, stop: 0 #ff0, stop: 1 #dd0);
+}
+
+QPushButton#rc_btn_colorYellow:disabled {
+       background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #ddd, stop: 1 #999);
+}
+
+
+
+QFileDialog QPushButton,  Settings QPushButton, AboutDialog QPushButton, AutoSearchDialog QPushButton, QMessageBox QPushButton {
+    min-width: 92px;
+    border-radius: 0px;
+    text-transform: none;
+}
+DeviceConnector QPushButton {
+    border-radius: 0px;
+    text-transform: none;
+}
+
+
+QLabel#producer {
+    color: #bbb;
+}
+
+
+QTreeView::branch:selected, QListView::item:selected,
+QTreeView::item:selected, QFileDialog::item:selected,
+QListView::item:selected:active,
+QComboBox::item:selected {
+    background-color: #999;
+    selection-background-color: #999;
+    color: black;
+}
+
+QComboBox::indicator {
+    image: none; 
+}
+
+QLineEdit {
+    selection-background-color: #999;
+}
+::separator
+{
+    background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #111, stop: 1 #999); spacing 0px; transparent;
+    margin:2px;
+}
+
+#centralWidget {
+    border:  2px solid #0310EA;
+     border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}

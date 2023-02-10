@@ -1,0 +1,206 @@
+{
+   "panel":[
+      [
+         {
+            "columns":2,
+            "position":3
+         },
+
+         {
+            "btn":"option",
+            "title":"OPTION"
+         },
+         {
+            "btn":"return",
+            "title":"RETURN"
+         }
+      ],
+      [
+         {
+            "columns":2,
+            "position":2
+         },
+
+         {
+            "btn":"topmnu",
+            "title":"TOP MENU"
+         },
+         {
+            "btn":"popupmnu",
+            "title":"POP-UP MENU"
+         }
+      ],
+      [
+         {
+            "columns":2,
+            "position":2
+        },
+         {
+            "btn":"info",
+            "title":"INFO"
+         },
+         {
+            "btn":"home",
+            "title":"HOME"
+         }
+
+      ],
+      [
+         {
+            "columns":2,
+            "position":8
+         },
+
+         {
+            "btn":"resolution",
+            "title":"RESOLUTION"
+         },
+         {
+            "btn":"hdr",
+            "title":"HDR"
+         }
+      ],
+      [
+         {
+            "columns":3,
+            "position":8
+         },
+
+         {
+            "btn":"audio",
+            "title":"AUDIO"
+         },
+         {
+            "btn":"sub",
+            "title":"SUBTITLE"
+         },
+         {
+            "btn":"zoom",
+            "title":"ZOOM"
+         },
+
+         {
+            "btn":"dim",
+            "title":"DIMMER"
+         },
+         {
+            "btn":"setup",
+            "title":"SETUP"
+         },
+         {
+            "btn":"abrepeat",
+            "title":"AB REPT"
+         },
+         {
+            "btn":"repeat",
+            "title":"REPEAT"
+         },
+         {},
+         {
+            "btn":"pic",
+            "title":"PIC"
+         }
+      ],      
+      [
+         {
+            "btn":"input",
+            "title":"INPUT"
+         },
+         {
+            "btn":"eject",
+            "title":"EJECT"
+         },
+         {
+            "btn":"paudio",
+            "title":"P AUDIO"
+         }
+      ]
+   ],
+   "labels": {
+       "channel": "Pg"
+   },
+   "tiles": {
+       "chUp": "Page Up",
+       "chDown": "Page Down"
+   },
+
+   "colorRed":"#RED",
+   "colorBlue":"#BLU",
+   "colorGreen":"#GRN",
+   "colorYellow":"#YLW",
+   "number0":"#NU0",
+   "number1":"#NU1",
+   "number2":"#NU2",
+   "number3":"#NU3",
+   "number4":"#NU4",
+   "number5":"#NU5",
+   "number6":"#NU6",
+   "number7":"#NU7",
+   "number8":"#NU8",
+   "number9":"#NU9",
+ 
+
+   "navPause":"#PAU",
+   "navPlay":"#PLA",
+   "navStop":"#STP",
+   "navBackward":"#REV",
+   "navForward":"#FWD",
+   "navFastForward":"#NXT",
+   "navFastBackward":"#PRE",
+   "down":"#NDN",
+   "left":"#NLT",
+   "right":"#NRT",
+   "up":"#NUP",
+   "ok":"#SEL",
+
+   "numberClear":"#CLR",
+   "numberGo":"#GOT",
+   "info":"#OSD",
+   "home":"#HOM",
+
+   "topmnu":"#TTL",
+   "popupmnu":"#MNU",
+
+   "option":"#OPT",
+   "return":"#RET",
+
+   "volUp":"#VUP",
+   "volDown":"#VDN",
+   "mute":"#MUT",
+
+   "chUp":"#PUP",
+   "chDown":"#PDN",
+
+
+   "dim":"#DIM",
+   "zoom":"#ZOM",
+   "angle":"#ANG",
+   "eject":"#EJT",
+   "hdmi":"#HDM",
+
+
+   "abrepeat": "#ATB",
+   "resolution": "#HDM",
+   "input": "#SRC",
+   "hdr": "#HDR",
+   "sub": "#SUB",
+   "pic": "#SEH",
+   "repeat": "#RPT",
+   "paudio": "#PUR",
+   "audio": "#AUD",
+   "setup": "#SET",
+
+   "powerOff":"#POW",
+   "powerOn":"#POW",
+
+   "pingCommands":[
+      "#QPW"
+   ],
+   "initCmd":"#SVM 3",
+   "pingResponseErr":"OK OFF",
+   "pingResponseOk":"OK ON",
+   "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}):([0-9]{2}):([0-9]{2})",
+   "prefferedPort":23,
+   "crlf":true,
+   "family":"Oppo 4K UHD Disc Player 20X"
+}

@@ -1,0 +1,115 @@
+{
+   "panel":[
+      [
+         {
+            "btn":"audio",
+            "title":"AUDIO"
+         },
+         {
+            "btn":"sub",
+            "title":"SUBTITLE"
+         },
+         {
+            "btn":"zoom",
+            "title":"ZOOM"
+         },
+
+         {
+            "btn":"dim",
+            "title":"DIMMER"
+         },
+         {
+            "btn":"setup",
+            "title":"SETUP"
+         },
+         {
+            "btn":"abrepeat",
+            "title":"AB REPT"
+         },
+         {
+            "btn":"repeat",
+            "title":"REPEAT"
+         },
+         {
+            "btn":"pic",
+            "title":"PIC"
+         }
+      ],      
+      [
+         {
+            "btn":"resolution",
+            "title":"RESOLN"
+         },
+         {
+            "btn":"input",
+            "title":"INPUT"
+         },
+         {
+            "btn":"eject",
+            "title":"EJECT"
+         },
+         {
+            "btn":"paudio",
+            "title":"P AUDIO"
+         }
+      ]
+   ],
+   "colorRed":"REMOTE RED",
+   "colorBlue":"REMOTE BLU",
+   "colorGreen":"REMOTE GRN",
+   "colorYellow":"REMOTE YLW",
+   "number0":"REMOTE NU0",
+   "number1":"REMOTE NU1",
+   "number2":"REMOTE NU2",
+   "number3":"REMOTE NU3",
+   "number4":"REMOTE NU4",
+   "number5":"REMOTE NU5",
+   "number6":"REMOTE NU6",
+   "number7":"REMOTE NU7",
+   "number8":"REMOTE NU8",
+   "number9":"REMOTE NU9",
+   "navPause":"REMOTE PAU",
+   "navPlay":"REMOTE PLA",
+   "navStop":"REMOTE STP",
+   "navBackward":"REMOTE REV",
+   "navForward":"REMOTE FWD",
+   "navFastForward":"REMOTE NXT",
+   "navFastBackward":"REMOTE PRE",
+   "down":"REMOTE NDN",
+   "left":"REMOTE NLT",
+   "right":"REMOTE NRT",
+   "up":"REMOTE NUP",
+   "ok":"REMOTE SEL",
+
+   "dim":"REMOTE DIM",
+   "zoom":"REMOTE ZOM",
+   "angle":"REMOTE ANG",
+   "eject":"REMOTE EJT",
+   "hdmi":"REMOTE HDM",
+
+
+   "abrepeat": "REMOTE ATB",
+   "resolution": "REMOTE HDM",
+   "input": "REMOTE SRC",
+   "hdr": "REMOTE HDR",
+   "sub": "REMOTE SUB",
+   "pic": "REMOTE SEH",
+   "repeat": "REMOTE RPT",
+   "paudio": "REMOTE PUR",
+   "audio": "REMOTE AUD",
+   "setup": "REMOTE SET",
+
+   "powerOff":"REMOTE POW",
+   "powerOn":"REMOTE POW",
+
+   "pingCommands":[
+      "REMOTE QPW"
+   ],
+   "initCmd":"REMOTE SVM 3",
+   "pingResponseErr":"OK OFF",
+   "pingResponseOk":"OK ON",
+   "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}):([0-9]{2}):([0-9]{2})",
+   "prefferedPort": 19999,
+   "crlf":true,
+   "family": "Oppo Blu-ray Disc Player 9X"
+}

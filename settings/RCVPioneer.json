@@ -1,0 +1,146 @@
+{ 
+   "panel":[   
+       [
+         {
+            "columns":4,
+            "group": "stu"
+         },
+
+         {
+            "btn":"bd",
+            "title":"BD"
+         },
+         {
+            "btn":"dvd",
+            "title":"DVD"
+         },
+         {
+            "btn":"dvr",
+            "title":"DVR"
+         },
+         {
+            "btn":"hdmi",
+            "title":"HDMI"
+         },
+         {
+            "btn":"tv",
+            "group": "none",
+            "title":"TV"
+         },
+         {
+            "btn":"cd",
+            "group": "none",
+            "title":"CD"
+         },
+         {
+            "btn":"net",
+            "group": "none",
+            "title":"NET"
+         },
+         {
+            "btn":"adpt",
+            "group": "none",
+            "title":"ADPT"
+         },
+         {
+            "btn":"ipod",
+            "group": "none",
+            "title":"iPod"
+         },
+         {
+            "btn":"sat",
+            "title":"SAT"
+         },
+         {
+            "btn":"mhl",
+            "title":"MHL"
+         },
+         {
+            "btn":"tuner",
+            "group": "none",
+            "title":"TUNER"
+         },
+         {
+            "btn":"prevd",
+            "group": "none",
+            "title":"<<"
+         },
+         {},
+         {},
+         {
+            "btn":"nextd",
+            "group": "none",
+            "title":">>"
+         }
+
+      ]
+    ],
+    "bd": "25FN",
+    "dvd": "04FN",
+    "dvr": "15FN",
+    "hdmi": "31FN",
+    "tv": "05FN",
+    "cd": "01FN",
+    "net": "26FN",
+    "adpt": "33FN",
+    "ipod": "17FN",
+    "sat": "06FN",
+    "mhl": "48FN",
+    "tuner": "02FN",
+    "nextd": "FU",
+    "prevd": "FD",
+
+    "down":"CDN",
+    "left":"CLE",
+    "right":"CRI",
+    "up":"CUP",
+    "ok":"CEN",
+
+    "volUp":"VU",
+    "volDown":"VD",
+    "mute":"MZ",
+
+
+
+    "powerOff":"PF",
+    "powerOn":"PO",
+
+
+
+   "pingCommands":[  
+      "?P",
+      "?STU",
+      "?F"
+   ],
+   "timeRegExp":".....([0-9]{3}).([0-9]{2,3})...([0-9]{2}) :([0-9]{2}) :([0-9]{2})",
+   "deviceIdRegExp":"FN([0-9]{2})",
+   "deviceNameRegExp":"RGB[0-9]{3}(.*)",
+   "deviceNameRq":"?RGB%s",
+   "pingResponseErr":"PWR1",
+   "pingResponseOk":"PWR0",
+
+   "specialControl": {
+       "stu": {
+           "comment":"HDMI pass through",
+           "cmd":"?STU",
+           "err": ["STU00"],
+           "ok": [
+               "STU01",
+               "STU02",
+               "STU03",
+               "STU04",
+               "STU05",
+               "STU06",
+               "STU07",
+               "STU08",
+               "STU09",
+               "STU10"
+           ]
+       }
+   },
+
+   "crlf": false,
+   "prefferedPort": 8102,
+   "family": "Pioneer Receiver till 2016"
+
+}
