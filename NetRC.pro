@@ -66,8 +66,6 @@ FORMS    += src/ui/remotecontrol.ui \
 RESOURCES += \
     src/resource.qrc
 
-RC_ICONS = src/icon_power.ico
-
 DISTFILES += \
     settings/BDOppo10X.json \
     settings/BDOppo20X.json \

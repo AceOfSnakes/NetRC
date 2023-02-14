@@ -1,3 +1,0 @@
-[submodule "src/commons"]
-	path = src/commons
-	url = git@github.com:AceOfSnakes/Commons.git
