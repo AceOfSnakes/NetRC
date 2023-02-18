@@ -21,6 +21,7 @@
 #include <QScreen>
 #include <QSpacerItem>
 #include <QStyleFactory>
+#include <QResource>
 #include <QLatin1String>
 #include <QWindowStateChangeEvent>
 #include <QMenu>
@@ -36,7 +37,6 @@
 #include <QFontDatabase>
 #include <QWidget>
 #include "aboutdialog.h"
-#include "autosearchdialog.h"
 #include "debug.h"
 #include "commons.h"
 #include "deviceconnector.h"
@@ -94,6 +94,10 @@ void RemoteControl::restoreSettings()
                        qApp->applicationName());
 
     settings.beginGroup("global");
+    if(!settings.value("theme").isValid()) {
+        settings.setValue("theme", QResource(":/commons/style/black.qss").uncompressedData().constData());
+    }
+
     setGeometry(settings.value("geometryX").toInt(),settings.value("geometryY").toInt(),0,0);
     QByteArray style = settings.value("theme").toByteArray();
     changeTheme(style);
@@ -101,9 +105,6 @@ void RemoteControl::restoreSettings()
 }
 
 void RemoteControl::changeTheme(QByteArray style) {
-    qDebug()<<ui->rc_btn_colorRed->styleSheet();
-    this->setStyleSheet("");
-    qDebug()<<ui->rc_btn_colorRed->styleSheet();
     if(style.isEmpty()) {
         setAttribute(Qt::WA_NoSystemBackground, false);
     } else {
@@ -111,21 +112,6 @@ void RemoteControl::changeTheme(QByteArray style) {
     }
     QString styleSheet = QLatin1String(style);
     this->setStyleSheet(styleSheet);
-    qDebug()<<ui->rc_btn_colorRed->styleSheet();
-/*
-    if(ui->rc_btn_colorBlue->styleSheet().isEmpty() ){
-        ui->rc_btn_colorBlue->setBackgroundRole();
-    }
-    if(ui->rc_btn_colorGreen->styleSheet().isEmpty() ){
-        ui->rc_btn_colorGreen->setStyleSheet("background: green");
-    }
-    if(ui->rc_btn_colorYellow->styleSheet().isEmpty() ){
-        ui->rc_btn_colorYellow->setStyleSheet("background: yellow");
-    }
-    if(ui->rc_btn_colorRed->styleSheet().isEmpty() ){
-        ui->rc_btn_colorRed->setStyleSheet("background: red");
-    }
-*/
 }
 
 void RemoteControl::initConnect()
@@ -219,6 +205,7 @@ void RemoteControl::redraw() {
 void RemoteControl::initSetting(const QString & set, QVariant & value) {
     QSettings sets(qApp->organizationName(),qApp->applicationName());
     sets.beginGroup("global");
+
     sets.beginGroup("view");
     if (!sets.value(set).isValid()) {
         sets.setValue(set, value);
@@ -255,17 +242,12 @@ void RemoteControl::switchPanel() {
 }
 
 void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
-
-    //    ui->centralWidget->layout()->addWidget(
-    //                new QSpacerItem(0,1000, QSizePolicy::Expanding, QSizePolicy::Expanding));
     QWidget *widInt = new QWidget(ui->centralWidget);
     widInt->setEnabled(true);
     widInt->setVisible(true);
     QString panelName = QString().asprintf("Panel_%d", panelIdx);
     widInt->setObjectName(panelName);
     QGridLayout* layout = new QGridLayout(widInt);
-    //    layout->addWidget(
-    //                    new QSpacerItem(0,1000, QSizePolicy::Expanding, QSizePolicy::Expanding));
     layout->setContentsMargins(9, 6, 9, 0);
     layout->setSpacing(3);
 
@@ -371,8 +353,6 @@ void RemoteControl::showHideWithReason(QSystemTrayIcon::ActivationReason reason)
 }
 
 void RemoteControl::changeEvent(QEvent *e) {
-    //e->accept();
-    //QMainWindow::changeEvent(e);
     switch (e->type()) {
     case QEvent::WindowStateChange:
     {
@@ -525,9 +505,6 @@ void RemoteControl::checkOnlineInternal() {
         foreach (QVariant ping_command, deviceInterface.pingCommands) {
             sendCmd(ping_command.toString());
         }
-        /*if(!deviceInterface.deviceSettings.value("initCmd").isNull()) {
-            sendCmd(deviceInterface.deviceSettings.value("initCmd").toString());
-        }*/
     }
 }
 
@@ -615,7 +592,6 @@ void RemoteControl::changeSettings() {
     QList<QPushButton *> allPButtons =
             ui->centralWidget->findChildren<QPushButton*>(
                 QRegularExpression("rc_btn.*"), Qt::FindChildrenRecursively);
-    //            this->findChildren<QPushButton *>();
     QVariant tiles = deviceInterface.deviceSettings.value("tiles");
     // Merge with default
     foreach (QPushButton *button, allPButtons) {

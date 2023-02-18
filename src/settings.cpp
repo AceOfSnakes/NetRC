@@ -21,6 +21,8 @@
 #include "filedialogwithhistory.h"
 #include "global.h"
 #include "remotecontrol.h"
+#include "QResource"
+#include "QJsonValue"
 
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
@@ -98,7 +100,7 @@ void Settings::loadTheme() {
 }
 
 void Settings::loadDefaultTheme() {
-    QString styleFile = (":/style.qss");
+    QString styleFile = (":/commons/style/black.qss");
     loadStyleSheet(styleFile);
 }
 
@@ -107,4 +109,26 @@ void Settings::devModeChanged() {
     ((RemoteControl*)parentWidget())->setEnableDevMode(ui->developmentCheck->isChecked()) ;
 }
 
+
+void Settings::on_saveTheme_clicked() {
+
+    QString xfile = FileDialogWithHistory().
+            resolveSaveFileName(this, tr("Save Theme file"),
+                                tr(" Files")
+                                .append(" (*.qss);;")
+                                .append(tr("All files"))
+                                .append(" (* *.*)"), "theme");
+    if (!xfile.isEmpty()) {
+            QFile file(xfile);
+            if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
+                QSettings sets(qApp->organizationName(), qApp->applicationName());
+                sets.beginGroup("global");
+                QString settings = sets.value("theme").toString();
+                file.write(settings.toLatin1());
+                file.close();
+                sets.endGroup();
+            }
+    }
+
+}
 

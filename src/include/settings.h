@@ -40,6 +40,7 @@ private slots:
 
     void loadDefaultTheme();
     void devModeChanged();
+    void on_saveTheme_clicked();
 
 private:
     Ui::Settings *ui;

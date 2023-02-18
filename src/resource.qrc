@@ -45,5 +45,6 @@
         <file>images/contributors/AVRPioRemote.png</file>
         <file>images/nav/special/plus.png</file>
         <file>images/nav/special/x.png</file>
+        <file>commons/style/black.qss</file>
     </qresource>
 </RCC>
