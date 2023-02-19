@@ -62,7 +62,6 @@ public:
     void reconnect();
     void reloadPanels();
     void removeEmpty();
-    void setEnableDevMode(bool);
     void restoreSettings();
     void initConnect();
     void initTray();
@@ -89,6 +88,7 @@ private slots:
     void newDevice();
     void reloadAndReconnect();
     void reloadAndReconnect(QString);
+    void setEnableDevMode(bool);
     void debugClicked();
     void about();
     void quit();

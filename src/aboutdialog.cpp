@@ -14,7 +14,6 @@
 */
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
-#include "global.h"
 #include "commons.h"
 #include <QImage>
 #include <QGraphicsOpacityEffect>

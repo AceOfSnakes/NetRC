@@ -33,6 +33,7 @@ INCLUDEPATH += src/commons/include/
 SOURCES += src/main.cpp\
         src/commons/commons.cpp \
         src/commons/filedialogwithhistory.cpp \
+        src/commons/settings.cpp \
         src/debug.cpp \
         src/aboutdialog.cpp \
         src/autosearchdialog.cpp \
@@ -40,28 +41,27 @@ SOURCES += src/main.cpp\
         src/deviceinterface.cpp \
         src/discoverydevice.cpp \
         src/rcsettings.cpp \
-        src/remotecontrol.cpp \
-        src/settings.cpp
+        src/remotecontrol.cpp 
 
 HEADERS  += src/include/remotecontrol.h \
     src/commons/include/commons.h \
     src/commons/include/filedialogwithhistory.h \
+    src/commons/include/settings.h \
     src/include/debug.h \
     src/include/aboutdialog.h \
     src/include/autosearchdialog.h \
     src/include/deviceconnector.h \
     src/include/deviceinterface.h \
     src/include/discoverydevice.h \
-    src/include/global.h \
-    src/include/rcsettings.h \
-    src/include/settings.h
+    src/include/rcsettings.h
+
 
 FORMS    += src/ui/remotecontrol.ui \
+    src/commons/ui/settings.ui \
     src/ui/aboutdialog.ui \
     src/ui/autosearchdialog.ui \
     src/ui/debug.ui \
-    src/ui/deviceconnector.ui \
-    src/ui/settings.ui
+    src/ui/deviceconnector.ui
 
 RESOURCES += \
     src/resource.qrc

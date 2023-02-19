@@ -13,7 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "autosearchdialog.h"
-#include "global.h"
+#include "commons.h"
 #include <string>
 #include "ui_autosearchdialog.h"
 #include <QHostAddress>

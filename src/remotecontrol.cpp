@@ -720,6 +720,7 @@ void RemoteControl::closeEvent(QCloseEvent *event) {
 void RemoteControl::settingsClicked() {
     Settings sets(this);
     connect(&sets, SIGNAL(themeChanged(QByteArray)), this, SLOT(changeTheme(QByteArray)));
+    connect(&sets, SIGNAL(devModeChanged(bool)), this, SLOT(setEnableDevMode(bool)));
     sets.exec();
     RCSettings::isMinimizeToTrayEnabled() ? trayIcon->show(): trayIcon->hide();
 }

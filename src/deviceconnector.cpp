@@ -22,7 +22,7 @@
 #include "ui_deviceconnector.h"
 #include "rcsettings.h"
 #include "autosearchdialog.h"
-#include "global.h"
+#include "commons.h"
 
 DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     QDialog(parent),
