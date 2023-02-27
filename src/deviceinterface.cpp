@@ -13,7 +13,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "deviceinterface.h"
-//#include <QTextCodec>
 #include <QThread>
 #include <QStringList>
 #include <QJsonDocument>

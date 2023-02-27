@@ -103,7 +103,6 @@ private slots:
     void showMinimizedAll();
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
-
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;

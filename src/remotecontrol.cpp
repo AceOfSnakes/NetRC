@@ -400,8 +400,7 @@ void RemoteControl::newDevice() {
     }
 
 }
-void RemoteControl::connectCustomMenuRequested(const QPoint &pos)
-{
+void RemoteControl::connectCustomMenuRequested(const QPoint &pos) {
     QList<QString> devices;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
@@ -425,8 +424,7 @@ void RemoteControl::connectCustomMenuRequested(const QPoint &pos)
     }
 }
 
-void RemoteControl::connectDevice()
-{
+void RemoteControl::connectDevice() {
     if (!deviceInterface.isConnected()) {
         deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
     }
@@ -487,6 +485,7 @@ void RemoteControl::enableControls(bool enable)
 }
 
 void RemoteControl::onConnect() {
+    /*
     if (!deviceInterface.isConnected()) {
         // connect
         connectDevice();
@@ -496,7 +495,7 @@ void RemoteControl::onConnect() {
         enableControls(false);
         deviceInterface.disconnect();
         deviceOnline = false;
-    }
+    }*/
     checkOnline();
 }
 
@@ -665,7 +664,7 @@ void RemoteControl::reconnect() {
     deviceInterface.reloadDeviceSettings(settings.toMap());
     deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
     enabledButtons.clear();
-    emit deviceActivated();
+    //emit deviceActivated();
 }
 
 void RemoteControl::reloadAndReconnect() {
@@ -783,3 +782,6 @@ void RemoteControl::quit() {
     this->close();
     exit(0);
 }
+
+
+
