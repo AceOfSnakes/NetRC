@@ -469,7 +469,7 @@ void RemoteControl::enableControls(bool enable)
         allPButtons.removeAll(button);
     }
 
-
+        ui->statusDisplayWidget->setEnabled(enable);
 
     foreach (QPushButton *button, allPButtons) {
         if(button->objectName().startsWith("rc_btn_")) {
