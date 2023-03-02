@@ -84,9 +84,6 @@ QVariant RCSettings::deviceSettings(QString device) {
     foreach(QString key,sets.allKeys()) {
         value.insert(key, sets.value(key));
     }
-
-    qDebug() << sets.value("deviceName");
-
     sets.endGroup();
     sets.endGroup();
     sets.endGroup();
