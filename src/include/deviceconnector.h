@@ -41,8 +41,12 @@ private slots:
     void autoSearchClicked();
     void applyButtonClicked();
     void loadConfigClicked();
-    void deviceProtocolCurrentIndexChanged(const QString &arg1);
+    void deviceProtocolCurrentIndexChanged(const QString &);
     void deleteFamilyClicked();
+
+    void onKnownDevicesComboBoxCurrentIndexChanged(int index);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::DeviceConnector *ui;

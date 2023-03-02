@@ -69,9 +69,54 @@ void RCSettings::updateSettings(QString & family, QVariant value) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.beginGroup("family");
-    sets.setValue(family,value);
+    sets.setValue(family, value);
     sets.endGroup();
     sets.endGroup();
+}
+
+QVariant RCSettings::deviceSettings(QString device) {
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("devices");
+    QString section = device.replace("/", "@@");
+    sets.beginGroup(section);
+    QMap<QString,QVariant> value;
+    foreach(QString key,sets.allKeys()) {
+        value.insert(key, sets.value(key));
+    }
+
+    qDebug() << sets.value("deviceName");
+
+    sets.endGroup();
+    sets.endGroup();
+    sets.endGroup();
+    return QVariant(value);
+}
+
+void RCSettings::removeDevice(QString device) {
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    QString section = device.replace("/", "@@");
+    sets.remove(QString("global/devices/").append(section));
+}
+
+QList<QString> RCSettings::devicesList() {
+    QStringList values;
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    sets.beginGroup("devices");
+    values = sets.childGroups();
+    sets.endGroup();
+    sets.endGroup();
+
+    QStringList result;
+    if(!values.isEmpty()) {
+        foreach(QString device, values) {
+            result.append(device.replace("@@", "/"));
+        }
+    }
+
+    return result;
+
 }
 
 QList<QString> RCSettings::settingsList() {

@@ -26,7 +26,10 @@ public:
     RCSettings();
     QVariant static load(QFile &file);
     QVariant static load(const QString family);
+    QVariant static deviceSettings(QString device);
     QList<QString> static settingsList();
+    QList<QString> static devicesList();
+    void static removeDevice(QString device);
     void static remove(QString family);
     bool static isMinimizeToTrayEnabled();
     bool static isSaveLatestDeviceEnabled();

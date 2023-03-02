@@ -22,19 +22,17 @@
 #include "ui_deviceconnector.h"
 #include "rcsettings.h"
 #include "autosearchdialog.h"
-#include "commons.h"
 
 DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     QDialog(parent),
     settings(sets),
     ui(new Ui::DeviceConnector)
 {
-    this->setStyleSheet("");
     ui->setupUi(this);
     QString family = settings.toMap().value("family").toString();
     setWindowTitle(qApp->applicationName().append(". Connect to \"").append(family).append("\""));
 
-    //setWindowFlags(WINDOW_FLAGS);
+    ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
 
     if(!family.isEmpty()) {
         ui->deviceProtocol->addItem(family);
@@ -59,6 +57,8 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     connect(ui->loadConfig, SIGNAL(clicked()), this, SLOT(loadConfigClicked()));
     connect(ui->deviceProtocol, SIGNAL(currentTextChanged(const QString &)),
             this, SLOT(deviceProtocolCurrentIndexChanged(const QString &)));
+    connect(ui->knownDevicesComboBox,SIGNAL(currentIndexChanged(int)),
+            this, SLOT(onKnownDevicesComboBoxCurrentIndexChanged(int)));
     reloadDevicesFamily();
 }
 
@@ -69,6 +69,11 @@ DeviceConnector::~DeviceConnector() {
 void DeviceConnector::setDevice(QString deviceFamily, QString device, QString address, unsigned int port) {
     ui->deviceProtocol->setCurrentText(deviceFamily);
     ui->line_DeviceName->setText(device);
+
+    if(!ui->line_DeviceName->text().isEmpty()) {
+        ui->knownDevicesComboBox->setCurrentText(ui->line_DeviceName->text());
+    }
+
     QStringList l = address.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
     if (l.size() == 4) {
         if(port == 0) {
@@ -175,6 +180,8 @@ void DeviceConnector::select(QVariant vars) {
 
 void DeviceConnector::reloadDevicesFamily() {
     QStringList saved = RCSettings::settingsList();
+    ui->knownDevicesComboBox->clear();
+    ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
     saved.sort();
     ui->deviceProtocol->clear();
     ui->deviceProtocol->addItems(saved);
@@ -189,6 +196,7 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
         select(RCSettings::load(arg1));
         ui->lineEditIPPort->setText(settings.toMap().value("prefferedPort").toString());
         ui->line_DeviceName->setText("");
+
         ui->lineEditIP4->setText("?");
         if(ui->deviceProtocol->findText(arg1) > 0) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
@@ -213,4 +221,24 @@ void DeviceConnector::deleteFamilyClicked() {
     }
 }
 
+
+
+void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
+    qDebug() << ui->knownDevicesComboBox->itemText(index);
+    QVariant sets = RCSettings::deviceSettings(ui->knownDevicesComboBox->itemText(index));
+    qDebug() << ui->knownDevicesComboBox->itemText(index) <<sets;
+    if (sets.isValid()) {
+        setDevice(sets.toMap().value("deviceFamily", "").toString(),
+                sets.toMap().value("deviceName", "").toString(),
+                sets.toMap().value("deviceIPAddress", "").toString(),
+                sets.toMap().value("devicePort").toUInt());
+    }
+}
+
+
+void DeviceConnector::on_pushButton_clicked() {
+   RCSettings::removeDevice(QString(ui->knownDevicesComboBox->currentText()));
+   ui->knownDevicesComboBox->clear();
+   ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
+}
 

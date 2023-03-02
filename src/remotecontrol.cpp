@@ -401,14 +401,7 @@ void RemoteControl::newDevice() {
 
 }
 void RemoteControl::connectCustomMenuRequested(const QPoint &pos) {
-    QList<QString> devices;
-    QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("devices");
-    devices = sets.childGroups();
-    sets.endGroup();
-    sets.endGroup();
-
+    QList<QString> devices = RCSettings::devicesList();
 
     if(devices.isEmpty()) {
         newDevice();
@@ -416,7 +409,7 @@ void RemoteControl::connectCustomMenuRequested(const QPoint &pos) {
     else {
         QMenu menu(ui->connectButton);
         foreach(QString device, devices) {
-            menu.addAction(QString(device).replace("@@","/"), this, SLOT(reloadAndReconnect()));
+            menu.addAction(QString(device), this, SLOT(reloadAndReconnect()));
         }
         menu.addSeparator();
         menu.addAction("&Device Management", this, SLOT(newDevice()));
