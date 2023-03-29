@@ -165,7 +165,7 @@ void RemoteControl::initTray() {
     QAction *hideAction = new QAction(QIcon(QString(":/images/nav/special/showHide.png")), "Show / Hide", trayIcon );
     connect( hideAction, SIGNAL(triggered()), this, SLOT(showHide()) );
 
-    QMenu *trayIconMenu = new QMenu();
+    QMenu *trayIconMenu = new QMenu(this);
     trayIconMenu->setStyleSheet(this->styleSheet());
     trayIconMenu->addAction( hideAction );
     trayIconMenu->addAction( quitAction );
