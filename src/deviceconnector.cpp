@@ -185,6 +185,7 @@ void DeviceConnector::reloadDevicesFamily() {
     saved.sort();
     ui->deviceProtocol->clear();
     ui->deviceProtocol->addItems(saved);
+    //ui->deviceProtocol->setItemIcon(0,QIcon(QString(":/images/tray/NetRC-Gray.png")));
     QString family = settings.toMap().value("family").toString();
     if(ui->deviceProtocol->findText(family) > 0) {
         ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));

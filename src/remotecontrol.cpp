@@ -166,7 +166,7 @@ void RemoteControl::initTray() {
     connect( hideAction, SIGNAL(triggered()), this, SLOT(showHide()) );
 
     QMenu *trayIconMenu = new QMenu();
-
+    trayIconMenu->setStyleSheet(this->styleSheet());
     trayIconMenu->addAction( hideAction );
     trayIconMenu->addAction( quitAction );
 
@@ -390,13 +390,16 @@ void RemoteControl::newDevice() {
     deviceConnector.exec();
 
     if(!deviceConnector.deviceFamily.isEmpty()) {
-        deviceName = deviceConnector.device;
-        settings.swap(deviceConnector.settings);
         deviceIpAddress = deviceConnector.deviceIPAddress;
-        deviceFamily = deviceConnector.deviceFamily;
-        deviceIpPort = deviceConnector.devicePort;
-        reconnect();
-        checkOnline();
+        qDebug() << "deviceIpAddress" << deviceIpAddress;
+        if(!deviceIpAddress.isEmpty()) {
+            deviceName = deviceConnector.device;
+            settings.swap(deviceConnector.settings);
+            deviceFamily = deviceConnector.deviceFamily;
+            deviceIpPort = deviceConnector.devicePort;
+            reconnect();
+            checkOnline();
+        }
     }
 
 }
@@ -462,7 +465,7 @@ void RemoteControl::enableControls(bool enable)
         allPButtons.removeAll(button);
     }
 
-        ui->statusDisplayWidget->setEnabled(enable);
+    ui->statusDisplayWidget->setEnabled(enable);
 
     foreach (QPushButton *button, allPButtons) {
         if(button->objectName().startsWith("rc_btn_")) {
