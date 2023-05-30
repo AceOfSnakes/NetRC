@@ -312,24 +312,39 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
 }
 
 void RemoteControl::showAll( ) {
+    qDebug() << "showAll !!!";
     show();
-    if(debugDialog != nullptr)  {
-        debugDialog->show();
+    foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
+        qDebug() << "showAll child" << child;
+        //child->show();
+        child->showNormal();
     }
 }
 
 void RemoteControl::showMinimizedAll( ) {
+    qDebug() << "showMinimizedAll !!!";
     showMinimized();
-    if(debugDialog != nullptr)  {
-        debugDialog->showMinimized();
+    foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
+        qDebug() << "showMinimizedAll child  " << child;
+        child->showMinimized();
     }
+
 }
 
 void RemoteControl::hideAll( ) {
+    qDebug() << "hideAll !!!";
     hide();
-    if(debugDialog != nullptr)  {
-        debugDialog->hide();
+    foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
+        qDebug() << "hideAll child" << child;
+        child->showMinimized();
     }
+//    qDebug() <<"";
+//    foreach (QObject *child, this->children()) {
+//        qDebug() << "child" << child;
+//    }
+//    if(debugDialog != nullptr)  {
+//        debugDialog->hide();
+//    }
 }
 
 void RemoteControl::showHide( ) {
@@ -339,6 +354,7 @@ void RemoteControl::showHide( ) {
     }
     else {
         isVisible() ? showMinimizedAll()  : showAll();
+        activateWindow();
     }
 }
 

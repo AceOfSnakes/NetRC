@@ -329,6 +329,9 @@ AKA NetRC</string>
          <height>128</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="text">
         <string/>
        </property>

@@ -20,7 +20,7 @@
 #include <QtGui>
 
 AboutDialog::AboutDialog(QWidget *parent) :
-    QDialog(parent), ui(new Ui::AboutDialog) {
+    QDialog(parent), contributor(0) , ui(new Ui::AboutDialog) {
     ui->setupUi(this);
     setWindowFlags(WINDOW_FLAGS);
     setFixedSize(width(), height());
@@ -44,12 +44,15 @@ AboutDialog::AboutDialog(QWidget *parent) :
                            SLOT(close()));
     QDir info(":/images/contributors/");
     contributors = info.entryInfoList(QDir::Files);
+    QDir info1(":/images/contributors/author");
+    contributors.append(info1.entryInfoList(QDir::Files));
+    qDebug()<< contributors;
     if(contributors.length() > 0) {
         QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect();
         ui->labelAuthor->setGraphicsEffect(effect);
-        QPropertyAnimation *anim = new QPropertyAnimation(effect,"opacity");
+        QPropertyAnimation *anim = new QPropertyAnimation(effect, "opacity");
         anim->setDuration(2500);
-        anim->setStartValue(1.0);
+        anim->setStartValue(contributors.length());
         anim->setEndValue(0);
         anim->setEasingCurve(QEasingCurve::InOutQuad);
         anim->setLoopCount(-1);
@@ -57,25 +60,26 @@ AboutDialog::AboutDialog(QWidget *parent) :
         connect(anim, &QPropertyAnimation::currentLoopChanged, [=]() {
             changeContributor();
         });
-        QDir info(":/images/contributors/author");
-        contributors.append(info.entryInfoList(QDir::Files));
-
     }
-
 }
 
 AboutDialog::~AboutDialog() {
     delete ui;
 }
+QPixmap GetNew(QImage& img)
+{
+    return QPixmap::fromImage(img);
+}
 void  AboutDialog::changeContributor() {
-    contributor++;
     contributor = contributor % contributors.length();
     QImage img;
     QString x = contributors.at(contributor).canonicalFilePath();
-    //qDebug() << x;
+    qDebug() <<contributor << x;
     img.load(x);
     ui->label_4->setText(contributors.at(contributor).baseName());
-    ui->labelAuthor->setPixmap(QPixmap::fromImage(img));
+    //QPixmap xxx = QPixmap::fromImage(img);
+    ui->labelAuthor->setPixmap(GetNew(img));
+    contributor++;
 }
 
 
