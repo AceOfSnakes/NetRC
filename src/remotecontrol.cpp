@@ -316,7 +316,6 @@ void RemoteControl::showAll( ) {
     show();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
         qDebug() << "showAll child" << child;
-        //child->show();
         child->showNormal();
     }
 }
@@ -338,13 +337,6 @@ void RemoteControl::hideAll( ) {
         qDebug() << "hideAll child" << child;
         child->showMinimized();
     }
-//    qDebug() <<"";
-//    foreach (QObject *child, this->children()) {
-//        qDebug() << "child" << child;
-//    }
-//    if(debugDialog != nullptr)  {
-//        debugDialog->hide();
-//    }
 }
 
 void RemoteControl::showHide( ) {
