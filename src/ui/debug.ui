@@ -168,6 +168,9 @@
        <height>480</height>
       </size>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
@@ -673,6 +676,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>commandLine</tabstop>
+  <tabstop>clearCommandLineButton</tabstop>
+  <tabstop>sendButton</tabstop>
+  <tabstop>pauseButton</tabstop>
+  <tabstop>eraseDebugOutput</tabstop>
+  <tabstop>maxLines</tabstop>
+  <tabstop>rqRegex</tabstop>
+  <tabstop>rsRegex</tabstop>
+  <tabstop>displayAllCheckBox</tabstop>
+  <tabstop>pingRq</tabstop>
+  <tabstop>pingRs</tabstop>
+  <tabstop>timeRs</tabstop>
+  <tabstop>deviceRs</tabstop>
+  <tabstop>textEdit</tabstop>
+ </tabstops>
  <resources>
   <include location="../resource.qrc"/>
  </resources>
