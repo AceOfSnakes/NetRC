@@ -327,7 +327,6 @@ void RemoteControl::showMinimizedAll( ) {
         qDebug() << "showMinimizedAll child  " << child;
         child->showMinimized();
     }
-
 }
 
 void RemoteControl::hideAll( ) {

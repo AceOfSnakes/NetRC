@@ -42,14 +42,19 @@ Debug::~Debug() {
 
 bool Debug::isRqNotDisplayed(const QString str) {
     return pause ||
-            (!ui->pingRq->isChecked() && devInterface->pingCommands.contains(str));
+           ((!ui->rqRegex->text().isEmpty()) ?
+                         !str.contains(ui->rqRegex->text()) :
+                         (!ui->pingRq->isChecked() &&
+                          devInterface->pingCommands.contains(str)));
 }
 
 bool Debug::isRsNotDisplayed(const QString str) {
-    return pause ||
-            (!ui->timeRs->isChecked() && devInterface->isTimeRs(str)) ||
-            (!ui->pingRs->isChecked() && devInterface->isPingRs(str)) ||
-            (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str));
+        return pause ||
+           ((!ui->rsRegex->text().isEmpty()) ?
+                         !str.contains(ui->rsRegex->text()) :
+                         (!ui->timeRs->isChecked() && devInterface->isTimeRs(str)) ||
+                         (!ui->pingRs->isChecked() && devInterface->isPingRs(str)) ||
+                         (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str)));
 }
 
 void Debug::read(const QString str) {

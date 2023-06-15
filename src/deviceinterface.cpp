@@ -141,11 +141,15 @@ bool DeviceInterface::sendCmd(const QString& cmd) {
 }
 
 bool DeviceInterface::isDeviceIdRs(const QString& data) {
-    return deviceIdRegex.isValid() ? deviceIdRegex.match(data).hasMatch() : false;
+    return deviceIdRegex.isValid() && deviceIdRegex.patternOptions() != QRegularExpression::NoPatternOption ?
+               deviceIdRegex.match(data).hasMatch() :
+               false;
 }
 
 bool DeviceInterface::isTimeRs(const QString& data) {
-    return timestampRegex.isValid() ? timestampRegex.match(data).hasMatch() : false;
+    return timestampRegex.isValid() && timestampRegex.patternOptions() != QRegularExpression::NoPatternOption ?
+               timestampRegex.match(data).hasMatch() :
+               false;
 }
 
 bool DeviceInterface::isPingErrRs(const QString& data) {
