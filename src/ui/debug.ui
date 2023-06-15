@@ -586,7 +586,7 @@
          <item row="7" column="1">
           <widget class="QCheckBox" name="displayAllCheckBox">
            <property name="text">
-            <string>All above</string>
+            <string>All below</string>
            </property>
            <property name="checked">
             <bool>true</bool>
