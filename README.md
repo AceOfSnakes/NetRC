@@ -12,10 +12,10 @@ Preview | Description
 and map buttons from this program to your device (more details will be provided soon).
 Some useful files for make device protocol JSON configuration file can be found [here](doc/rfc/)
 
-1. Create Device protocol file description [TBD]
-    * Connection settings
-    * Predefined buttons / panels
-    * Custom buttons / panels
+1. Create Device protocol file description 
+    * [Connection settings](doc/HowTo/Step0/README.md)
+    * Predefined buttons / panels [TBD]
+    * Custom buttons / panels [TBD]
 1. Load Device protocol file description [TBD]
 1. Connect To Device /  Auto Search Device [TBD]
 

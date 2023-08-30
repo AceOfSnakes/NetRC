@@ -54,6 +54,8 @@ void RemoteDevice::connectRemoteDevice(QString ip, unsigned int port) {
     connect((socket), SIGNAL(disconnected()), this, SLOT(_tcpDisconnected()));
     connect((socket), SIGNAL(readyRead()), this, SLOT(_dataAvailable()));
     connect((socket), SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this,  SLOT(_tcpError(QAbstractSocket::SocketError)));
+    socket->disconnectFromHost();
+    qDebug()<<"RemoteDevice::connectRemoteDevice";
     socket->connectToHost(ip, port);
 }
 
@@ -148,6 +150,7 @@ QString AutoSearchDialog::parseResponse(QNetworkReply *reply, QUrl &url) {
     document.setContent(data);
 
     QDomNodeList nodes = document.childNodes();
+
     for (int i = 0; i < nodes.count(); i++) {
         if (nodes.at(i).nodeName() == "root") {
             QDomNodeList nodes1 = nodes.at(i).childNodes();

@@ -54,8 +54,9 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
 }
 
 void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsigned int PlayerIpPort) {
-    socket.disconnectFromHost();
-    socket.connectToHost(PlayerIpAddress, PlayerIpPort);
+    qDebug()<<"DeviceInterface::connectToDevice";
+    disconnect();
+    socket.connectToHost(PlayerIpAddress, PlayerIpPort,QAbstractSocket::ReadWrite,QAbstractSocket::IPv4Protocol);
 }
 
 void DeviceInterface::disconnect() {
@@ -131,6 +132,7 @@ void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     default:
         str = QString("The following error occurred: %1.").arg(socket.errorString());
     }
+    qDebug()<< "SocketError"<<socketError<<str;
     emit commError(str);
 }
 
