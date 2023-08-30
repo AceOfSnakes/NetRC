@@ -4,7 +4,7 @@ What do You see from the scratch
 
 ![About W10](images/Original.png)
 
-Just click on icon with <img src="../../../src/images/connect-red.png" width ="12" height="12"/> and select settings folder and file
+Just click on icon with &nbsp;&nbsp;&nbsp;<img src="../../../src/images/connect-red.png" width ="24" height="24"/>&nbsp;&nbsp;&nbsp; and select settings folder and file
 
 ![About W10](images/Select-Device.png)
 
