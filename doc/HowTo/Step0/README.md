@@ -4,7 +4,7 @@ What do You see from the scratch
 
 ![About W10](images/Original.png)
 
-Just click on icon with and select settings folder 
+Just click on icon with ![](../../../src/images/connect-red.png) and select settings folder 
 
 ![About W10](images/Select-Device.png)
 
