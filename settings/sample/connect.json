@@ -1,0 +1,13 @@
+{
+   "powerOff":"#POW",
+   "powerOn":"#POW",
+
+   "pingCommands":[
+      "#QPW"
+   ],
+   "pingResponseErr":"QPW OK OFF",
+   "pingResponseOk":"QPW OK ON",
+   "prefferedPort":23,
+   "crlf":true,
+   "family":"Just for connect"
+} 
