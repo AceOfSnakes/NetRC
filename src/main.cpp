@@ -39,7 +39,10 @@ int main(int argc, char *argv[]) {
             (first.weekNumber() > date.date().weekNumber() ? 0 : first.weekNumber());
     app.setApplicationVersion(date.toString("yy.MM")
                               .append(week == 0 ? QString() : QString().asprintf(".%d", week))
-                              .append(" RC. based on Qt " ).append(qVersion())
+                          #ifdef STATIC                                   
+                              .append(" (static)" )
+                          #endif
+                              .append(" based on Qt " ).append(qVersion())
                           #if Q_PROCESSOR_WORDSIZE == 8
                               .append(" x64")
                           #endif
