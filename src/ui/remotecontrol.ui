@@ -780,12 +780,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>5</string>
@@ -814,12 +811,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>0</string>
@@ -848,12 +842,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>4</string>
@@ -882,12 +873,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>8</string>
@@ -942,12 +930,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>3</string>
@@ -976,12 +961,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>2</string>
@@ -1010,12 +992,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>6</string>
@@ -1050,12 +1029,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>1</string>
@@ -1084,12 +1060,12 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
+            <property name="autoFillBackground">
+             <bool>false</bool>
             </property>
             <property name="text">
              <string>7</string>
@@ -1118,12 +1094,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>-1</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:  19px;</string>
             </property>
             <property name="text">
              <string>9</string>

@@ -273,6 +273,8 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     }
     uint rows = buttons.size() + buttons_count - 1 - offset;
     rows = buttons_count > 0 ? rows / buttons_count: rows;
+    //const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+
     for (row = 0; row < rows; row++) {
         for (column = 0; column < buttons_count; column++) {
             QMap<QString, QVariant>button = buttons.at(
@@ -281,6 +283,8 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
             QString btnGroup = button.value("group").toString();
             if(!title.isEmpty()) {
                 QPushButton *btn = new QPushButton(title);
+                //btn->setFont(fixedFont);
+                btn->setFont(QFont(btn->font().family(), btn->font().pixelSize(), QFont::Bold));
                 btn->setObjectName(QString().asprintf("rc_btn_").append(button.value("btn").toString()));
                 btn->setMinimumWidth(50);
                 btn->setMinimumHeight(28);
