@@ -81,11 +81,18 @@ RemoteControl::RemoteControl(QWidget *parent) :
     }
     initConnect();
     reloadMenu();
+
+    ui->rc_btn_colorYellow->setStyleSheet("background-color : yellow");
+    ui->rc_btn_colorGreen->setStyleSheet("background-color : green");
+    ui->rc_btn_colorRed->setStyleSheet("background-color : red");
+    ui->rc_btn_colorBlue->setStyleSheet("background-color : blue");
+
     show();
     ui->connectButton->setEnabled(true);
     redraw();
     reloadLatestDevice();
     qApp->installEventFilter(this);
+
 }
 
 void RemoteControl::restoreSettings()
@@ -148,6 +155,9 @@ void RemoteControl::initConnect()
             this, SLOT(connectCustomMenuRequested(QPoint)));
     connect(ui->settingsButton, SIGNAL(clicked()), this, SLOT(settingsClicked()));
     connect(ui->powerButton, SIGNAL(clicked()), this, SLOT(powerClicked()));
+
+
+
 }
 
 void RemoteControl::initTray() {
