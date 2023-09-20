@@ -8,7 +8,7 @@ Black | Gray | White | No C11n
 
 
 Need to fix :)
-And Just for fun current design
+And Just for fun look at current design
 
 
 Dark On | Dark Off | Light On | Light Off
