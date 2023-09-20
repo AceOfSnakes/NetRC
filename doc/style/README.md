@@ -11,6 +11,6 @@ Need to fix :)
 And Just for fun current design
 
 
-On | Off | On | Off
+Dark On | Dark Off | Light On | Light Off
 ------------ | ------------- | ------------- | -------------
 ![Dark On](dark-on.png) | ![Dark Off](dark-off.png) | ![Light On](light-on.png) | ![Light Off](light-off.png)
