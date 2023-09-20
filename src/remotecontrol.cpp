@@ -82,11 +82,6 @@ RemoteControl::RemoteControl(QWidget *parent) :
     initConnect();
     reloadMenu();
 
-    ui->rc_btn_colorYellow->setStyleSheet("background-color : yellow");
-    ui->rc_btn_colorGreen->setStyleSheet("background-color : green");
-    ui->rc_btn_colorRed->setStyleSheet("background-color : red");
-    ui->rc_btn_colorBlue->setStyleSheet("background-color : blue");
-
     show();
     ui->connectButton->setEnabled(true);
     redraw();
@@ -112,9 +107,19 @@ void RemoteControl::restoreSettings()
 }
 
 void RemoteControl::changeTheme(QByteArray style) {
+
     if(style.isEmpty()) {
+
+        ui->rc_btn_colorYellow->setStyleSheet("background-color : yellow");
+        ui->rc_btn_colorGreen->setStyleSheet("background-color : green");
+        ui->rc_btn_colorRed->setStyleSheet("background-color : red");
+        ui->rc_btn_colorBlue->setStyleSheet("background-color : blue");
         setAttribute(Qt::WA_NoSystemBackground, false);
     } else {
+        ui->rc_btn_colorYellow->setStyleSheet("");
+        ui->rc_btn_colorGreen->setStyleSheet("");
+        ui->rc_btn_colorRed->setStyleSheet("");
+        ui->rc_btn_colorBlue->setStyleSheet("");
         setAttribute(Qt::WA_NoSystemBackground);
     }
     QString styleSheet = QLatin1String(style);
