@@ -13,4 +13,4 @@ And Just for fun current design
 
 On | Off | On | Off
 ------------ | ------------- | ------------- | -------------
-![Dark On](dark-on.png) | ![Dark Off](dark-off.png)! | ![Light On](light-on.png) | ![Light Off](light-off.png)
+![Dark On](dark-on.png) | ![Dark Off](dark-off.png) | ![Light On](light-on.png) | ![Light Off](light-off.png)
