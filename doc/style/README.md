@@ -3,7 +3,7 @@
 Black | Gray | White | No C11n
 ------------ | ------------- | ------------- | -------------
 
-![OPPO UDP-203 black](../w11/images/Oppo-203.png) | ![OPPO UDP-203 gray](../w11/images/theme/Oppo-203-gray.png) | ![OPPO UDP-203 white](../w11/images/theme/Oppo-203-white.png) | ![OPPO UDP-203 0](../w11/images/theme/Oppo-203-0.png)
+![OPPO UDP-203 black](../w11/images/Oppo-203.png) | ![OPPO UDP-203 gray](../w11/images/theme/Oppo-203-gray.png) | ![OPPO UDP-203 white](../w11/images/theme/Oppo-203-white.png) | ![OPPO UDP-203 0](light-on.png)
 
 # No Customization (now depends on OS theme)
 
@@ -16,4 +16,4 @@ Dark  | Light
 
 On | Off | On | Off
 ------------ | ------------- | ------------- | -------------
-![Dark On](dark-on.png) | ![Dark Off](dark-off.png)
+![Dark On](dark-on.png) | ![Dark Off](dark-off.png)! | ![Light On](light-on.png) | ![Light Off](light-off.png)
