@@ -257,6 +257,12 @@
                <height>24</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>16</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -286,8 +292,10 @@
                <height>24</height>
               </size>
              </property>
-             <property name="text">
-              <string/>
+             <property name="font">
+              <font>
+               <pointsize>16</pointsize>
+              </font>
              </property>
              <property name="icon">
               <iconset resource="../resource.qrc">
@@ -433,8 +441,11 @@
                <height>32</height>
               </size>
              </property>
-             <property name="text">
-              <string/>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+               <bold>true</bold>
+              </font>
              </property>
              <property name="icon">
               <iconset resource="../resource.qrc">
@@ -488,6 +499,12 @@
            </item>
            <item>
             <widget class="QPushButton" name="aboutButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>32</width>
@@ -499,6 +516,27 @@
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
              </property>
              <property name="text">
               <string/>
@@ -512,6 +550,15 @@
                <width>24</width>
                <height>24</height>
               </size>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -1117,6 +1164,12 @@
               <height>28</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -1283,11 +1336,7 @@
                <string>Channel Up</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/up.png</normaloff>:/images/nav/circle/up.png</iconset>
+               <string>▲</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1321,11 +1370,7 @@
                <string>Volume Up</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/up.png</normaloff>:/images/nav/circle/up.png</iconset>
+               <string>▲</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1430,11 +1475,7 @@
                <string>eevfvrfevg</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/down.png</normaloff>:/images/nav/circle/down.png</iconset>
+               <string>▼</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1469,11 +1510,7 @@
                <string>Right</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/right.png</normaloff>:/images/nav/circle/right.png</iconset>
+               <string>⮞</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1507,11 +1544,7 @@
                <string>Up</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/up.png</normaloff>:/images/nav/circle/up.png</iconset>
+               <string>⮝</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1545,11 +1578,7 @@
                <string>Down</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/down.png</normaloff>:/images/nav/circle/down.png</iconset>
+               <string>⮟</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1631,11 +1660,7 @@
                <enum>Qt::RightToLeft</enum>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/left.png</normaloff>:/images/nav/circle/left.png</iconset>
+               <string>⮜</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1724,11 +1749,7 @@
                <string>Volume Down</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../resource.qrc">
-                <normaloff>:/images/nav/circle/down.png</normaloff>:/images/nav/circle/down.png</iconset>
+               <string>▼</string>
               </property>
               <property name="iconSize">
                <size>
@@ -2128,12 +2149,11 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>7</pointsize>
+              <family>Raleway</family>
+              <pointsize>13</pointsize>
               <bold>true</bold>
+              <stylestrategy>PreferDefault</stylestrategy>
              </font>
-            </property>
-            <property name="text">
-             <string/>
             </property>
             <property name="icon">
              <iconset resource="../resource.qrc">
@@ -2198,12 +2218,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>4</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="text">
-             <string/>
             </property>
             <property name="icon">
              <iconset resource="../resource.qrc">
@@ -2233,12 +2250,9 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>7</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="text">
-             <string/>
             </property>
             <property name="icon">
              <iconset resource="../resource.qrc">
@@ -2268,7 +2282,7 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>7</pointsize>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -2306,7 +2320,8 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>4</pointsize>
+              <family>Arial</family>
+              <pointsize>13</pointsize>
               <bold>true</bold>
              </font>
             </property>
