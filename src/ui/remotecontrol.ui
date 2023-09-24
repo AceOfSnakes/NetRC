@@ -259,16 +259,12 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>16</pointsize>
+               <pointsize>9</pointsize>
                <bold>true</bold>
               </font>
              </property>
              <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../resource.qrc">
-               <normaloff>:/images/nav/special/min.png</normaloff>:/images/nav/special/min.png</iconset>
+              <string>🗕</string>
              </property>
              <property name="iconSize">
               <size>
@@ -294,12 +290,12 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>16</pointsize>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
               </font>
              </property>
-             <property name="icon">
-              <iconset resource="../resource.qrc">
-               <normaloff>:/images/nav/special/close.png</normaloff>:/images/nav/special/close.png</iconset>
+             <property name="text">
+              <string>✕</string>
              </property>
              <property name="iconSize">
               <size>
@@ -865,11 +861,8 @@
             <property name="text">
              <string>0</string>
             </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
+            <property name="autoRepeatDelay">
+             <number>296</number>
             </property>
            </widget>
           </item>
@@ -1091,40 +1084,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QPushButton" name="rc_btn_number7">
-            <property name="minimumSize">
-             <size>
-              <width>64</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>64</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="autoFillBackground">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>7</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="4">
            <widget class="QPushButton" name="rc_btn_number9">
             <property name="minimumSize">
@@ -1164,6 +1123,12 @@
               <height>28</height>
              </size>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>32</width>
+              <height>28</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>13</pointsize>
@@ -1171,11 +1136,7 @@
              </font>
             </property>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../resource.qrc">
-              <normaloff>:/images/nav/special/close.png</normaloff>:/images/nav/special/close.png</iconset>
+             <string>✕</string>
             </property>
            </widget>
           </item>
@@ -1193,6 +1154,40 @@
             <property name="icon">
              <iconset resource="../resource.qrc">
               <normaloff>:/images/nav/numbers/go1.png</normaloff>:/images/nav/numbers/go1.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QPushButton" name="rc_btn_number7">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>64</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>7</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -2286,9 +2281,6 @@
               <bold>true</bold>
              </font>
             </property>
-            <property name="text">
-             <string/>
-            </property>
             <property name="icon">
              <iconset resource="../resource.qrc">
               <normaloff>:/images/nav/play/fforward.png</normaloff>:/images/nav/play/fforward.png</iconset>
@@ -2320,17 +2312,13 @@
             </property>
             <property name="font">
              <font>
-              <family>Arial</family>
+              <family>Sans Serif</family>
               <pointsize>13</pointsize>
-              <bold>true</bold>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
              <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../resource.qrc">
-              <normaloff>:/images/nav/play/stop.png</normaloff>:/images/nav/play/stop.png</iconset>
             </property>
             <property name="iconSize">
              <size>
