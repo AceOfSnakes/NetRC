@@ -259,9 +259,12 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>9</pointsize>
+               <pointsize>11</pointsize>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>Minimize</string>
              </property>
              <property name="text">
               <string>🗕</string>
@@ -290,9 +293,12 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>9</pointsize>
+               <pointsize>11</pointsize>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>Close</string>
              </property>
              <property name="text">
               <string>✕</string>
@@ -354,6 +360,9 @@
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
+             <property name="toolTip">
+              <string>Devices Configuration</string>
+             </property>
              <property name="icon">
               <iconset resource="../resource.qrc">
                <normaloff>:/images/connect-red.png</normaloff>:/images/connect-red.png</iconset>
@@ -391,6 +400,9 @@
                <pointsize>8</pointsize>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>Power switch</string>
              </property>
              <property name="icon">
               <iconset resource="../resource.qrc">
@@ -443,6 +455,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="toolTip">
+              <string>Developmernt console</string>
+             </property>
              <property name="icon">
               <iconset resource="../resource.qrc">
                <normaloff>:/images/nav/special/debug.png</normaloff>:/images/nav/special/debug.png</iconset>
@@ -474,6 +489,9 @@
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Configuration</string>
              </property>
              <property name="text">
               <string/>
@@ -530,6 +548,9 @@
                <pointsize>13</pointsize>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>About</string>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -2319,6 +2340,10 @@
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/stop.png</normaloff>:/images/nav/play/stop.png</iconset>
             </property>
             <property name="iconSize">
              <size>
