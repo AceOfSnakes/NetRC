@@ -299,7 +299,7 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
             if(!title.isEmpty()) {
                 QPushButton *btn = new QPushButton(title);
                 //btn->setFont(fixedFont);
-                btn->setFont(QFont(btn->font().family(), btn->font().pixelSize(), QFont::Bold));
+                btn->setFont(QFont(btn->font().family(), 7, QFont::Bold));
                 btn->setObjectName(QString().asprintf("rc_btn_").append(button.value("btn").toString()));
                 btn->setMinimumWidth(50);
                 btn->setMinimumHeight(28);
@@ -500,7 +500,6 @@ void RemoteControl::enableControls(bool enable)
                 button->setEnabled(enable);
             } else {
                 button->setEnabled(false);
-                button->setStyleSheet("");
             }
         }
     };
