@@ -267,7 +267,11 @@
               <string>Minimize</string>
              </property>
              <property name="text">
-              <string>🗕</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resource.qrc">
+               <normaloff>:/images/nav/special/min.png</normaloff>:/images/nav/special/min.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -301,7 +305,11 @@
               <string>Close</string>
              </property>
              <property name="text">
-              <string>✕</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resource.qrc">
+               <normaloff>:/images/nav/special/close.png</normaloff>:/images/nav/special/close.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -1154,7 +1162,11 @@
              </font>
             </property>
             <property name="text">
-             <string>✕</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/special/close.png</normaloff>:/images/nav/special/close.png</iconset>
             </property>
            </widget>
           </item>

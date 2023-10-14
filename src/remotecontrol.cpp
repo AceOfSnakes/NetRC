@@ -178,6 +178,8 @@ void RemoteControl::changeTheme(QByteArray style) {
             ui->settingsButton->setIcon(invertedIcon(originalIcons.value("settingsButton")));
             ui->aboutButton->setIcon(invertedIcon(originalIcons.value("aboutButton")));
             ui->debugButton->setIcon(invertedIcon(originalIcons.value("debugButton")));
+            ui->exitButton->setIcon(invertedIcon(originalIcons.value("exitButton")));
+            ui->minButton->setIcon(invertedIcon(originalIcons.value("minButton")));
             //
         }
 
