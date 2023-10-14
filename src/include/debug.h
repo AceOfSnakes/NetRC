@@ -26,8 +26,9 @@ class Debug : public QDialog
 {
     Q_OBJECT
     DeviceInterface *devInterface;
-    QMap<QString,QIcon> originalIcons;
+
 public:
+    QMap<QString,QIcon> originalIcons;
     explicit Debug(DeviceInterface *deviceInterface, QWidget *parent = nullptr);
     ~Debug();
 public slots:

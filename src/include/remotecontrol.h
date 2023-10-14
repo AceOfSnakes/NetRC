@@ -124,6 +124,7 @@ private:
     void clearInformationPanel();
     bool eventFilter(QObject *obj, QEvent *event);
     QIcon invertedIcon(QIcon  icon);
+    void repaintDebugDialog();
 signals:
     void deviceActivated();
 };
