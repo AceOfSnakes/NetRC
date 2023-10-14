@@ -19,6 +19,7 @@
 
 #include <QTimer>
 #include <QScreen>
+#include <QNetworkProxy>
 #include <QSpacerItem>
 #include <QStyleFactory>
 #include <QResource>
@@ -74,6 +75,9 @@ RemoteControl::RemoteControl(QWidget *parent) :
     font.setBold(true);
     font.setStyleHint(QFont::Monospace);
     ui->statusDisplayWidget->setFont(font);
+
+    QNetworkProxy proxy;
+    QNetworkProxy::setApplicationProxy(proxy);
 
     initTray();
     powerButtonOnIcon.addFile( ":/images/power_green.png", QSize(128, 128));

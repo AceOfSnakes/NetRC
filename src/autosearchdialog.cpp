@@ -407,6 +407,7 @@ void AutoSearchDialog::processPendingDatagrams() {
 
 void AutoSearchDialog::sendMsg() {
     QString datagram;
+    QNetworkProxyFactory::setUseSystemConfiguration(false);
     datagram.append("M-SEARCH * HTTP/1.1\r\nHOST: ")
             .append(groupAddress.toString())
             .append(":1900\r\n"
