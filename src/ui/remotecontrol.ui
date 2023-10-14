@@ -2133,7 +2133,11 @@
              </font>
             </property>
             <property name="text">
-             <string>9</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/fbackward.png</normaloff>:/images/nav/play/fbackward.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2166,7 +2170,11 @@
              </font>
             </property>
             <property name="text">
-             <string>8</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/forward.png</normaloff>:/images/nav/play/forward.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2198,7 +2206,11 @@
              </font>
             </property>
             <property name="text">
-             <string>7</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/backward.png</normaloff>:/images/nav/play/backward.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2230,7 +2242,11 @@
              </font>
             </property>
             <property name="text">
-             <string>;</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/pause.png</normaloff>:/images/nav/play/pause.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2262,7 +2278,11 @@
              </font>
             </property>
             <property name="text">
-             <string>4</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/play.png</normaloff>:/images/nav/play/play.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2294,7 +2314,11 @@
              </font>
             </property>
             <property name="text">
-             <string>:</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/fforward.png</normaloff>:/images/nav/play/fforward.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2329,7 +2353,11 @@
              </font>
             </property>
             <property name="text">
-             <string>&lt;</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/images/nav/play/stop.png</normaloff>:/images/nav/play/stop.png</iconset>
             </property>
             <property name="iconSize">
              <size>

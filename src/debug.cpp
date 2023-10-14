@@ -33,6 +33,12 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     connect(ui->clearCommandLineButton, SIGNAL(clicked()), this, SLOT(clearCommandLine()));
 
     ui->maxLines->setText("50");
+
+    foreach(QPushButton *action, this->findChildren<QPushButton*>(
+                                      Qt::FindChildrenRecursively)) {
+        originalIcons.insert(action->objectName(),action->icon());
+    }
+
     changeMaxLines();
 }
 

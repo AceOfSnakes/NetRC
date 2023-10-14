@@ -26,6 +26,7 @@
 #include <QWindowStateChangeEvent>
 #include <QMenu>
 #include <QFileDialog>
+#include <QStyleHints>
 #include <QRect>
 #include <QSettings>
 #include <QJsonDocument>
@@ -76,22 +77,59 @@ RemoteControl::RemoteControl(QWidget *parent) :
 
     connectButtonOnIcon.addFile( ":/images/connect-green.png", QSize(128, 128));
     connectButtonOffIcon.addFile( ":/images/connect-red.png", QSize(128, 128));
+
+//    ui->rc_btn_navPause->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaPause));
+//    //ui->rc_btn_navPlay->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaPlay));
+//    ui->rc_btn_navForward->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaSeekForward));
+//    ui->rc_btn_navBackward->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaSeekBackward));
+//    ui->rc_btn_navFastBackward->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaSkipBackward));
+//    ui->rc_btn_navFastForward->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaSkipForward));
+//    ui->rc_btn_navStop->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
+
     if(!RCSettings::isDevelopmentModeEnabled()) {
         setEnableDevMode(false);
     }
     initConnect();
     reloadMenu();
 
+    foreach(QPushButton *action, ui->centralWidget->findChildren<QPushButton*>(
+                                      Qt::FindChildrenRecursively)) {
+        originalIcons.insert(action->objectName(), action->icon());
+    }
+
     show();
     ui->connectButton->setEnabled(true);
     redraw();
     reloadLatestDevice();
     qApp->installEventFilter(this);
-
+    //qDebug() << "QIcon::themeSearchPaths()"<<QIcon::themeSearchPaths();
+    //qDebug() << "QIcon::themeName()" << qApp->themeName();
+    //qDebug() << "qApp->style" << qApp->style()->styleHint();
+    //qDebug() << "qApp->styleHints()->colorScheme()" << qApp->styleHints()->colorScheme();
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, &RemoteControl::colorSchemeChanged);
+}
+void RemoteControl::colorSchemeChanged(Qt::ColorScheme scheme) {
+    qDebug()<< scheme;
 }
 
-void RemoteControl::restoreSettings()
-{
+QIcon RemoteControl::invertedIcon(QIcon icon) {
+    QIcon invertedIcon;
+    for(auto singleMode : {QIcon::Normal, QIcon::Disabled, QIcon::Active, QIcon::Selected}) {
+        for(auto singleState : {QIcon::On, QIcon::Off}) {
+            const auto avalSize = icon.availableSizes(singleMode, singleState );
+            for(auto& singleSize : avalSize){
+                QImage tempImage = icon.pixmap(singleSize, singleMode, singleState).toImage();
+                tempImage.invertPixels();
+                invertedIcon.addPixmap(QPixmap::fromImage(std::move(tempImage)), singleMode, singleState);
+            }
+        }
+    }
+    return invertedIcon;
+}
+
+void RemoteControl::restoreSettings() {
+
     QSettings settings(qApp->organizationName(),
                        qApp->applicationName());
 
@@ -107,14 +145,32 @@ void RemoteControl::restoreSettings()
 }
 
 void RemoteControl::changeTheme(QByteArray style) {
-
+    foreach(QString key, originalIcons.keys() ) {
+        ui->centralWidget->findChild<QPushButton*>(key, Qt::FindChildrenRecursively)
+            ->setIcon(originalIcons.value(key));
+    }
+    // Media control icons
     if(style.isEmpty()) {
-
         ui->rc_btn_colorYellow->setStyleSheet("background-color : yellow");
         ui->rc_btn_colorGreen->setStyleSheet("background-color : green");
         ui->rc_btn_colorRed->setStyleSheet("background-color : red");
         ui->rc_btn_colorBlue->setStyleSheet("background-color : blue");
         setAttribute(Qt::WA_NoSystemBackground, false);
+        const QPalette defaultPalette;
+
+        if (defaultPalette.color(QPalette::WindowText).lightness()
+            > defaultPalette.color(QPalette::Window).lightness()) {
+            qDebug() << "invert";
+            foreach(QPushButton *action, ui->centralWidget->findChildren<QPushButton*>(
+                                              QRegularExpression("btn.*"),
+                                              Qt::FindChildrenRecursively)) {
+                action->setIcon(invertedIcon(action->icon()));
+            }
+            ui->settingsButton->setIcon(invertedIcon(ui->settingsButton->icon()));
+            ui->aboutButton->setIcon(invertedIcon(ui->aboutButton->icon()));
+            ui->debugButton->setIcon(invertedIcon(ui->debugButton->icon()));
+        }
+
     } else {
         ui->rc_btn_colorYellow->setStyleSheet("");
         ui->rc_btn_colorGreen->setStyleSheet("");
@@ -122,6 +178,7 @@ void RemoteControl::changeTheme(QByteArray style) {
         ui->rc_btn_colorBlue->setStyleSheet("");
         setAttribute(Qt::WA_NoSystemBackground);
     }
+
     QString styleSheet = QLatin1String(style);
     this->setStyleSheet(styleSheet);
 }

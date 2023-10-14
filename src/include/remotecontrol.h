@@ -19,6 +19,7 @@
 #include <QRegularExpression>
 #include <QSignalMapper>
 #include <QSystemTrayIcon>
+#include <QStyle>
 #include "deviceinterface.h"
 #include "debug.h"
 
@@ -55,6 +56,7 @@ class RemoteControl : public QMainWindow
     QIcon           trayGreen;
     QIcon           trayRed;
     QMap<QString,QList<QPushButton *>> buttonGroups;
+    QMap<QString,QIcon> originalIcons;
     QSet<QPushButton *> enabledButtons;
 public:
     explicit RemoteControl(QWidget *parent = 0);
@@ -103,6 +105,7 @@ private slots:
     void showMinimizedAll();
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
+    void colorSchemeChanged(Qt::ColorScheme scheme);
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;
@@ -120,6 +123,7 @@ private:
     void reloadMenu();
     void clearInformationPanel();
     bool eventFilter(QObject *obj, QEvent *event);
+    QIcon invertedIcon(QIcon  icon);
 signals:
     void deviceActivated();
 };
