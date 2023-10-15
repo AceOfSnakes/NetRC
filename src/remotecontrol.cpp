@@ -486,6 +486,21 @@ void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
     deviceConnector.setDevice(deviceFamily, deviceName, deviceIpAddress, deviceIpPort);
 
+    if(this->styleSheet().isEmpty()) {
+        const QPalette defaultPalette;
+
+        if (defaultPalette.color(QPalette::WindowText).lightness()
+            > defaultPalette.color(QPalette::Window).lightness()) {
+            foreach(QPushButton *action, deviceConnector.findChildren<QPushButton*>(
+                                              Qt::FindChildrenRecursively)) {
+                qDebug() << action->objectName() << "repaintDebugDialog";
+                action->setIcon(invertedIcon(action->icon()));
+            }
+        }
+    }
+
+
+
     deviceConnector.exec();
 
     if(!deviceConnector.deviceFamily.isEmpty()) {
