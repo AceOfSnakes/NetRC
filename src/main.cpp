@@ -19,7 +19,7 @@
 #include <QDateTime>
 #include <QFontDatabase>
 #include <QStyleFactory>
-#include <QNetworkProxyFactory>>
+#include <QNetworkProxyFactory>
 
 int main(int argc, char *argv[]) {
 
