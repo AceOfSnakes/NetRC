@@ -225,12 +225,13 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Network Remote Control 
-
-AKA NetRC</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Network Remote Control&lt;/p&gt;&lt;p&gt;AKA NetRC&lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;https://github.com/AceOfSnakes/NetRC/&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

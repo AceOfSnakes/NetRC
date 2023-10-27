@@ -132,7 +132,7 @@ void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     default:
         str = QString("The following error occurred: %1.").arg(socket.errorString());
     }
-    qDebug()<< "SocketError"<<socketError<<str;
+    qDebug() << "SocketError" << socketError << str;
     emit commError(str);
 }
 
