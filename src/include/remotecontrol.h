@@ -106,6 +106,7 @@ private slots:
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
     void colorSchemeChanged(Qt::ColorScheme scheme);
+    void iconChanged(QPushButton& button);
 private:
     QAction *minimizeAction;
     QAction *maximizeAction;

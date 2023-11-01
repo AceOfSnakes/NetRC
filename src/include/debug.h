@@ -50,6 +50,7 @@ private:
     bool isRsNotDisplayed(const QString str);
 signals:
     void send(const QString str);
+    void iconChanged(QPushButton & button);
 };
 
 #endif // DEBUG_H

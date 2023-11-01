@@ -561,6 +561,7 @@ void RemoteControl::updateDisplayInfo (QRegularExpressionMatch rx) {
 
 void RemoteControl::deviceOffline(bool offline) {
     ui->powerButton->setIcon((offline) ? powerButtonOffIcon : powerButtonOnIcon);
+    originalIcons.insert(ui->powerButton->objectName(), ui->powerButton->icon());
     QIcon newIcon = (offline) ? trayRed : trayGreen;
     if(trayIcon->icon().data_ptr() != newIcon.data_ptr()) {
         trayIcon->setIcon(newIcon);
@@ -643,6 +644,7 @@ void RemoteControl::commConnected() {
     deviceOnline = true;
     enableControls(true);
     ui->connectButton->setIcon(connectButtonOnIcon);
+    originalIcons.insert(ui->connectButton->objectName(), ui->connectButton->icon());
     clearInformationPanel();
     checkOnline();
     if(deviceInterface.isConnected()) {
@@ -661,6 +663,7 @@ void RemoteControl::commDisconnected() {
     enableControls(false);
     ui->powerButton->setEnabled(false);
     ui->connectButton->setIcon(connectButtonOffIcon);
+    originalIcons.insert(ui->connectButton->objectName(), ui->connectButton->icon());
     deviceOnline = false;
     if(trayIcon->icon().data_ptr() != trayGray.data_ptr()) {
         trayIcon->setIcon(trayGray);
@@ -775,6 +778,16 @@ void RemoteControl::reconnect() {
     enabledButtons.clear();
     //emit deviceActivated();
 }
+void RemoteControl::iconChanged(QPushButton & button) {
+    qDebug() << "IconChanged";
+
+    const QPalette defaultPalette;
+
+    if (defaultPalette.color(QPalette::WindowText).lightness()
+        > defaultPalette.color(QPalette::Window).lightness()) {
+        button.setIcon(invertedIcon(button.icon()));
+    }
+}
 
 void RemoteControl::reloadAndReconnect() {
     QAction *action = qobject_cast<QAction *> (sender());
@@ -854,10 +867,14 @@ void RemoteControl::debugClicked() {
     }
 
     ui->debugButton->setChecked(true);
+
     connect(&deviceInterface, SIGNAL(tx(const QString)), debugDialog, SLOT(write(const QString)));
     connect(&deviceInterface, SIGNAL(rx(const QString)), debugDialog, SLOT(read(const QString)));
     connect(debugDialog, SIGNAL(send(const QString)), &deviceInterface, SLOT(sendCmd(const QString)));
     connect(debugDialog, SIGNAL(finished(int)), this, SLOT(closeDebug()));
+
+    connect(debugDialog, SIGNAL(iconChanged(QPushButton &)), this, SLOT(iconChanged(QPushButton &)));
+
     debugDialog->show();
 }
 

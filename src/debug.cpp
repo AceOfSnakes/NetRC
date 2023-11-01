@@ -80,7 +80,8 @@ void Debug::pauseClicked() {
     } else {
         ui->pauseButton->setIcon(QIcon(":/images/nav/play/pause.png"));
     }
-
+    originalIcons.insert(ui->pauseButton->objectName(), ui->pauseButton->icon());
+    emit(iconChanged(*ui->pauseButton));
 }
 
 void Debug::cleanDebugOutput() {
