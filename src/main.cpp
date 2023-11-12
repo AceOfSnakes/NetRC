@@ -38,8 +38,13 @@ int main(int argc, char *argv[]) {
     first.setDate(date.date().year(),date.date().month(),1);
     int week = date.date().weekNumber() -
             (first.weekNumber() > date.date().weekNumber() ? 0 : first.weekNumber());
-    app.setApplicationVersion(date.toString("yy.MM")
+    app.setApplicationVersion(
+#ifdef __FORCED_APP_VER
+        QString(__FORCED_APP_VER)
+#else
+        date.toString("yy.MM")
                               .append(week == 0 ? QString() : QString().asprintf(".%d", week))
+#endif
                           #ifdef STATIC                                   
                               .append(" (static)" )
                           #endif

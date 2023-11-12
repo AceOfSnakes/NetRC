@@ -19,6 +19,13 @@ static { # everything below takes effect with CONFIG += static
 
 VSCMD_VER = $$(VSCMD_VER)
 VSVERSION = $$(VisualStudioVersion)
+FORCEDAPPVERSION = $$(APP_VERSION_VALUE)
+#message("~~~ APP_VER $$((APPVERSION)) ~~~")
+!isEmpty(FORCEDAPPVERSION) {
+    message("~~~ FORCED APP_VER $$(APP_VERSION_VALUE) ~~~")
+    DEFINES += __FORCED_APP_VER=\\\"$$(APP_VERSION_VALUE)\\\"
+}
+
 
 !isEmpty(VSCMD_VER) {
    message("~~~ VSCMD_VER $$(VSCMD_VER) ~~~")
