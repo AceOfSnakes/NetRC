@@ -246,11 +246,21 @@ void RemoteControl::initTray() {
     trayIcon->setToolTip(qApp->applicationName());
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &RemoteControl::showHideWithReason);
+    const QPalette defaultPalette;
+    QIcon close(QString(":/images/nav/special/close.png"));
+    bool invert = defaultPalette.color(QPalette::WindowText).lightness()
+                  > defaultPalette.color(QPalette::Window).lightness();
 
-    QAction *quitAction = new QAction(QIcon(QString(":/images/nav/special/close.png")), "Exit", trayIcon );
+    QAction *quitAction = new QAction(
+        invert ? invertedIcon(close) : close, "Exit", trayIcon );
+
     connect( quitAction, SIGNAL(triggered()), this, SLOT(quit()) );
 
-    QAction *hideAction = new QAction(QIcon(QString(":/images/nav/special/showHide.png")), "Show / Hide", trayIcon );
+    QIcon switchHide(QString(":/images/nav/special/showHide.png"));
+
+    QAction *hideAction = new QAction(
+        invert ? invertedIcon(switchHide): switchHide, "Show / Hide", trayIcon );
+
     connect( hideAction, SIGNAL(triggered()), this, SLOT(showHide()) );
 
     QMenu *trayIconMenu = new QMenu(this);
