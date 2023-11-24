@@ -7,6 +7,15 @@ Preview | Description
 :-------------------------:|:-------------------------:
 ![NetRC](doc/linux/images/Oppo-203.png) | **NetRC** also known as  **Network remote control**. The base idea of this project is to provide access to control your devices via local network. All devices should be configurable without changes in source code. All you need is to create device configuration file. Load it into application and control your device via network. Based on ideas and code from this project https://sourceforge.net/projects/avrpioremote/.
 
+# Some files from another repository is needed for compilation
+
+Just run
+
+```shell
+git submodule init
+git submodule update
+```
+
 # NetRC Integration steps
 * Create configuration file to control your device. When you know how to control your devices via network then you can create [device protocol file](settings/)
 and map buttons from this program to your device (more details will be provided soon).

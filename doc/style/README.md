@@ -6,10 +6,7 @@ Black | Gray | White | No C11n
 
 # No C11n (now depends on OS theme)
 
-
-Need to fix :)
 And Just for fun look at current design
-
 
 Dark On | Dark Off | Light On | Light Off
 ------------ | ------------- | ------------- | -------------

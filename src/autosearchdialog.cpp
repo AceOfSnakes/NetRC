@@ -55,7 +55,7 @@ void RemoteDevice::connectRemoteDevice(QString ip, unsigned int port) {
     connect((socket), SIGNAL(readyRead()), this, SLOT(_dataAvailable()));
     connect((socket), SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this,  SLOT(_tcpError(QAbstractSocket::SocketError)));
     socket->disconnectFromHost();
-    qDebug()<<"RemoteDevice::connectRemoteDevice";
+    qDebug()<<"RemoteDevice::connectRemoteDevice"<<ip<<port;
     socket->connectToHost(ip, port);
 }
 
@@ -148,7 +148,7 @@ QString AutoSearchDialog::parseResponse(QNetworkReply *reply, QUrl &url) {
     QDomDocument document;
 
     document.setContent(data);
-
+    qDebug() << url<< url.port()<<document.toString();
     QDomNodeList nodes = document.childNodes();
 
     for (int i = 0; i < nodes.count(); i++) {
@@ -241,7 +241,7 @@ QString AutoSearchDialog::removeDevice(QMap<QString,RemoteDevice*>  &m_RemoteDev
     return QString();
 }
 void AutoSearchDialog::reconnect(QString & key, QString & ip, int port,RemoteDevice* device){
-    qDebug() << "reconnect" << port;
+    qDebug() << "reconnect" <<ip << port;
     if (!key.isEmpty() && (port == 23 || port != 8102)) {
         device = new RemoteDevice();
         connect((device), SIGNAL(tcpConnected()), this, SLOT(tcpConnected()));
