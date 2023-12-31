@@ -792,10 +792,16 @@ void RemoteControl::iconChanged(QPushButton & button) {
     qDebug() << "IconChanged";
 
     const QPalette defaultPalette;
-
-    if (defaultPalette.color(QPalette::WindowText).lightness()
-        > defaultPalette.color(QPalette::Window).lightness()) {
-        button.setIcon(invertedIcon(button.icon()));
+    if(this->styleSheet().isEmpty()) {
+        if (defaultPalette.color(QPalette::WindowText).lightness()
+            > defaultPalette.color(QPalette::Window).lightness()) {
+            qDebug() << "IconChangedinvert icon " <<
+                "defaultPalette.color(QPalette::WindowText).lightness()" <<
+                defaultPalette.color(QPalette::WindowText).lightness() <<
+                "defaultPalette.color(QPalette::Window).lightness()" <<
+                defaultPalette.color(QPalette::Window).lightness();
+            button.setIcon(invertedIcon(button.icon()));
+        }
     }
 }
 

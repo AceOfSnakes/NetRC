@@ -143,14 +143,13 @@ bool DeviceInterface::sendCmd(const QString& cmd) {
 }
 
 bool DeviceInterface::isDeviceIdRs(const QString& data) {
-    return deviceIdRegex.isValid()/* && deviceIdRegex.patternOptions() != QRegularExpression::NoPatternOption */?
+    return deviceIdRegex.isValid() && !deviceIdRegex.pattern().isEmpty() ?
                deviceIdRegex.match(data).hasMatch() :
                false;
 }
 
 bool DeviceInterface::isTimeRs(const QString& data) {
-    qDebug()<< data<<  timestampRegex <<timestampRegex.isValid()<<timestampRegex.patternOptions() ;
-    return timestampRegex.isValid()/*&& timestampRegex.patternOptions() != QRegularExpression::NoPatternOption */?
+    return timestampRegex.isValid() && !timestampRegex.pattern().isEmpty() ?
                timestampRegex.match(data).hasMatch() :
                false;
 }

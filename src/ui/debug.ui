@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>392</width>
-    <height>957</height>
+    <height>959</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -457,7 +457,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Show only by string contains</string>
+            <string>Contains</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
