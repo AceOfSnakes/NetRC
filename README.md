@@ -1,4 +1,4 @@
-# NetRC. Based on Qt 6+
+# NetRC. Based on Qt 6.5+
 <p align="center">
 <img src="src/images/NetRC.png" width ="128" height="128"/>
 </p>
