@@ -755,13 +755,13 @@ void RemoteControl::reconnect() {
         QVariant var = settings.toMap().value("panel");
         QList<QWidget*>old = ui->centralWidget->findChildren<QWidget*>(
                     QRegularExpression("Panel_"), Qt::FindChildrenRecursively);
-        foreach(QWidget* rem, old) {
+        for(QWidget* rem: old) {
             delete rem;
         }
         if(var.isValid()) {
             QJsonArray array =  var.toJsonArray();
             int idx = 0;
-            foreach (const QJsonValue & value, array) {
+            for (const QJsonValue & value: array) {
                 addPanel(idx++, value.toArray());
 
             }
@@ -775,10 +775,10 @@ void RemoteControl::reconnect() {
             lbls.insert(key, lbs.value(key).toString());
         }
 
-        foreach (const QString & key, lbls.keys()) {
+        for (const QString & key: lbls.keys()) {
             QList<QLabel*> labels = ui->centralWidget->findChildren<QLabel*>(
                         QRegularExpression(QString("rc_lbl_").append(key)), Qt::FindChildrenRecursively);
-            foreach(QLabel* label, labels) {
+            for(QLabel* label: labels) {
                 label->setText(lbls.value(key));
             }
         }
