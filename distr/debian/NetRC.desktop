@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=Application;
+Comment[en_US]=
+Comment=
+Exec=/opt/NetRC/NetRC
+GenericName[en_US]=NetRC
+GenericName=NetRC
+Icon=/opt/NetRC/NetRC.png
+MimeType=
+Name[en_US]=NetRC
+Name=NetRC
+Path=/opt/NetRC
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
