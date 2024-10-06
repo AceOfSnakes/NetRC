@@ -1,0 +1,20 @@
+Source: netrc
+Section: misc
+Priority: optional
+Maintainer: Ace Of Snakes <AceOfSnakesMain@gmail.com>
+#Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+Standards-Version: 4.6.2
+Homepage: https://github.com/AceOfSnakes/NetRC
+#Vcs-Browser: https://salsa.debian.org/debian/netrc
+#Vcs-Git: https://salsa.debian.org/debian/netrc.git
+
+Package: netrc
+Architecture: any
+Multi-Arch: foreign
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: NetRC also known as Network remote control. The base idea of this project is to provide access to control your devices via local network. All devices should be configurable without changes in source code. All you need is to create device configuration file. Load it into application and control your device via network. Based on ideas and code from this project https://sourceforge.net/projects/avrpioremote/
+
