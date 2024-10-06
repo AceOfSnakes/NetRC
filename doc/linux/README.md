@@ -1,6 +1,6 @@
 # Ubuntu 22.04
     Distributor ID: Neon
-    Description:    KDE neon 5.26
+    Description:    KDE neon 6.1
     Release:        22.04
     Codename:       jammy
     
