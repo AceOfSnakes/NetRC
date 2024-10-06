@@ -15,6 +15,7 @@
 #include "deviceinterface.h"
 #include <QThread>
 #include <QStringList>
+#include <QHostInfo>
 #include <QJsonDocument>
 #include <QRegularExpression>
 #include <QDebug>
@@ -56,7 +57,7 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
 void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsigned int PlayerIpPort) {
     qDebug()<<"DeviceInterface::connectToDevice";
     disconnect();
-    socket.connectToHost(PlayerIpAddress, PlayerIpPort,QAbstractSocket::ReadWrite,QAbstractSocket::IPv4Protocol);
+    socket.connectToHost(PlayerIpAddress, PlayerIpPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
 
 void DeviceInterface::disconnect() {

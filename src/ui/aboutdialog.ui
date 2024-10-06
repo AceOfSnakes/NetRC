@@ -3,7 +3,7 @@
  <class>AboutDialog</class>
  <widget class="QDialog" name="AboutDialog">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -40,7 +40,7 @@
    <bool>true</bool>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::CustomContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>About</string>
@@ -59,7 +59,7 @@
     <number>6</number>
    </property>
    <property name="sizeConstraint">
-    <enum>QLayout::SetDefaultConstraint</enum>
+    <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
    </property>
    <property name="leftMargin">
     <number>9</number>
@@ -84,14 +84,14 @@
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
    <item>
     <widget class="Line" name="line_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -106,7 +106,7 @@
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -121,21 +121,21 @@
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
    <item>
     <widget class="Line" name="line_5">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -153,7 +153,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -181,20 +181,20 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../resource.qrc">:/images/NetRC-128.png</pixmap>
+        <pixmap resource="../resource.qrc">:/images/NetRC.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -212,7 +212,7 @@
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -228,7 +228,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Network Remote Control&lt;/p&gt;&lt;p&gt;AKA NetRC&lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;https://github.com/AceOfSnakes/NetRC/&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -238,7 +238,7 @@
        <item>
         <spacer name="verticalSpacer_7">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -251,14 +251,14 @@
        <item>
         <widget class="Line" name="line_6">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_8">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -274,7 +274,7 @@
           <string>Project contributors:</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -284,14 +284,14 @@
           <string>Ace Of Snakes</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_6">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -306,7 +306,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -343,14 +343,14 @@
         <bool>true</bool>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -365,7 +365,7 @@
    <item>
     <spacer name="verticalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -378,14 +378,14 @@
    <item>
     <widget class="Line" name="line_4">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item>
     <spacer name="verticalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -443,19 +443,19 @@
       </font>
      </property>
      <property name="contextMenuPolicy">
-      <enum>Qt::CustomContextMenu</enum>
+      <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="pixmap">
       <pixmap resource="../resource.qrc">:/images/Built_with_Qt_RGB_logo.png</pixmap>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -465,7 +465,7 @@
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -481,7 +481,7 @@
    <item>
     <widget class="Line" name="line">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -496,24 +496,24 @@
       <string>License: LGPL version 3, GPL version 2 and GPL version 3</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
    <item>
     <widget class="Line" name="line_3">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::NoButton</set>
+      <set>QDialogButtonBox::StandardButton::NoButton</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>
