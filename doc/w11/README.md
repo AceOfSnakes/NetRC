@@ -1,8 +1,8 @@
 # Windows 11
     Windows
     Edition     Windows 11 Pro
-    Version	    23H2
-    OS build    22631
+    Version	    24H2
+    OS build    26100
 
 ![About](./images/about.png)
 
