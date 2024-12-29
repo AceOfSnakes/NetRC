@@ -21,8 +21,10 @@
 #include <QClipboard>
 #include <QRegularExpression>
 #include <QtNetwork>
-#include <QtXml>
+#include <QtXmlDepends>
 #include <QMenu>
+#include <QDomDocument>
+
 
 string trim(const string &t, const string &ws) {
     string str = t;

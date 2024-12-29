@@ -662,6 +662,7 @@ void RemoteControl::commConnected() {
         this->setWindowTitle(app);
         if (RCSettings::isMinimizeToTrayEnabled()) {
             trayIcon->showMessage(deviceName, "Connected", QIcon(QString(":/images/").append(qApp->applicationName()).append(".png")));
+            //ui->statusDisplayWidget->setEnabled(true);
             trayIcon->setToolTip(app);
         }
     }
@@ -677,6 +678,7 @@ void RemoteControl::commDisconnected() {
     deviceOnline = false;
     if(trayIcon->icon().data_ptr() != trayGray.data_ptr()) {
         trayIcon->setIcon(trayGray);
+        ui->statusDisplayWidget->setEnabled(false);
     }
 }
 

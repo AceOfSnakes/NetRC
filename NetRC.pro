@@ -1,21 +1,21 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-08-05T19:55:58
-#
-#-------------------------------------------------
-
-QT       += core gui network xml
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui multimedia multimediawidgets opengl widgets xml
+APPName = MtkFwTool
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 static { # everything below takes effect with CONFIG += static
     CONFIG += static
     DEFINES += STATIC
     message("~~~ static build ~~~") # this is for information, that the static build is done
-    message($$[QT_INSTALL_PREFIX])
     win32: TARGET = $$join(TARGET,,,) #this adds an s in the end, so you can seperate static build from non static build
+    win32: LIBS += -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 }
+
+VSCMD_VER = $$(VSCMD_VER)
+VSVERSION = $$(VisualStudioVersion)
+FORCEDAPPVERSION = $$(APP_VERSION_VALUE)
+
 
 VSCMD_VER = $$(VSCMD_VER)
 VSVERSION = $$(VisualStudioVersion)
@@ -32,7 +32,17 @@ FORCEDAPPVERSION = $$(APP_VERSION_VALUE)
    DEFINES += __VSCMD_VER=\\\"$$(VSCMD_VER)\\\"
    DEFINES += __VSVERSION=$$(VisualStudioVersion)
 }
+contains(QMAKE_TARGET.arch, x86_64) {
+    message("Compiling for a 64-bit system")
+    X64 = true
+}
 
+isEmpty(QMAKE_TARGET.arch) {
+    contains(QMAKE_HOST.arch, x86_64) {
+        message("64-bit operation system")
+        X64 = true
+    }
+}
 TARGET = NetRC
 TEMPLATE = app
 INCLUDEPATH += src/include/

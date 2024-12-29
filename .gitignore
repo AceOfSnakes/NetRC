@@ -1,2 +1,4 @@
-
+*.idx
+*.obj
 *.pro.user
+build/*
