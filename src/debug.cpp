@@ -38,7 +38,8 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
                                       Qt::FindChildrenRecursively)) {
         originalIcons.insert(action->objectName(),action->icon());
     }
-
+    this->setWindowFlags(windowFlags() &(~Qt::WindowMinMaxButtonsHint));
+    //this->setWindowFlags(Qt::WindowNoState);
     changeMaxLines();
 }
 
