@@ -159,6 +159,8 @@ void RemoteControl::repaintDebugDialog() {
 }
 
 void RemoteControl::changeTheme(QByteArray style) {
+
+
     foreach(QString key, originalIcons.keys() ) {
         ui->centralWidget->findChild<QPushButton*>(key, Qt::FindChildrenRecursively)
             ->setIcon(originalIcons.value(key));
@@ -193,9 +195,13 @@ void RemoteControl::changeTheme(QByteArray style) {
         ui->rc_btn_colorRed->setStyleSheet("");
         ui->rc_btn_colorBlue->setStyleSheet("");
         setAttribute(Qt::WA_NoSystemBackground);
-    }
+
+   }
     QString styleSheet = QLatin1String(style);
     this->setStyleSheet(styleSheet);
+    ui->minButton->setStyleSheet("padding: 0px; margin: 0px;");
+    ui->exitButton->setStyleSheet("padding: 0px; margin: 0px;");
+
     repaintDebugDialog();
 }
 
@@ -233,8 +239,6 @@ void RemoteControl::initConnect()
             this, SLOT(connectCustomMenuRequested(QPoint)));
     connect(ui->settingsButton, SIGNAL(clicked()), this, SLOT(settingsClicked()));
     connect(ui->powerButton, SIGNAL(clicked()), this, SLOT(powerClicked()));
-
-
 
 }
 
