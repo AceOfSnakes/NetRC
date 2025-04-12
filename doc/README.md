@@ -1,6 +1,6 @@
 # Development screenshots
 
-[Windows 11](w11/) | [Ubuntu 22.04](linux/)
+[Windows 11](w11/) | [Ubuntu 24.04](linux/)
 ------------ | ------------
 ![About W10](w11/images/about.png) | ![About Linux](linux/images/about.png)
 ![About QT W10](w11/images/aboutQT.png) | ![About QT Linux](linux/images/aboutQT.png)
