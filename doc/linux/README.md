@@ -1,7 +1,7 @@
-# Ubuntu 22.04
+# Ubuntu 24.04
     Distributor ID: Neon
-    Description:    KDE neon 6.1
-    Release:        22.04
+    Description:    KDE neon 6.3
+    Release:        24.04
     Codename:       jammy
     
     
