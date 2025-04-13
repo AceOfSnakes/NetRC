@@ -2,7 +2,7 @@
     Distributor ID: Neon
     Description:    KDE neon 6.3
     Release:        24.04
-    Codename:       jammy
+    Codename:       noble
     
     
 ![About](./images/about.png)
