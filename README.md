@@ -36,7 +36,7 @@ Some useful files for make device protocol JSON configuration file can be found 
 
 # Tested Environment
 * [Windows 11](doc/w11/README.md)
-* [Ubuntu 22.04](doc/linux/README.md)
+* [Ubuntu 24.04](doc/linux/README.md)
 
 # C11n
 * [Themes](doc/style/README.md)
