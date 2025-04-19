@@ -10,5 +10,5 @@ cp  ../* $TARGET/
 cd $TARGET
 ln -s /usr/bin/qmake6 ./qmake
 pwd
-
-dpkg-buildpackage -b -uc -us
+export __FORCED_APP_VER=25.25
+dpkg-buildpackage -b -uc -us -d

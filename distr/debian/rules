@@ -16,7 +16,7 @@
 
 
 %:
-	dh $@ --buildsystem qmake
+	dh $@ --buildsystem qmake6
 
 
 # dh_make generated override targets.

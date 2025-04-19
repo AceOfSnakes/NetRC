@@ -1,6 +1,6 @@
-The Debian Package avrpioremote
+The Debian Package netrc
 ----------------------------
 
 NetRC also known as Network remote control. The base idea of this project is to provide access to control your devices via local network. All devices should be configurable without changes in source code. All you need is to create device configuration file. Load it into application and control your device via network. Based on ideas and code from this project https://sourceforge.net/projects/avrpioremote/
 
- -- Ace Of Snakes <AceOfSnakesMain@gmail.com>  Sat, 02 Mar 2024 11:42:11 +0300
+ -- Ace Of Snakes <AceOfSnakesMain@gmail.com>
