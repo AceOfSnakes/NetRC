@@ -57,9 +57,10 @@ AboutDialog::AboutDialog(QWidget *parent) :
         anim->setEasingCurve(QEasingCurve::InOutQuad);
         anim->setLoopCount(-1);
         anim->start(QAbstractAnimation::DeleteWhenStopped);
-        connect(anim, &QPropertyAnimation::currentLoopChanged, [=]() {
-            changeContributor();
-        });
+        // connect(anim, &QPropertyAnimation::currentLoopChanged, [=]() {
+        //     changeContributor();
+        // });
+        connect(anim, SIGNAL(currentLoopChanged(int)), this, SLOT(changeContributor()));
     }
 }
 
