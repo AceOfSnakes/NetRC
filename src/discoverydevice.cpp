@@ -28,7 +28,7 @@ void DiscoveryDevice::connectDevice(QString ip, unsigned int port) {
     connect((socket), SIGNAL(disconnected()), this, SLOT(_tcpDisconnected()));
     connect((socket), SIGNAL(readyRead()), this, SLOT(_newDataToRead()));
     connect((socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(_tcpError(QAbstractSocket::SocketError)));
-    qDebug()<<"DiscoveryDevice::connectDevice";
+    qDebug() << "DiscoveryDevice::connectDevice";
     socket->connectToHost(ip, port);
 }
 

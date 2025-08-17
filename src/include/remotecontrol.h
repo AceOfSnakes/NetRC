@@ -41,6 +41,7 @@ class RemoteControl : public QMainWindow
     bool               deviceOnline;
     QSignalMapper*     signalMapper;
     unsigned int       deviceIpPort = 0;
+    QPixmap            img;
     QString            deviceIpAddress;
     QString            deviceFamily;
     QString            deviceName;
@@ -67,6 +68,8 @@ public:
     void restoreSettings();
     void initConnect();
     void initTray();
+
+    void reloadLogo(QPixmap &img );
 
 protected:
      void changeEvent(QEvent *e);

@@ -17,6 +17,7 @@
 #include "commons.h"
 #include <QImage>
 #include <QGraphicsOpacityEffect>
+#include <QApplication>
 #include <QtGui>
 
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -34,6 +35,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
                 .append(QSysInfo::productVersion()
                 .append(" / Kernel version: ")
                 .append(QSysInfo::kernelVersion())
+//                .append("\nGraphics platform: ")
+//                .append(QGuiApplication::platformName())
                 ));
     ui->compiler->setText(Commons::compilerQString());
     ui->buttonBox->clear();

@@ -498,7 +498,8 @@ void RemoteControl::connectClicked() {
 }
 void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
-    deviceConnector.setDevice(deviceFamily, deviceName, deviceIpAddress, deviceIpPort);
+    deviceConnector.setDevice(deviceFamily, deviceName,
+                              deviceIpAddress, deviceIpPort, img);
 
     if(this->styleSheet().isEmpty()) {
         const QPalette defaultPalette;
@@ -525,6 +526,7 @@ void RemoteControl::newDevice() {
             settings.swap(deviceConnector.settings);
             deviceFamily = deviceConnector.deviceFamily;
             deviceIpPort = deviceConnector.devicePort;
+            reloadLogo(deviceConnector.img);
             reconnect();
             checkOnline();
         }
@@ -789,6 +791,7 @@ void RemoteControl::reconnect() {
             }
         }
     }
+//    if(deviceInterface.)
     deviceInterface.reloadDeviceSettings(settings.toMap());
     deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
     enabledButtons.clear();
@@ -818,6 +821,17 @@ void RemoteControl::reloadAndReconnect() {
     }
 }
 
+void RemoteControl::reloadLogo(QPixmap &img)
+{
+    if(!img.isNull()) {
+        ui->producer->setText("");
+        ui->producer->setPixmap(img);
+    }
+    else {
+        ui->producer->setText("NetRC");
+    }
+}
+
 void RemoteControl::reloadAndReconnect(QString device) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
@@ -829,7 +843,8 @@ void RemoteControl::reloadAndReconnect(QString device) {
     deviceName = sets.value("deviceName", "").toString();
     deviceIpPort = sets.value("devicePort", deviceIpPort).toUInt();
     deviceIpAddress = sets.value("deviceIPAddress", deviceIpAddress).toString();
-
+    img = QPixmap::fromImage(sets.value("deviceLogo").value<QImage>());
+    reloadLogo(img);
     sets.endGroup();
 
     sets.endGroup();

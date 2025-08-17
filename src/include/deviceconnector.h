@@ -35,8 +35,12 @@ public:
     QString  deviceIPAddress;
     unsigned int devicePort;
     QString  deviceFamily;
+    QPixmap  img;
     QVariant settings;
-    void setDevice(QString deviceFamily, QString device, QString address, unsigned int port);
+    void setDevice(QString deviceFamily, QString device, QString address,
+                   unsigned int port, QPixmap logo);
+    void loadLogo();
+
 private slots:
     void autoSearchClicked();
     void applyButtonClicked();
@@ -47,7 +51,8 @@ private slots:
     void onKnownDevicesComboBoxCurrentIndexChanged(int index);
 
     void on_pushButton_clicked();
-
+    void onLogoUploaded(bool);
+    void onLogoRemoved(bool);
 private:
     Ui::DeviceConnector *ui;
     void reloadDevicesFamily();

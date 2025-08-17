@@ -15,7 +15,6 @@
 #ifndef AUTOSEARCHDIALOG_H
 #define AUTOSEARCHDIALOG_H
 
-#include <string>
 #include <QDialog>
 #include <QNetworkReply>
 #include <QDebug>

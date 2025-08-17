@@ -1,0 +1,32 @@
+{
+   "powerOff":"#POW",
+   "powerOn":"#POW",
+
+   "pingCommands":[
+      "NOTIFY IDENTIFY"
+   ],
+
+   "number0":"",
+   "number1":"",
+   "number2":"",
+   "number3":"",
+   "number4":"",
+   "number5":"",
+   "number6":"",
+   "number7":"",
+   "number8":"",
+   "number9":"",
+
+
+   "colorRed": "",
+   "colorBlue": "",
+   "colorGreen": "",
+   "colorYellow": "",
+
+
+   "pingResponseErr":"QPW OK OFF",
+   "pingResponseOk":"NOTIFY IDENTIFY",
+   "prefferedPort":9761,
+   "crlf":true,
+   "family":"LG Smart TV"
+} 

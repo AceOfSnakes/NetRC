@@ -14,6 +14,7 @@
 */
 #include <QFileDialog>
 #include <QDebug>
+#include <QImage>
 #include <QMessageBox>
 #include <QNetworkInterface>
 #include "deviceconnector.h"
@@ -29,6 +30,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     ui(new Ui::DeviceConnector)
 {
     ui->setupUi(this);
+    ui->cryptoBox->setVisible(false);
     QString family = settings.toMap().value("family").toString();
     setWindowTitle(qApp->applicationName().append(". Connect to \"").append(family).append("\""));
 
@@ -59,14 +61,23 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
             this, SLOT(deviceProtocolCurrentIndexChanged(const QString &)));
     connect(ui->knownDevicesComboBox,SIGNAL(currentIndexChanged(int)),
             this, SLOT(onKnownDevicesComboBoxCurrentIndexChanged(int)));
+    connect(ui->uploadLogo,SIGNAL(clicked(bool)),
+            this, SLOT(onLogoUploaded(bool)));
+    connect(ui->removeLogo,SIGNAL(clicked(bool)),
+            this, SLOT(onLogoRemoved(bool)));
+
     reloadDevicesFamily();
+
 }
 
 DeviceConnector::~DeviceConnector() {
     delete ui;
 }
 
-void DeviceConnector::setDevice(QString deviceFamily, QString device, QString address, unsigned int port) {
+void DeviceConnector::setDevice(QString deviceFamily, QString device,
+                                QString address, unsigned int port,
+                                QPixmap logo) {
+
     ui->deviceProtocol->setCurrentText(deviceFamily);
     ui->line_DeviceName->setText(device);
 
@@ -82,6 +93,7 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device, QString ad
             setIpAddress(l[0], l[1], l[2], l[3], QString().asprintf("%d", port));
         }
     }
+    img = logo.copy();
 }
 
 void DeviceConnector::autoSearchClicked() {
@@ -120,6 +132,7 @@ QString DeviceConnector::getIpAddress() {
     return ui->lineEditIP1->text().append(".").append(ui->lineEditIP2->text()).append(".")
             .append(ui->lineEditIP3->text()).append(".").append(ui->lineEditIP4->text());
 }
+
 void DeviceConnector::setIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port) {
     ui->lineEditIP1->setText(ip1);
     ui->lineEditIP2->setText(ip2);
@@ -145,15 +158,21 @@ void DeviceConnector::applyButtonClicked()
         sets.setValue("deviceFamily", deviceFamily);
         sets.setValue("devicePort", devicePort);
         sets.setValue("deviceIPAddress", deviceIPAddress);
+        if(!img.isNull()) {
+            sets.setValue("deviceLogo", img.toImage());
+        }
+        else {
+            sets.remove("deviceLogo");
+        }
         sets.endGroup();
         sets.endGroup();
         sets.endGroup();
+        // TODO emit signal for apply changes
     }
     close();
 }
 
 void DeviceConnector::loadConfigClicked() {
-
 
     QString xfile = FileDialogWithHistory().resolveLoadFileName(this, tr("Load RC Settings Protocol"),
                              tr("JSON Files")
@@ -202,7 +221,6 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
         if(ui->deviceProtocol->findText(arg1) > 0) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
         }
-
     }
 }
 
@@ -222,24 +240,58 @@ void DeviceConnector::deleteFamilyClicked() {
     }
 }
 
-
-
 void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
     qDebug() << ui->knownDevicesComboBox->itemText(index);
     QVariant sets = RCSettings::deviceSettings(ui->knownDevicesComboBox->itemText(index));
     qDebug() << ui->knownDevicesComboBox->itemText(index) <<sets;
+
+    QImage image = sets.toMap().value("deviceLogo").value<QImage>();
+    img = QPixmap::fromImage(image);
     if (sets.isValid()) {
         setDevice(sets.toMap().value("deviceFamily", "").toString(),
                 sets.toMap().value("deviceName", "").toString(),
                 sets.toMap().value("deviceIPAddress", "").toString(),
-                sets.toMap().value("devicePort").toUInt());
+                sets.toMap().value("devicePort").toUInt(),
+                img);
+        loadLogo();
     }
 }
-
 
 void DeviceConnector::on_pushButton_clicked() {
    RCSettings::removeDevice(QString(ui->knownDevicesComboBox->currentText()));
    ui->knownDevicesComboBox->clear();
    ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
+}
+
+void DeviceConnector::loadLogo()
+{
+    if(!img.isNull()) {
+        ui->logoLabel->setText("");
+        img = img.scaledToHeight(16);
+        ui->logoLabel->setPixmap(img);
+    }
+    else {
+        ui->logoLabel->setText("NetRC");
+    }
+}
+
+void DeviceConnector::onLogoUploaded(bool) {
+    QString xfile = FileDialogWithHistory().resolveLoadFileName(this, tr("Load Logo"),
+                                                                tr("Image files")
+                                                                    .append(" (*.png);;")
+                                                                    .append(tr("All files"))
+                                                                    .append(" (* *.*)"), "logo");
+    if (!xfile.isEmpty()) {
+        QFile file(xfile);
+        img.load(file.fileName());
+        loadLogo();
+    }
+}
+
+void DeviceConnector::onLogoRemoved(bool) {
+    img = QPixmap();
+    img.loadFromData(nullptr);
+    ui->logoLabel->setPixmap(img);
+    ui->logoLabel->setText("NetRC");
 }
 

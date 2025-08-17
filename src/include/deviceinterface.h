@@ -21,8 +21,6 @@
 #include <QVariant>
 #include <QVariantMap>
 #include <QtNetwork/QTcpSocket>
-#include <string>
-
 using namespace std;
 
 class DeviceInterface : public QObject
