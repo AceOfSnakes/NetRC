@@ -2,5 +2,5 @@
 
 Online | Offline
 ------------ | ------------- 
-![Online](../w11/images/Oppo-203.png) | ![Offline](../w11/images/Oppo-203-off.png)
+![Online](./Oppo-203.png) | ![Offline](./Oppo-203-off.png)
 
