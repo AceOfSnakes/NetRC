@@ -28,5 +28,40 @@
    "pingResponseOk":"NOTIFY IDENTIFY",
    "prefferedPort":9761,
    "crlf":true,
-   "family":"LG Smart TV"
+   "family":"LG Smart TV",
+   "crypto" : {
+     "cipher" : {
+         "value": "aes-128-cbc",
+         "label": "Cipher:"
+     },
+     "iv" : {
+         "label": "Iv:",
+         "value" : "random"
+     },
+     "ivLength" : {
+         "label": "Iv length:",
+         "value" : 16
+     },
+     "keyCode" : {
+         "label": "Key code:",
+         "editable" : "true",
+         "value" : 12345678
+     },
+     "keyIterations": {
+         "label": "Key code iterations:",
+         "value" : 1
+     },
+     "keyLength": {
+         "label": "Key code length:",
+         "value" : 16
+     },
+     "keyDigest" : {
+         "label": "Key digest:",
+         "value" : "sha256"
+     },
+     "keySalt": {
+         "label": "Key salt:",
+	 "value": "6361b80e9bdca6638d0720f2cc568fb9"
+    }
+  }
 } 

@@ -27,6 +27,7 @@ class DeviceConnector : public QDialog
 {
     Q_OBJECT
 private:
+    void applyCryptoToUI(QVariant& crypto);
 public:
     explicit DeviceConnector(QVariant & sets, QWidget *parent = nullptr);
     ~DeviceConnector();
@@ -50,7 +51,7 @@ private slots:
 
     void onKnownDevicesComboBoxCurrentIndexChanged(int index);
 
-    void on_pushButton_clicked();
+    void onRemoveKnownDevice();
     void onLogoUploaded(bool);
     void onLogoRemoved(bool);
 private:

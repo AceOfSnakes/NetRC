@@ -30,11 +30,12 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     ui(new Ui::DeviceConnector)
 {
     ui->setupUi(this);
-    ui->cryptoBox->setVisible(false);
+
     QString family = settings.toMap().value("family").toString();
     setWindowTitle(qApp->applicationName().append(". Connect to \"").append(family).append("\""));
 
     ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
+
 
     if(!family.isEmpty()) {
         ui->deviceProtocol->addItem(family);
@@ -59,13 +60,14 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     connect(ui->loadConfig, SIGNAL(clicked()), this, SLOT(loadConfigClicked()));
     connect(ui->deviceProtocol, SIGNAL(currentTextChanged(const QString &)),
             this, SLOT(deviceProtocolCurrentIndexChanged(const QString &)));
-    connect(ui->knownDevicesComboBox,SIGNAL(currentIndexChanged(int)),
+    connect(ui->knownDevicesComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onKnownDevicesComboBoxCurrentIndexChanged(int)));
-    connect(ui->uploadLogo,SIGNAL(clicked(bool)),
+    connect(ui->uploadLogo, SIGNAL(clicked(bool)),
             this, SLOT(onLogoUploaded(bool)));
-    connect(ui->removeLogo,SIGNAL(clicked(bool)),
+    connect(ui->removeLogo, SIGNAL(clicked(bool)),
             this, SLOT(onLogoRemoved(bool)));
-
+    connect(ui->removeKnownDevice, SIGNAL(clicked(bool)),
+            this, SLOT(onRemoveKnownDevice()));
     reloadDevicesFamily();
 
 }
@@ -198,6 +200,7 @@ void DeviceConnector::select(QVariant vars) {
 }
 
 void DeviceConnector::reloadDevicesFamily() {
+    onLogoRemoved(true);
     QStringList saved = RCSettings::settingsList();
     ui->knownDevicesComboBox->clear();
     ui->knownDevicesComboBox->addItems(RCSettings::devicesList());
@@ -208,6 +211,30 @@ void DeviceConnector::reloadDevicesFamily() {
     QString family = settings.toMap().value("family").toString();
     if(ui->deviceProtocol->findText(family) > 0) {
         ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));
+    }
+
+
+}
+
+void DeviceConnector::applyCryptoToUI(QVariant& crypto) {
+    QMap<QString, QVariant> cryptoSettings = crypto.toMap();
+    int idx = 0;
+    //cryptoSettings.keys().sort();
+    //ui->cryptoGridLayout->addWidget(new, idx, 1);
+    foreach (QString key, cryptoSettings.keys()) {
+
+        QMap<QString, QVariant> setting = cryptoSettings.value(key).toMap();
+        QLabel *valueLabel = new QLabel(setting.value("label").toString());
+        ui->cryptoGridLayout->addWidget(valueLabel, idx, 0);
+
+        QWidget *valueEditor = new QLineEdit(setting.value("value").toString());
+        ui->cryptoGridLayout->addWidget(valueEditor, idx, 2);
+        valueEditor->setEnabled(false);
+        if(QString("true") == setting.value("editable").toString()) {
+            valueEditor->setEnabled(true);
+            valueLabel->setText("* " + valueLabel->text());
+        }
+        idx++;
     }
 }
 
@@ -221,6 +248,19 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
         if(ui->deviceProtocol->findText(arg1) > 0) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
         }
+        onLogoRemoved(true);
+        QVariant crypto = settings.toMap().value("crypto");
+
+        if(crypto.isValid()) {
+            ui->cryptoBox->setVisible(true);
+            applyCryptoToUI(crypto);
+        } else {
+            ui->cryptoBox->setVisible(false);
+        }
+
+        ui->cryptoLine->setVisible(ui->cryptoBox->isVisible());
+        adjustSize();
+        setMaximumSize(minimumSize());
     }
 }
 
@@ -244,7 +284,7 @@ void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
     qDebug() << ui->knownDevicesComboBox->itemText(index);
     QVariant sets = RCSettings::deviceSettings(ui->knownDevicesComboBox->itemText(index));
     qDebug() << ui->knownDevicesComboBox->itemText(index) <<sets;
-
+    onLogoRemoved(true);
     QImage image = sets.toMap().value("deviceLogo").value<QImage>();
     img = QPixmap::fromImage(image);
     if (sets.isValid()) {
@@ -257,7 +297,7 @@ void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
     }
 }
 
-void DeviceConnector::on_pushButton_clicked() {
+void DeviceConnector::onRemoveKnownDevice() {
    RCSettings::removeDevice(QString(ui->knownDevicesComboBox->currentText()));
    ui->knownDevicesComboBox->clear();
    ui->knownDevicesComboBox->addItems(RCSettings::devicesList());

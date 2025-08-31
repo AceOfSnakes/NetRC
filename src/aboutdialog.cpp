@@ -19,13 +19,15 @@
 #include <QGraphicsOpacityEffect>
 #include <QApplication>
 #include <QtGui>
+#include <openssl/crypto.h>
 
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent), contributor(0) , ui(new Ui::AboutDialog) {
     ui->setupUi(this);
     setWindowFlags(WINDOW_FLAGS);
     setFixedSize(width(), height());
-    ui->label->setText(qApp->applicationName() + ". Version: " + qApp->applicationVersion());
+    ui->label->setText(qApp->applicationName() + ". Version: " + qApp->applicationVersion()
+                       .append(" / ").append(SSLeay_version(SSLEAY_VERSION)));
     ui->label_os->setText(
                 QString("OS: ")
                 .append(Commons::prettyProductName())

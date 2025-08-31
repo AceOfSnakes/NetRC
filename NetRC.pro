@@ -20,6 +20,27 @@ FORCEDAPPVERSION = $$(APP_VERSION_VALUE)
 VSCMD_VER = $$(VSCMD_VER)
 VSVERSION = $$(VisualStudioVersion)
 FORCEDAPPVERSION = $$(APP_VERSION_VALUE)
+
+win32: LIBS += -llibcrypto
+else: LIBS += -lcrypto
+
+contains(QMAKE_TARGET.arch, x86_64) {
+    message("Compiling for a 64-bit system")
+    X64 = true
+}
+
+isEmpty(X64) {
+  INCLUDEPATH += f:/usr/lib32/openssl3/include
+  LIBS += -L/usr/local/lib
+  LIBS += -Lf:/usr/lib32/openssl3/lib
+  LIBS += -Lf:/usr/lib32/openssl3/bin
+} else {
+  INCLUDEPATH += f:/usr/lib64/openssl3/include
+  LIBS += -L/usr/local/lib64
+  LIBS += -Lf:/usr/lib64/openssl3/lib
+  LIBS += -Lf:/usr/lib64/openssl3/bin
+}
+
 #message("~~~ APP_VER $$((APPVERSION)) ~~~")
 !isEmpty(FORCEDAPPVERSION) {
     message("~~~ FORCED APP_VER $$(APP_VERSION_VALUE) ~~~")
