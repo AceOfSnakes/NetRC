@@ -2,7 +2,7 @@
 Categories=Utility;Network
 Comment[en_US]=
 Comment=
-Exec=/opt/NetRC/NetRC
+Exec=/opt/NetRC/NetRC -platform xcb
 GenericName[en_US]=NetRC
 GenericName=NetRC
 Icon=/opt/NetRC/NetRC.png
