@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QMessageBox>
+#include <QGroupBox>
 #include <QNetworkInterface>
 #include "deviceconnector.h"
 #include "autosearchdialog.h"
@@ -41,7 +42,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
         ui->deviceProtocol->addItem(family);
     }
     if(settings.toMap().value("pingResponseOk").toString().isEmpty()) {
-        ui->groupBox_Connect->setEnabled(false);
+        ui->groupBoxConnect->setEnabled(false);
         ui->deviceProtocol->setEnabled(true);
     }
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
@@ -58,8 +59,8 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     connect(ui->applyButton, SIGNAL(clicked()), this, SLOT(applyButtonClicked()));
     connect(ui->deleteConfig, SIGNAL(clicked()), this, SLOT(deleteFamilyClicked()));
     connect(ui->loadConfig, SIGNAL(clicked()), this, SLOT(loadConfigClicked()));
-    connect(ui->deviceProtocol, SIGNAL(currentTextChanged(const QString &)),
-            this, SLOT(deviceProtocolCurrentIndexChanged(const QString &)));
+    connect(ui->deviceProtocol, SIGNAL(currentTextChanged(QString)),
+            this, SLOT(deviceProtocolCurrentIndexChanged(QString)));
     connect(ui->knownDevicesComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onKnownDevicesComboBoxCurrentIndexChanged(int)));
     connect(ui->uploadLogo, SIGNAL(clicked(bool)),
@@ -86,8 +87,8 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device,
     if(!ui->line_DeviceName->text().isEmpty()) {
         ui->knownDevicesComboBox->setCurrentText(ui->line_DeviceName->text());
     }
-
-    QStringList l = address.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
+    QRegularExpression re("[.]");
+    QStringList l = address.split(re, Qt::SkipEmptyParts);
     if (l.size() == 4) {
         if(port == 0) {
             setIpAddress(l[0], l[1], l[2], l[3], "?");
@@ -116,7 +117,8 @@ void DeviceConnector::autoSearchClicked() {
     if(autoSearchDialog->result == 1) {
         QString ip = autoSearchDialog->selectedAddress;
         int port = autoSearchDialog->selectedPort;
-        QStringList l = ip.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
+        QRegularExpression re("[.]");
+        QStringList l = ip.split(re, Qt::SkipEmptyParts);
         if (l.size() == 4) {
             setIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
             deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]).arg(port);
@@ -169,7 +171,6 @@ void DeviceConnector::applyButtonClicked()
         sets.endGroup();
         sets.endGroup();
         sets.endGroup();
-        // TODO emit signal for apply changes
     }
     close();
 }
@@ -193,7 +194,7 @@ void DeviceConnector::loadConfigClicked() {
 
 void DeviceConnector::select(QVariant vars) {
     settings.swap(vars);
-    ui->groupBox_Connect->setEnabled(true);
+    ui->groupBoxConnect->setEnabled(true);
     QString family = settings.toMap().value("family").toString();
     deviceFamily = family;
     setWindowTitle(qApp->applicationName().append(". Connect to \"").append(family).append("\""));
@@ -207,34 +208,42 @@ void DeviceConnector::reloadDevicesFamily() {
     saved.sort();
     ui->deviceProtocol->clear();
     ui->deviceProtocol->addItems(saved);
-    //ui->deviceProtocol->setItemIcon(0,QIcon(QString(":/images/tray/NetRC-Gray.png")));
     QString family = settings.toMap().value("family").toString();
     if(ui->deviceProtocol->findText(family) > 0) {
         ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));
     }
-
-
 }
 
-void DeviceConnector::applyCryptoToUI(QVariant& crypto) {
-    QMap<QString, QVariant> cryptoSettings = crypto.toMap();
-    int idx = 0;
-    //cryptoSettings.keys().sort();
-    //ui->cryptoGridLayout->addWidget(new, idx, 1);
-    foreach (QString key, cryptoSettings.keys()) {
+void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGridLayout * layout) {
 
-        QMap<QString, QVariant> setting = cryptoSettings.value(key).toMap();
-        QLabel *valueLabel = new QLabel(setting.value("label").toString());
-        ui->cryptoGridLayout->addWidget(valueLabel, idx, 0);
+    QString label = settings.value("label").toString();
+    QLabel *valueLabel = new QLabel(label);
+    int idx = layout->rowCount();
+    if(QString("group") == settings.value("type").toString()) {
+        QGroupBox *inner = new QGroupBox(settings.value("label").toString());
+        QGridLayout *lay = new QGridLayout();
+        inner->setLayout(lay);
+        layout->addWidget(
+            inner,
+            idx, 0, 1, 2);
+        applyCryptoToUI(settings.value("settings").toMap(), lay);
+    } else {
+        layout->addWidget(valueLabel, idx, 0);
 
-        QWidget *valueEditor = new QLineEdit(setting.value("value").toString());
-        ui->cryptoGridLayout->addWidget(valueEditor, idx, 2);
+        QWidget *valueEditor = new QLineEdit(settings.value("value").toString());
+        layout->addWidget(valueEditor, idx, 1);
         valueEditor->setEnabled(false);
-        if(QString("true") == setting.value("editable").toString()) {
+        if(QString("true") == settings.value("editable").toString()) {
             valueEditor->setEnabled(true);
             valueLabel->setText("* " + valueLabel->text());
         }
-        idx++;
+    }
+}
+
+void DeviceConnector::applyCryptoToUI(QMap<QString, QVariant> crypto, QGridLayout * layout) {
+    foreach (auto key, crypto.keys()) {
+        QMap<QString, QVariant> a = crypto.value(key).toMap();
+        applyCryptoBlockToUI(a, layout);
     }
 }
 
@@ -249,14 +258,22 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
         }
         onLogoRemoved(true);
+
+        foreach(auto child, ui->cryptoBox->findChildren<QWidget*>()) {
+            ui->cryptoGridLayout->removeWidget(child);
+        }
         QVariant crypto = settings.toMap().value("crypto");
 
         if(crypto.isValid()) {
             ui->cryptoBox->setVisible(true);
-            applyCryptoToUI(crypto);
+            applyCryptoToUI(crypto.toMap(), ui->cryptoGridLayout);
+
         } else {
             ui->cryptoBox->setVisible(false);
         }
+
+        // TODO reset known device
+        // ui->knownDevicesComboBox->setCurrentText("");
 
         ui->cryptoLine->setVisible(ui->cryptoBox->isVisible());
         adjustSize();

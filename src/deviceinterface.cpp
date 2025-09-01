@@ -207,7 +207,7 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
     QVariant special = deviceSettings.value("specialControl");
     if(special.isValid()) {
         QMap<QString,QVariant>map = special.toMap();
-        foreach(QString key, map.keys() ) {
+        foreach(auto key, map.keys() ) {
             QVariant spec = map.value(key);
             if(spec.isValid()) {
                 if(spec.toMap().value("err").toList().contains(response)) {

@@ -35,33 +35,45 @@
          "label": "Cipher:"
      },
      "iv" : {
-         "label": "Iv:",
-         "value" : "random"
+         "label": "Iv",
+         "type": "group",
+         "settings": {
+             "iv" : {
+                 "label": "Iv:",
+                 "value" : "random"
+             },
+             "ivLength" : {
+                 "label": "Iv length:",
+                 "value" : 16
+             }
+         }
      },
-     "ivLength" : {
-         "label": "Iv length:",
-         "value" : 16
-     },
-     "keyCode" : {
-         "label": "Key code:",
-         "editable" : "true",
-         "value" : 12345678
-     },
-     "keyIterations": {
-         "label": "Key code iterations:",
-         "value" : 1
-     },
-     "keyLength": {
-         "label": "Key code length:",
-         "value" : 16
-     },
-     "keyDigest" : {
-         "label": "Key digest:",
-         "value" : "sha256"
-     },
-     "keySalt": {
-         "label": "Key salt:",
-	 "value": "6361b80e9bdca6638d0720f2cc568fb9"
-    }
+     "key" : {
+         "label": "Key",
+         "type": "group",
+         "settings": {
+             "keyCode" : {
+                 "label": "Key code:",
+                 "editable" : "true",
+                 "value" : 12345678
+             },
+             "keyIterations": {
+                 "label": "Key code iterations:",
+                 "value" : 1
+             },
+             "keyLength": {
+                 "label": "Key code length:",
+                 "value" : 16
+             },
+             "keyDigest" : {
+                 "label": "Key digest:",
+                 "value" : "sha256"
+             },
+             "keySalt": {
+                 "label": "Key salt:",
+    	     "value": "6361b80e9bdca6638d0720f2cc568fb9"
+            }
+        }
+     }
   }
 } 

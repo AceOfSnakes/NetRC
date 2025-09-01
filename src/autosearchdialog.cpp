@@ -250,7 +250,7 @@ QString AutoSearchDialog::removeDevice(QMap<QString,RemoteDevice*>  &m_RemoteDev
 }
 void AutoSearchDialog::reconnect(QString & key, QString & ip, int port,RemoteDevice* device){
     qDebug() << "reconnect" <<ip << port;
-    if (!key.isEmpty() && (port == 23 || port != 8102)) {
+    if (!key.isEmpty()/* && (port == 23 || port != 8102)*/) {
         device = new RemoteDevice();
         connect((device), SIGNAL(tcpConnected()), this, SLOT(tcpConnected()));
         connect((device), SIGNAL(tcpDisconnected()), this, SLOT(tcpDisconnected()));
