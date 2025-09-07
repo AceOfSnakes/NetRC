@@ -3,9 +3,9 @@
 ## Settings
 ![Offline](./settings.png)
 
-| Online | Pass through
-|--|--|
-| ![Online](./VSX-923.png) | ![Pass through](./VSX-923-pt.png)
+| Online | Pass through | Offline
+|--|--|--|
+| ![Online](./online.png) | ![Pass through](./pass.png)| ![Pass through](./offline.png)
 
 
 

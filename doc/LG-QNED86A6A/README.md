@@ -6,4 +6,4 @@
 
 Online | Offline
 ------------ | -------------
-![Online](./Oppo-203.png) | ![Offline](./Oppo-203-poff.png)
+![Online](./online.png) | ![Offline](./offline.png)
