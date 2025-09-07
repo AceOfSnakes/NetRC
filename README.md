@@ -29,15 +29,3 @@ Some useful files for make device protocol JSON configuration file can be found 
 1. Load Device protocol file description [TBD]
 1. Connect To Device /  Auto Search Device [TBD]
 
-# Known devices
-* [OPPO UDP-203](doc/OPPO_UDP-203/README.md)
-* [Pioneer BDP-140](doc/Pioneer_BDP-140/README.md)
-* [Pioneer VSX-923](doc/Pioneer_VSX923/README.md)
-
-# Tested Environment
-* [Windows 11](doc/w11/README.md)
-* [Ubuntu 24.04](doc/linux/README.md)
-
-# C11n
-* [Themes](doc/style/README.md)
-
