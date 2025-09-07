@@ -11,15 +11,16 @@
 ![Dev mode W11](w11/images/dev.png) | ![Dev mode Linux](linux/images/dev.png)
 ![Dev file browser w11](w11/images/filebrowser.png) |  ![Dev file browser linux](linux/images/filebrowser.png)
 
-# Known devices
-* [OPPO UDP-203](doc/OPPO_UDP-203/README.md)
-* [Pioneer BDP-140](doc/Pioneer_BDP-140/README.md)
-* [Pioneer VSX-923](doc/Pioneer_VSX923/README.md)
+:# Known devices
 
-# Tested Environment
-* [Windows 11](doc/w11/README.md)
-* [Ubuntu 24.04](doc/linux/README.md)
+:* [OPPO UDP-203](doc/OPPO_UDP-203/README.md)
+:* [Pioneer BDP-140](doc/Pioneer_BDP-140/README.md)
+:* [Pioneer VSX-923](doc/Pioneer_VSX923/README.md)
 
-# C11n
-* [Themes](doc/style/README.md)
+[comment]# Tested Environment
+[comment]* [Windows 11](doc/w11/README.md)
+[comment]* [Ubuntu 24.04](doc/linux/README.md)
+[comment]
+[comment]# C11n
+[comment]* [Themes](doc/style/README.md)
 

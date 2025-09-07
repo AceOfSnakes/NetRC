@@ -29,4 +29,7 @@ Some useful files for make device protocol JSON configuration file can be found 
 1. Load Device protocol file description [TBD]
 1. Connect To Device /  Auto Search Device [TBD]
 
+# Tested device
+
+# Tested OS
 
