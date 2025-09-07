@@ -71,6 +71,8 @@ public:
 
     void reloadLogo(QPixmap &img );
 
+    void enableSpecialControls(bool enabled=false);
+
 protected:
      void changeEvent(QEvent *e);
      void closeEvent(QCloseEvent *event);

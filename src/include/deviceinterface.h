@@ -58,8 +58,8 @@ private:
 private slots:
     void tcpError(QAbstractSocket::SocketError socketError);
     void tcpConnected();
-    void tcpDisconnected();
     void readString();
+    void tcpDisconnected();
 public slots:
     void connectToDevice(const QString &PlayerIpAddress, const unsigned int PlayerIpPort);
     void disconnect();

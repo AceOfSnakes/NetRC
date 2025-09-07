@@ -62,6 +62,7 @@ void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsi
 
 void DeviceInterface::disconnect() {
     connected = false;
+    //tcpDisconnected();
     socket.disconnectFromHost();
     socket.close();
 }

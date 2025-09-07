@@ -674,18 +674,34 @@ void RemoteControl::commConnected() {
     }
 }
 
+void RemoteControl::enableSpecialControls(bool enabled) {
+    QVariant special = deviceInterface.deviceSettings.value("specialControl");
+
+    if(special.isValid()) {
+        QMap<QString,QVariant>map = special.toMap();
+        foreach(auto key, map.keys() ) {
+            QVariant spec = map.value(key);
+            if(spec.isValid()) {
+                emit specialControl(key, enabled);
+            }
+        }
+    }
+}
+
 void RemoteControl::commDisconnected() {
     ui->connectButton->setEnabled(true);
     ui->connectButton->setChecked(false);
-    enableControls(false);
     ui->powerButton->setEnabled(false);
     ui->connectButton->setIcon(connectButtonOffIcon);
     originalIcons.insert(ui->connectButton->objectName(), ui->connectButton->icon());
+    deviceOffline(true);
     deviceOnline = false;
     if(trayIcon->icon().data_ptr() != trayGray.data_ptr()) {
         trayIcon->setIcon(trayGray);
         ui->statusDisplayWidget->setEnabled(false);
     }
+    // TODO disable special controls
+    enableSpecialControls(false);
 }
 
 void RemoteControl::commError(QString/* socketError*/) {
@@ -937,7 +953,10 @@ void RemoteControl::specialControl(const QString control, bool enabled) {
         if(enabled) {
             btn->setEnabled(enabled);
             enabledButtons.insert(btn);
+        } else {
+            btn->setEnabled(false);
         }
+
     }
 }
 
