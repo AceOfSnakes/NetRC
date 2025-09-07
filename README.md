@@ -5,7 +5,7 @@
 
 Preview | Description
 :-------------------------:|:-------------------------:
-![NetRC](./doc/OPPO_UDP-203/Oppo-203.png) | **NetRC** also known as  **Network remote control**. The base idea of this project is to provide access to control your devices via local network. All devices should be configurable without changes in source code. All you need is to create device configuration file. Load it into application and control your device via network. Based on ideas and code from this project https://sourceforge.net/projects/avrpioremote/<br><br><br><br><br><br><br><br>
+![NetRC](./doc/OPPO_UDP-203/online.png) | **NetRC** also known as  **Network remote control**. The base idea of this project is to provide access to control your devices via local network. All devices should be configurable without changes in source code. All you need is to create device configuration file. Load it into application and control your device via network. Based on ideas and code from this project https://sourceforge.net/projects/avrpioremote/<br><br><br><br><br><br><br><br>
 
 
 # Some files from another repository are needed for compilation
@@ -40,4 +40,5 @@ Some useful files for make device protocol JSON configuration file can be found 
 
 # C11n
 * [Themes](doc/style/README.md)
+
 
