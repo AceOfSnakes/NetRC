@@ -1,6 +1,6 @@
 # Ubuntu 24.04
     Distributor ID: Neon
-    Description:    KDE neon 6.3
+    Description:    KDE neon 6.4
     Release:        24.04
     Codename:       noble
     
