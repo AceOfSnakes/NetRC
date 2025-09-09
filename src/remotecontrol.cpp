@@ -496,6 +496,16 @@ void RemoteControl::connectClicked() {
         }
     }
 }
+
+void RemoteControl::displayNear(QDialog & dialog) {
+    this->pos().x();
+    if(this->screen()->geometry().width() < (x() + width() + dialog.width() + 6)) {
+        dialog.move(dialog.mapFromGlobal(QPoint(x() - 6 - dialog.width(), y())));
+    } else {
+        dialog.move(dialog.mapFromGlobal(QPoint(x() + width() + 6, y())));
+    }
+}
+
 void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
     deviceConnector.setDevice(deviceFamily, deviceName,
@@ -514,12 +524,7 @@ void RemoteControl::newDevice() {
         }
     }
 
-    this->pos().x();
-    if(this->screen()->geometry().width() < (x() + width() + deviceConnector.width()+6)) {
-        deviceConnector.move(deviceConnector.mapFromGlobal(QPoint(x() - 6 - deviceConnector.width(), y())));
-    } else {
-        deviceConnector.move(deviceConnector.mapFromGlobal(QPoint(x() + width() + 6, y())));
-    }
+    displayNear(deviceConnector);
 
     deviceConnector.exec();
 
@@ -917,12 +922,8 @@ void RemoteControl::debugClicked() {
         return;
     }
     debugDialog = new Debug(&deviceInterface, this) ;
+    displayNear(*debugDialog);
     repaintDebugDialog();
-    if(this->screen()->geometry().width() < (x() + width() + debugDialog->width()+6)) {
-        debugDialog->move(debugDialog->mapFromGlobal(QPoint(x() - 6 - debugDialog->width(), y())));
-    } else {
-        debugDialog->move(debugDialog->mapFromGlobal(QPoint(x() + width() + 6, y())));
-    }
 
     ui->debugButton->setChecked(true);
 

@@ -72,7 +72,9 @@ public:
     void reloadLogo(QPixmap &img );
 
     void enableSpecialControls(bool enabled=false);
-
+    
+    void displayNear(QDialog & dialog);
+    
 protected:
      void changeEvent(QEvent *e);
      void closeEvent(QCloseEvent *event);
