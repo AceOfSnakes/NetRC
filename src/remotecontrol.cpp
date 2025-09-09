@@ -514,7 +514,12 @@ void RemoteControl::newDevice() {
         }
     }
 
-
+    this->pos().x();
+    if(this->screen()->geometry().width() < (x() + width() + deviceConnector.width()+6)) {
+        deviceConnector.move(deviceConnector.mapFromGlobal(QPoint(x() - 6 - deviceConnector.width(), y())));
+    } else {
+        deviceConnector.move(deviceConnector.mapFromGlobal(QPoint(x() + width() + 6, y())));
+    }
 
     deviceConnector.exec();
 
