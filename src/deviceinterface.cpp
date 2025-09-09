@@ -42,6 +42,10 @@ void DeviceInterface::reloadSettings() {
     pingResponseErr = deviceSettings.value("pingResponseErr").toString();
     pingResponsePlay = deviceSettings.value("pingResponsePlay").toString();
     pingPlayCommand = deviceSettings.value("pingPlayCommand").toString();
+
+    // Crypto settings
+
+
     deviceId = QString();
     deviceName = QString();
 }
@@ -62,7 +66,6 @@ void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsi
 
 void DeviceInterface::disconnect() {
     connected = false;
-    //tcpDisconnected();
     socket.disconnectFromHost();
     socket.close();
 }
@@ -108,7 +111,8 @@ void DeviceInterface::readString() {
                 QString str;
                 str = str.fromUtf8(receivedString.c_str());
                 InterpretString(str);
-                emit dataReceived(str);
+
+                emit dataReceived(QString("DECODED:").append(str));
             }
             receivedString = "";
         }
@@ -138,10 +142,9 @@ void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     emit commError(str);
 }
 
-bool DeviceInterface::sendCmd(const QString& cmd) {
-    QString tmp = cmd + (deviceSettings.value("crlf",true).toBool()? "\r\n" : "\r");
-    emit tx(cmd);
-    return socket.write(tmp.toLatin1(), tmp.length()) == tmp.length();
+bool DeviceInterface::sendCmd(const QString & cmd) {
+    QByteArray newCmd = encrypt(cmd);
+    return socket.write(newCmd, newCmd.length()) == newCmd.length();
 }
 
 bool DeviceInterface::isDeviceIdRs(const QString& data) {
@@ -168,30 +171,32 @@ bool DeviceInterface::isPingRs(const QString& data) {
     return isPingErrRs(data) || isPingOkRs(data);
 }
 
-void DeviceInterface::InterpretString(const QString& data) {
+void DeviceInterface::InterpretString(const QString& dataOrigin) {
+    // Decrypt
+    QString newData = decrypt(dataOrigin);
 
-    bool deviceNameMatch = deviceNameRegex.isValid() ? deviceNameRegex.match(data).hasMatch() : false;
-    emit rx(data);
-    if(isDeviceIdRs(data)) {
-        QString newDeviceId = deviceIdRegex.match(data).captured(1);
+    bool deviceNameMatch = deviceNameRegex.isValid() ? deviceNameRegex.match(newData).hasMatch() : false;
+
+    if(isDeviceIdRs(newData)) {
+        QString newDeviceId = deviceIdRegex.match(newData).captured(1);
         if(newDeviceId != deviceId) {
-            deviceId = deviceIdRegex.match(data).captured(1);
+            deviceId = deviceIdRegex.match(newData).captured(1);
             sendCmd(deviceSettings.value("deviceNameRq").toString().replace(QString("%s"),deviceId));
         }
     } else if(deviceNameMatch) {
-        deviceName = deviceNameRegex.match(data).captured(1);
+        deviceName = deviceNameRegex.match(newData).captured(1);
         emit updateDeviceInfo();
     }
 
-    checkSpecialResponse(data);
+    checkSpecialResponse(newData);
 
-    if(isPingErrRs(data)) {
+    if(isPingErrRs(newData)) {
         emit deviceOffline(true);
         return;
-    } else if (isPingOkRs(data)) {
+    } else if (isPingOkRs(newData)) {
         emit deviceOffline(false);
         if(!pingResponsePlay.isEmpty()) {
-            if(data == pingResponsePlay) {
+            if(newData == pingResponsePlay) {
                 sendCmd(pingPlayCommand);
             } else {
                 QRegularExpressionMatch rx;
@@ -199,8 +204,8 @@ void DeviceInterface::InterpretString(const QString& data) {
             }
         }
         return;
-    } else if(isTimeRs(data)) {
-        emit updateDisplayInfo(timestampRegex.match(data));
+    } else if(isTimeRs(newData)) {
+        emit updateDisplayInfo(timestampRegex.match(newData));
     }
 }
 
@@ -221,3 +226,18 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
     }
 }
 
+QByteArray  DeviceInterface::decrypt(const QString& data) {
+    emit rx(data);
+    auto placeholder = QString("Decrypted : ").append(data);
+    emit rx(placeholder);
+    return data.toLatin1();
+}
+
+QByteArray  DeviceInterface::encrypt(const QString& data) {
+    emit tx(data);
+    auto placeholder = QString("Encrypted : ").append(data);
+    emit tx(placeholder);
+    return QString(data)
+        .append(deviceSettings.value("crlf", true).toBool() ? "\r\n" : "\r")
+        .toLatin1();
+}

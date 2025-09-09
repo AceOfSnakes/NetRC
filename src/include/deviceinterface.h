@@ -39,6 +39,9 @@ public:
     bool isPingErrRs(const QString& data);
     bool isTimeRs(const QString& data);
     bool isDeviceIdRs(const QString& data);
+    QByteArray decrypt(const QString& data);
+    QByteArray encrypt(const QString& data);
+    
 private:
     QString        deviceId;
     QTcpSocket     socket;
