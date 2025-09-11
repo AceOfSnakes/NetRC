@@ -17,11 +17,4 @@
 :* [Pioneer BDP-140](../doc/Pioneer_BDP-140/README.md)
 :* [Pioneer VSX-923](../doc/Pioneer_VSX923/README.md)
 
-[comment]# Tested Environment
-[comment]* [Windows 11](../doc/w11/README.md)
-[comment]* [Ubuntu 24.04](../doc/linux/README.md)
-[comment]
-[comment]# C11n
-[comment]* [Themes](../doc/style/README.md)
-
 
