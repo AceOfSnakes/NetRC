@@ -15,7 +15,7 @@
 #ifndef PLAYERINTERFACE_H
 #define PLAYERINTERFACE_H
 
-
+#include "crypto.h"
 #include <QSettings>
 #include <QRegularExpression>
 #include <QVariant>
@@ -30,6 +30,7 @@ public:
     QVariantMap            deviceSettings;
     QString                deviceName;
     QVariantList           pingCommands = {};
+    Crypto*                crypto = nullptr;
 
     DeviceInterface();
     bool isConnected();
@@ -47,6 +48,7 @@ private:
     QTcpSocket     socket;
     bool           connected;
     bool           crlf;
+    bool           crypted;
 
     QRegularExpression     timestampRegex;
     QRegularExpression     deviceIdRegex;
@@ -80,6 +82,8 @@ signals:
     void updateDeviceInfo(QRegularExpressionMatch);
     void tx(const QString str);
     void rx(const QString str);
+    void err(const QString str);
+    void chdv(const QString str);
     void specialControl(const QString control, bool enabled);
 };
 

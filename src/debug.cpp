@@ -22,7 +22,8 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
 
     devInterface = deviceInterface;
     ui->setupUi(this);
-    setWindowTitle(qApp->applicationName()+ " RX/TX Console");
+    setWindowTitle(qApp->applicationName() + " RX/TX Console");
+    //setWindowTitle(qApp->applicationName() + " RX/TX Console " + deviceInterface->deviceName);
 
     connect(ui->displayAllCheckBox, SIGNAL(stateChanged(int)), this, SLOT(switchAll(int)));
     connect(ui->eraseDebugOutput, SIGNAL(clicked()), this, SLOT(cleanDebugOutput()));
@@ -41,6 +42,9 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     this->setWindowFlags(windowFlags() &(~Qt::WindowMinMaxButtonsHint));
     //this->setWindowFlags(Qt::WindowNoState);
     changeMaxLines();
+
+    adjustSize();
+    setMaximumSize(minimumSize());
 }
 
 Debug::~Debug() {
@@ -66,12 +70,20 @@ bool Debug::isRsNotDisplayed(const QString str) {
 
 void Debug::read(const QString str) {
     if(isRsNotDisplayed(str)) { return; }
-    ui->textEdit->append(QString("<<< ").append(str));
+    ui->textEdit->append(QString(" 🟢 ").append(str));
 }
 
 void Debug::write(const QString str) {
     if(isRqNotDisplayed(str)) { return; }
-    ui->textEdit->append(QString(">>> ").append(str));
+    ui->textEdit->append(QString(" 🔵 ").append(str));
+}
+
+void Debug::error(const QString str) {
+    ui->textEdit->append(QString(" 🔴 ").append(str));
+}
+
+void Debug::chdv(const QString str) {
+    ui->textEdit->append(QString(" 🟡 ").append(str));
 }
 
 void Debug::pauseClicked() {

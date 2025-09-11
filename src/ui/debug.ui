@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>392</width>
-    <height>967</height>
+    <height>956</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>392</width>
-    <height>967</height>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>392</width>
-    <height>967</height>
+    <height>956</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -179,7 +179,7 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

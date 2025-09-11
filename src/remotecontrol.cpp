@@ -161,7 +161,7 @@ void RemoteControl::repaintDebugDialog() {
 void RemoteControl::changeTheme(QByteArray style) {
 
 
-    foreach(QString key, originalIcons.keys() ) {
+    foreach(auto key, originalIcons.keys()){
         ui->centralWidget->findChild<QPushButton*>(key, Qt::FindChildrenRecursively)
             ->setIcon(originalIcons.value(key));
     }
@@ -722,8 +722,7 @@ bool RemoteControl::sendCmd(const QString& cmd) {
     return deviceInterface.sendCmd(cmd);
 }
 
-void RemoteControl::removeEmpty()
-{
+void RemoteControl::removeEmpty() {
     QList<QWidget *> allPanels =
             ui->centralWidget->findChildren<QWidget*>(
                 QRegularExpression(".*_internal"), Qt::FindChildrenRecursively);
@@ -817,11 +816,11 @@ void RemoteControl::reconnect() {
             }
         }
     }
-//    if(deviceInterface.)
+
     deviceInterface.reloadDeviceSettings(settings.toMap());
     deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
     enabledButtons.clear();
-    //emit deviceActivated();
+
 }
 void RemoteControl::iconChanged(QPushButton & button) {
     qDebug() << "IconChanged";
@@ -927,12 +926,15 @@ void RemoteControl::debugClicked() {
 
     ui->debugButton->setChecked(true);
 
-    connect(&deviceInterface, SIGNAL(tx(const QString)), debugDialog, SLOT(write(const QString)));
-    connect(&deviceInterface, SIGNAL(rx(const QString)), debugDialog, SLOT(read(const QString)));
-    connect(debugDialog, SIGNAL(send(const QString)), &deviceInterface, SLOT(sendCmd(const QString)));
+    connect(&deviceInterface, SIGNAL(tx(QString)), debugDialog, SLOT(write(QString)));
+    connect(&deviceInterface, SIGNAL(rx(QString)), debugDialog, SLOT(read(QString)));
+    connect(&deviceInterface, SIGNAL(err(QString)), debugDialog, SLOT(error(QString)));
+    connect(&deviceInterface, SIGNAL(chdv(QString)), debugDialog, SLOT(chdv(QString)));
+    connect(debugDialog, SIGNAL(send(QString)), &deviceInterface, SLOT(sendCmd(QString)));
     connect(debugDialog, SIGNAL(finished(int)), this, SLOT(closeDebug()));
 
-    connect(debugDialog, SIGNAL(iconChanged(QPushButton &)), this, SLOT(iconChanged(QPushButton &)));
+
+    connect(debugDialog, SIGNAL(iconChanged(QPushButton&)), this, SLOT(iconChanged(QPushButton&)));
 
     debugDialog->show();
 }

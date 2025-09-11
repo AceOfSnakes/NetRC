@@ -13,6 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "deviceinterface.h"
+#include "crypto.h"
 #include <QThread>
 #include <QStringList>
 #include <QHostInfo>
@@ -44,7 +45,12 @@ void DeviceInterface::reloadSettings() {
     pingPlayCommand = deviceSettings.value("pingPlayCommand").toString();
 
     // Crypto settings
-
+    crypted = false;
+    if(deviceSettings.value("crypto").isValid()) {
+        crypted = true;
+    }
+    // emit signal for device change
+    emit chdv(deviceSettings.value("family").toString());
 
     deviceId = QString();
     deviceName = QString();
@@ -59,7 +65,6 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
 }
 
 void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsigned int PlayerIpPort) {
-    qDebug()<<"DeviceInterface::connectToDevice";
     disconnect();
     socket.connectToHost(PlayerIpAddress, PlayerIpPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
 }
@@ -138,7 +143,7 @@ void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     default:
         str = QString("The following error occurred: %1.").arg(socket.errorString());
     }
-    qDebug() << "SocketError" << socketError << str;
+    emit err(str);
     emit commError(str);
 }
 
@@ -227,16 +232,21 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
 }
 
 QByteArray  DeviceInterface::decrypt(const QString& data) {
+    if(crypted) {
+        auto placeholder = QString(data).append(" 🔒 ");
+        emit rx(placeholder);
+    }
     emit rx(data);
-    auto placeholder = QString("Decrypted : ").append(data);
-    emit rx(placeholder);
     return data.toLatin1();
 }
 
 QByteArray  DeviceInterface::encrypt(const QString& data) {
     emit tx(data);
-    auto placeholder = QString("Encrypted : ").append(data);
-    emit tx(placeholder);
+    if(crypted) {
+        auto placeholder = QString(data).append(" 🔒 ");
+        emit tx(placeholder);
+    }
+
     return QString(data)
         .append(deviceSettings.value("crlf", true).toBool() ? "\r\n" : "\r")
         .toLatin1();

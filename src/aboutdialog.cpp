@@ -80,7 +80,7 @@ void  AboutDialog::changeContributor() {
     contributor = contributor % contributors.length();
     QImage img;
     QString x = contributors.at(contributor).canonicalFilePath();
-    qDebug() <<contributor << x;
+    qDebug() << contributor << x;
     img.load(x);
     ui->label_4->setText(contributors.at(contributor).baseName());
     //QPixmap xxx = QPixmap::fromImage(img);

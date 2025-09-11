@@ -55,11 +55,11 @@
              "keyCode" : {
                  "label": "Key code:",
                  "editable" : "true",
-                 "value" : 12345678
+                 "value" : "12345678"
              },
              "keyIterations": {
                  "label": "Key code iterations:",
-                 "value" : 1
+                 "value" : 16384
              },
              "keyLength": {
                  "label": "Key code length:",
@@ -71,7 +71,7 @@
              },
              "keySalt": {
                  "label": "Key salt:",
-    	     "value": "6361b80e9bdca6638d0720f2cc568fb9"
+         	 "value": "6361b80e9bdca6638d0720f2cc568fb9"
             }
         }
      }

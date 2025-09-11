@@ -265,17 +265,15 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
         QVariant crypto = settings.toMap().value("crypto");
 
         if(crypto.isValid()) {
-            ui->cryptoBox->setVisible(true);
             applyCryptoToUI(crypto.toMap(), ui->cryptoGridLayout);
-
+            ui->cryptoBox->setVisible(true);
         } else {
             ui->cryptoBox->setVisible(false);
         }
-
         // TODO reset known device
         // ui->knownDevicesComboBox->setCurrentText("");
+        ui->cryptoLine->setVisible(crypto.isValid());
 
-        ui->cryptoLine->setVisible(ui->cryptoBox->isVisible());
         adjustSize();
         setMaximumSize(minimumSize());
     }
@@ -298,9 +296,7 @@ void DeviceConnector::deleteFamilyClicked() {
 }
 
 void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
-    qDebug() << ui->knownDevicesComboBox->itemText(index);
     QVariant sets = RCSettings::deviceSettings(ui->knownDevicesComboBox->itemText(index));
-    qDebug() << ui->knownDevicesComboBox->itemText(index) <<sets;
     onLogoRemoved(true);
     QImage image = sets.toMap().value("deviceLogo").value<QImage>();
     img = QPixmap::fromImage(image);

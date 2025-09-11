@@ -79,6 +79,7 @@ SOURCES += src/main.cpp\
         src/deviceinterface.cpp \
         src/discoverydevice.cpp \
         src/rcsettings.cpp \
+        src/crypto.cpp \
         src/remotecontrol.cpp 
 
 HEADERS  += src/include/remotecontrol.h \
@@ -91,6 +92,7 @@ HEADERS  += src/include/remotecontrol.h \
     src/include/deviceconnector.h \
     src/include/deviceinterface.h \
     src/include/discoverydevice.h \
+    src/include/crypto.h \
     src/include/rcsettings.h
 
 

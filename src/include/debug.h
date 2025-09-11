@@ -32,8 +32,10 @@ public:
     explicit Debug(DeviceInterface *deviceInterface, QWidget *parent = nullptr);
     ~Debug();
 public slots:
+    void error(const QString str);
     void read(const QString str);
     void write(const QString str);
+    void chdv(const QString str);
 private slots:
     void changeMaxLines();
     void pauseClicked();
