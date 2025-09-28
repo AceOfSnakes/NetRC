@@ -27,7 +27,7 @@
    "pingResponseErr":"QPW OK OFF",
    "pingResponseOk":"NOTIFY IDENTIFY",
    "prefferedPort":9761,
-   "crlf":true,
+   "lf": true,
    "family":"LG Smart TV",
    "crypto" : {
      "cipher" : {

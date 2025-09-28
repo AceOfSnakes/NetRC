@@ -46,9 +46,12 @@ void DeviceInterface::reloadSettings() {
 
     // Crypto settings
     crypted = false;
+    crypto = nullptr;
     if(deviceSettings.value("crypto").isValid()) {
+        crypto = new Crypto(this);
         crypted = true;
     }
+
     // emit signal for device change
     emit chdv(deviceSettings.value("family").toString());
 
@@ -96,35 +99,45 @@ void DeviceInterface::readString() {
     // read all available data
     int count = socket.bytesAvailable();
     std::vector<char> data;
+
     data.resize(count + 1);
     socket.read(&data[0], count);
     data[count] = '\0';
+
     // split lines
     int lineLength = 0;
     string receivedString;
     int lineStartPos = 0;
-    for(int i = 0; i < count; i++) {
-        if (data[i] != '\n' && data[i] != '\r') {
-            continue;
-        }
-        lineLength = i - lineStartPos;
-        if (lineLength > 0) {
-            receivedString.append((const char*)&data[lineStartPos], 0, lineLength);
-            receivedString = trim(receivedString, "\r");
-            receivedString = trim(receivedString, "\n");
-            if (receivedString != "") {
-                QString str;
-                str = str.fromUtf8(receivedString.c_str());
-                InterpretString(str);
 
-                emit dataReceived(QString("DECODED:").append(str));
-            }
-            receivedString = "";
-        }
-        lineStartPos = i + 1;
+    if(crypted) {
+        QByteArray response = QByteArray::fromRawData(data.data(), count);
+        QString res = decrypt(response);
+        interpretString(res);
     }
-    if (lineStartPos < count) {
-        receivedString.append((const char*)&data[lineStartPos]);
+    else {
+        for(int i = 0; i < count; i++) {
+            if (data[i] != '\n' && data[i] != '\r') {
+                continue;
+            }
+            lineLength = i - lineStartPos;
+            if (lineLength > 0) {
+
+                receivedString.append((const char*)&data[lineStartPos], 0, lineLength);
+                receivedString = trim(receivedString, "\r");
+                receivedString = trim(receivedString, "\n");
+                if (receivedString != "") {
+                    QString str;
+                    str = str.fromUtf8(receivedString.c_str());
+                    emit rx(str);
+                    interpretString(str);
+                }
+                receivedString = "";
+            }
+            lineStartPos = i + 1;
+        }
+        if (lineStartPos < count) {
+            receivedString.append((const char*)&data[lineStartPos]);
+        }
     }
 }
 
@@ -176,32 +189,30 @@ bool DeviceInterface::isPingRs(const QString& data) {
     return isPingErrRs(data) || isPingOkRs(data);
 }
 
-void DeviceInterface::InterpretString(const QString& dataOrigin) {
-    // Decrypt
-    QString newData = decrypt(dataOrigin);
+void DeviceInterface::interpretString(const QString& dataOrigin) {
+    bool deviceNameMatch = deviceNameRegex.isValid() ?
+                               deviceNameRegex.match(dataOrigin).hasMatch() : false;
 
-    bool deviceNameMatch = deviceNameRegex.isValid() ? deviceNameRegex.match(newData).hasMatch() : false;
-
-    if(isDeviceIdRs(newData)) {
-        QString newDeviceId = deviceIdRegex.match(newData).captured(1);
+    if(isDeviceIdRs(dataOrigin)) {
+        QString newDeviceId = deviceIdRegex.match(dataOrigin).captured(1);
         if(newDeviceId != deviceId) {
-            deviceId = deviceIdRegex.match(newData).captured(1);
+            deviceId = deviceIdRegex.match(dataOrigin).captured(1);
             sendCmd(deviceSettings.value("deviceNameRq").toString().replace(QString("%s"),deviceId));
         }
     } else if(deviceNameMatch) {
-        deviceName = deviceNameRegex.match(newData).captured(1);
+        deviceName = deviceNameRegex.match(dataOrigin).captured(1);
         emit updateDeviceInfo();
     }
 
-    checkSpecialResponse(newData);
+    checkSpecialResponse(dataOrigin);
 
-    if(isPingErrRs(newData)) {
+    if(isPingErrRs(dataOrigin)) {
         emit deviceOffline(true);
         return;
-    } else if (isPingOkRs(newData)) {
+    } else if (isPingOkRs(dataOrigin)) {
         emit deviceOffline(false);
         if(!pingResponsePlay.isEmpty()) {
-            if(newData == pingResponsePlay) {
+            if(dataOrigin == pingResponsePlay) {
                 sendCmd(pingPlayCommand);
             } else {
                 QRegularExpressionMatch rx;
@@ -209,8 +220,8 @@ void DeviceInterface::InterpretString(const QString& dataOrigin) {
             }
         }
         return;
-    } else if(isTimeRs(newData)) {
-        emit updateDisplayInfo(timestampRegex.match(newData));
+    } else if(isTimeRs(dataOrigin)) {
+        emit updateDisplayInfo(timestampRegex.match(dataOrigin));
     }
 }
 
@@ -218,6 +229,18 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
     QVariant special = deviceSettings.value("specialControl");
     if(special.isValid()) {
         QMap<QString,QVariant>map = special.toMap();
+        foreach(auto value, map ) {
+            QVariant spec = value;
+            if(spec.isValid()) {
+                if(spec.toMap().value("err").toList().contains(response)) {
+                    emit specialControl(map.key(value), false);
+                } else if(spec.toMap().value("ok").toList().contains(response)) {
+                    emit specialControl(map.key(value), true);
+                }
+            }
+        }
+/*
+
         foreach(auto key, map.keys() ) {
             QVariant spec = map.value(key);
             if(spec.isValid()) {
@@ -228,26 +251,44 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
                 }
             }
         }
+*/
     }
 }
 
-QByteArray  DeviceInterface::decrypt(const QString& data) {
+QByteArray  DeviceInterface::decrypt(QByteArray& data) {
     if(crypted) {
-        auto placeholder = QString(data).append(" 🔒 ");
-        emit rx(placeholder);
+        auto placeholder = (data.toHex(' ').toUpper());
+        emit rx(QString(" 🔒 ").append(placeholder));
+        auto result =  crypto->decrypt(data);
+       //qDebug()<<result.toHex(' ').toUpper();
+        emit rx(QString(" HEX ").append(result.toHex(' ').toUpper()));
+        emit rx(result);
+        return result;
     }
     emit rx(data);
-    return data.toLatin1();
+    return data;
 }
 
-QByteArray  DeviceInterface::encrypt(const QString& data) {
+QString DeviceInterface::applyTrailer(QString source) {
+    return QString().append(deviceSettings.value("crlf", false).toBool() ? "\r\n":
+                         deviceSettings.value("lf", false).toBool() ? "\0xD" :" 0xA");
+}
+
+QByteArray DeviceInterface::encrypt(const QString& data, const char *newParameter) {
     emit tx(data);
     if(crypted) {
-        auto placeholder = QString(data).append(" 🔒 ");
-        emit tx(placeholder);
-    }
+         emit tx(QString("Key: 🔒 ")
+              .append(QByteArray::fromRawData((const char*)crypto->key, 16)
+                                 .toHex(' ').toUpper()));
+         QByteArray array = crypto->encrypt(
+            QString(data).append(applyTrailer(data)).toLatin1());
 
+        auto placeholder = QString(array.toHex(' ').toUpper());
+        emit tx(QString(" 🔒 ").append(placeholder));
+        decrypt(array);
+        return array;
+    }
     return QString(data)
-        .append(deviceSettings.value("crlf", true).toBool() ? "\r\n" : "\r")
-        .toLatin1();
+         .append(applyTrailer(data))
+         .toLatin1();
 }

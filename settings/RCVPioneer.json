@@ -139,7 +139,7 @@
        }
    },
 
-   "crlf": false,
+   "crlf": true,
    "prefferedPort": 8102,
    "family": "Pioneer Receiver till 2016"
 

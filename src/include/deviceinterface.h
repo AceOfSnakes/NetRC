@@ -40,8 +40,8 @@ public:
     bool isPingErrRs(const QString& data);
     bool isTimeRs(const QString& data);
     bool isDeviceIdRs(const QString& data);
-    QByteArray decrypt(const QString& data);
-    QByteArray encrypt(const QString& data);
+    QByteArray decrypt(QByteArray& data);
+    QByteArray encrypt(const QString& data, const char *newParameter = "\r");
     
 private:
     QString        deviceId;
@@ -58,8 +58,9 @@ private:
     QString                pingResponsePlay;
     QString                pingPlayCommand;
 
-    void InterpretString(const QString& data);
+    void interpretString(const QString& data);
     void checkSpecialResponse(const QString&);
+    QString applyTrailer(QString source);
 private slots:
     void tcpError(QAbstractSocket::SocketError socketError);
     void tcpConnected();
