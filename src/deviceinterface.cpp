@@ -269,15 +269,15 @@ QByteArray  DeviceInterface::decrypt(QByteArray& data) {
     return data;
 }
 
-QString DeviceInterface::applyTrailer(QString source) {
+QString DeviceInterface::applyTrailer(QString) {
     return QString().append(deviceSettings.value("crlf", false).toBool() ? "\r\n":
                          deviceSettings.value("lf", false).toBool() ? "\0xD" :" 0xA");
 }
 
-QByteArray DeviceInterface::encrypt(const QString& data, const char *newParameter) {
+QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
     emit tx(data);
     if(crypted) {
-         emit tx(QString("Key: 🔒 ")
+         emit tx(QString(" 🔒 Key: ")
               .append(QByteArray::fromRawData((const char*)crypto->key, 16)
                                  .toHex(' ').toUpper()));
          QByteArray array = crypto->encrypt(

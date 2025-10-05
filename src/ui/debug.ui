@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Debug</class>
  <widget class="QDialog" name="Debug">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -156,48 +159,42 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="4">
+     <item row="0" column="2">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string> 🔒 Crypted</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="text">
-        <string> 🔵 Outbound</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string> 🟡 Info</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string> 🟢 Inbound</string>
+        <string>🔴  Error</string>
        </property>
       </widget>
      </item>
      <item row="0" column="3">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string> 🔴  Error</string>
+        <string> 🟡 Info</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="5">
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string> 🔒 Crypted</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string> 🟢 Inbound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string> 🔵 Outbound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="9">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>

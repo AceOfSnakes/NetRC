@@ -27,6 +27,7 @@
 
 DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     QDialog(parent),
+    reIP("[.]"),
     settings(sets),
     ui(new Ui::DeviceConnector)
 {
@@ -46,9 +47,10 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
         ui->deviceProtocol->setEnabled(true);
     }
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
-    for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
+
+    for (auto &address: QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
-            QStringList l = address.toString().split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
+            QStringList l = address.toString().split(reIP, Qt::SkipEmptyParts);
             if (l.size() == 4) {
                 setIpAddress(l[0], l[1], l[2], l[3], "?");
                 break;
@@ -87,8 +89,7 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device,
     if(!ui->line_DeviceName->text().isEmpty()) {
         ui->knownDevicesComboBox->setCurrentText(ui->line_DeviceName->text());
     }
-    QRegularExpression re("[.]");
-    QStringList l = address.split(re, Qt::SkipEmptyParts);
+    QStringList l = address.split(reIP, Qt::SkipEmptyParts);
     if (l.size() == 4) {
         if(port == 0) {
             setIpAddress(l[0], l[1], l[2], l[3], "?");
@@ -117,12 +118,11 @@ void DeviceConnector::autoSearchClicked() {
     if(autoSearchDialog->result == 1) {
         QString ip = autoSearchDialog->selectedAddress;
         int port = autoSearchDialog->selectedPort;
-        QRegularExpression re("[.]");
-        QStringList l = ip.split(re, Qt::SkipEmptyParts);
+        QStringList l = ip.split(reIP, Qt::SkipEmptyParts);
         if (l.size() == 4) {
             setIpAddress(l[0], l[1], l[2], l[3], QString("%1").arg(port));
-            deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]).arg(port);
-            deviceIPAddress = QString("%1.%2.%3.%4").arg(l[0]).arg(l[1]).arg(l[2]).arg(l[3]);
+            deviceAddress = QString("%1.%2.%3.%4:%5").arg(l[0], l[1], l[2], l[3]).arg(port);
+            deviceIPAddress = QString("%1.%2.%3.%4").arg(l[0], l[1], l[2], l[3]);
             devicePort = port;
         }
 
@@ -212,16 +212,18 @@ void DeviceConnector::reloadDevicesFamily() {
     if(ui->deviceProtocol->findText(family) > 0) {
         ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(family));
     }
+    reloadCryptoSettings();
 }
 
 void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGridLayout * layout) {
 
     QString label = settings.value("label").toString();
     QLabel *valueLabel = new QLabel(label);
+        valueLabel->setMinimumWidth(100);
     int idx = layout->rowCount();
     if(QString("group") == settings.value("type").toString()) {
         QGroupBox *inner = new QGroupBox(settings.value("label").toString());
-        QGridLayout *lay = new QGridLayout();
+        QGridLayout *lay = new QGridLayout(/*settings.value("label").toString()*/);
         inner->setLayout(lay);
         layout->addWidget(
             inner,
@@ -241,10 +243,35 @@ void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGr
 }
 
 void DeviceConnector::applyCryptoToUI(QMap<QString, QVariant> crypto, QGridLayout * layout) {
-    foreach (auto key, crypto.keys()) {
-        QMap<QString, QVariant> a = crypto.value(key).toMap();
+    //ui->cryptoBox = new QGroupBox(this);
+    foreach (auto element, crypto) {
+        QMap<QString, QVariant> a = element.toMap();
         applyCryptoBlockToUI(a, layout);
     }
+}
+
+void DeviceConnector::reloadCryptoSettings() {
+
+    QVariant crypto = settings.toHash().value("crypto");
+
+    QLayoutItem *child;
+    while ((child = ui->cryptoGridLayout->takeAt(0)) != nullptr) {
+        child->widget()->hide();
+        delete child;
+    }
+
+    if(crypto.isValid()) {
+        applyCryptoToUI(crypto.toMap(), ui->cryptoGridLayout);
+        ui->cryptoBox->setVisible(true);
+    } else {
+        ui->cryptoBox->setVisible(false);
+    }
+
+    ui->cryptoLine->setVisible(crypto.isValid());
+
+    adjustSize();
+    setMaximumSize(minimumSize());
+    repaint();
 }
 
 void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
@@ -258,24 +285,7 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
         }
         onLogoRemoved(true);
-
-        foreach(auto child, ui->cryptoBox->findChildren<QWidget*>()) {
-            ui->cryptoGridLayout->removeWidget(child);
-        }
-        QVariant crypto = settings.toMap().value("crypto");
-
-        if(crypto.isValid()) {
-            applyCryptoToUI(crypto.toMap(), ui->cryptoGridLayout);
-            ui->cryptoBox->setVisible(true);
-        } else {
-            ui->cryptoBox->setVisible(false);
-        }
-        // TODO reset known device
-        // ui->knownDevicesComboBox->setCurrentText("");
-        ui->cryptoLine->setVisible(crypto.isValid());
-
-        adjustSize();
-        setMaximumSize(minimumSize());
+        reloadCryptoSettings();
     }
 }
 

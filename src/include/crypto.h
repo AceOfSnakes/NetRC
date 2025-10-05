@@ -29,6 +29,8 @@ public:
     QByteArray decryptIV(QByteArray);
     QByteArray decrypt(QByteArray);
     QByteArray encrypt(QByteArray);
+    QByteArray decodeIV(unsigned char iv[]);
+    
 signals:
 };
 

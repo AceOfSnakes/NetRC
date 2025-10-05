@@ -16,6 +16,7 @@
 #define DEVICECONNECTOR_H
 
 #include <QDialog>
+#include <QRegularExpression>
 #include <QGridLayout>
 #include <QVariant>
 #include <QRegularExpression>
@@ -28,6 +29,7 @@ class DeviceConnector : public QDialog
 {
     Q_OBJECT
 private:
+    QRegularExpression reIP; //("[.]");
     void applyCryptoToUI(QMap<QString, QVariant> crypto, QGridLayout * layout);
     void applyCryptoBlockToUI(QMap<QString, QVariant> crypto, QGridLayout * layout);
 public:
@@ -43,7 +45,9 @@ public:
     void setDevice(QString deviceFamily, QString device, QString address,
                    unsigned int port, QPixmap logo);
     void loadLogo();
-
+    
+    void reloadCryptoSettings();
+    
 private slots:
     void autoSearchClicked();
     void applyButtonClicked();

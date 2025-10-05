@@ -160,7 +160,6 @@ void RemoteControl::repaintDebugDialog() {
 
 void RemoteControl::changeTheme(QByteArray style) {
 
-
     foreach(auto key, originalIcons.keys()){
         ui->centralWidget->findChild<QPushButton*>(key, Qt::FindChildrenRecursively)
             ->setIcon(originalIcons.value(key));

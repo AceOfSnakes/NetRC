@@ -54,7 +54,32 @@ void handleErrors(void) {
 
 QByteArray Crypto::decryptIV(QByteArray data) {
     return data;
+}
 
+QByteArray Crypto::decodeIV(unsigned char iv[]) {
+    EVP_CIPHER_CTX *ctx;
+    if(!(ctx = EVP_CIPHER_CTX_new())) {
+        handleErrors();
+    }
+    if(!EVP_CIPHER_CTX_init(ctx)) {
+        handleErrors();
+    }
+    if(!EVP_DecryptInit_ex (ctx, EVP_aes_128_ecb(), NULL, key, iv)) {
+        handleErrors();
+    }
+    EVP_CIPHER_CTX_set_padding(ctx, false);
+
+    unsigned char buffer[1024], *pointer = buffer;
+    int outlen=16;
+    EVP_CIPHER_CTX_set_padding(ctx, false);
+    if(!EVP_DecryptUpdate(ctx, pointer, &outlen, iv, 16))
+        handleErrors();
+    pointer += outlen;
+    if(!EVP_DecryptFinal_ex(ctx, pointer, &outlen))
+        handleErrors();
+
+    // pointer += outlen;
+    return QByteArray::fromRawData((const char *)buffer, outlen);
 }
 
 QByteArray Crypto::decrypt(QByteArray array) {
@@ -97,9 +122,10 @@ QByteArray Crypto::decrypt(QByteArray array) {
 
     // if(!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_SET_KEY_LENGTH, 16, NULL))
     //     handleErrors();
-
+    unsigned char *decodedIV = (unsigned char *)decodeIV(iv).data();
+    //unsigned char *decodedIV = (unsigned char*)decodeIV(iv).data();
     /* Initialise key and IV */
-    if(!EVP_DecryptInit_ex(ctx, NULL, NULL, key, iv))
+    if(!EVP_DecryptInit_ex(ctx, NULL, NULL, key, decodedIV))
         handleErrors();
 /*
     unsigned char updated_iv[16];
