@@ -98,6 +98,7 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device,
         }
     }
     img = logo.copy();
+    loadLogo();
 }
 
 void DeviceConnector::autoSearchClicked() {

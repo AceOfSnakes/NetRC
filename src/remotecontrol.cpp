@@ -524,12 +524,10 @@ void RemoteControl::newDevice() {
     }
 
     displayNear(deviceConnector);
-
     deviceConnector.exec();
 
     if(!deviceConnector.deviceFamily.isEmpty()) {
         deviceIpAddress = deviceConnector.deviceIPAddress;
-        qDebug() << "deviceIpAddress" << deviceIpAddress;
         if(!deviceIpAddress.isEmpty()) {
             deviceName = deviceConnector.device;
             settings.swap(deviceConnector.settings);
