@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
+    <width>520</width>
     <height>956</height>
    </rect>
   </property>
@@ -21,14 +21,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>392</width>
+    <width>520</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>392</width>
-    <height>956</height>
+    <width>520</width>
+    <height>1144</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>370</width>
+       <width>500</width>
        <height>0</height>
       </size>
      </property>
@@ -219,8 +219,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>370</width>
-       <height>480</height>
+       <width>500</width>
+       <height>501</height>
       </size>
      </property>
      <property name="focusPolicy">
@@ -234,15 +234,15 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
       <size>
-       <width>370</width>
-       <height>0</height>
+       <width>500</width>
+       <height>48</height>
       </size>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -403,7 +403,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>370</width>
+       <width>500</width>
        <height>0</height>
       </size>
      </property>

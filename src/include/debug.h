@@ -35,7 +35,7 @@ public slots:
     void error(const QString str);
     void read(const QString str);
     void write(const QString str);
-    void chdv(const QString str);
+    void warn(const QString str);
 private slots:
     void changeMaxLines();
     void pauseClicked();

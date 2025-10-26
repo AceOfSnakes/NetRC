@@ -49,11 +49,14 @@ void DeviceInterface::reloadSettings() {
     crypto = nullptr;
     if(deviceSettings.value("crypto").isValid()) {
         crypto = new Crypto(this);
+        connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos); } );
+        connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos); } );
+        connect(crypto, &Crypto::info, this, [&](const QString pos) { emit warn(pos); } );
         crypted = true;
     }
 
     // emit signal for device change
-    emit chdv(deviceSettings.value("family").toString());
+    emit warn(deviceSettings.value("family").toString());
 
     deviceId = QString();
     deviceName = QString();
@@ -257,12 +260,15 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
 
 QByteArray  DeviceInterface::decrypt(QByteArray& data) {
     if(crypted) {
-        auto placeholder = (data.toHex(' ').toUpper());
-        emit rx(QString(" 🔒 ").append(placeholder));
+        // emit rx(QString(" 🔒 ").append(placeholder));
+        emit rx(QString("     🔒 ")
+                    .append(data.toHex(' ').toUpper())
+                    .insert(56, "\n             "));
+
         auto result =  crypto->decrypt(data);
        //qDebug()<<result.toHex(' ').toUpper();
-        emit rx(QString(" HEX ").append(result.toHex(' ').toUpper()));
-        emit rx(result);
+        //emit rx(QString(" HEX ").append(result.toHex(' ').toUpper()));
+        //emit rx(result);
         return result;
     }
     emit rx(data);
@@ -277,15 +283,17 @@ QString DeviceInterface::applyTrailer(QString) {
 QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
     emit tx(data);
     if(crypted) {
-         emit tx(QString(" 🔒 Key: ")
-              .append(QByteArray::fromRawData((const char*)crypto->key, 16)
-                                 .toHex(' ').toUpper()));
+//         emit tx(QString(" 🔒 Key: ")
+//              .append(QByteArray::fromRawData((const char*)crypto->key, 16)
+//                                 .toHex(' ').toUpper()));
          QByteArray array = crypto->encrypt(
-            QString(data).append(applyTrailer(data)).toLatin1());
+            QString(data).append(applyTrailer(data)).toUtf8());
 
-        auto placeholder = QString(array.toHex(' ').toUpper());
-        emit tx(QString(" 🔒 ").append(placeholder));
-        decrypt(array);
+//        auto placeholder = QString(array.toHex(' ').toUpper());
+        emit tx(QString("     🔒 ")
+                    .append(array.toHex(' ').toUpper())
+                    .insert(56, "\n             "));
+//        emit tx();
         return array;
     }
     return QString(data)

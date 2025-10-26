@@ -22,34 +22,40 @@
 #include <openssl/err.h>
 #include <openssl/core_names.h>
 #include <QRandomGenerator>
+#define handleErrors(); ERR_print_errors_fp(stderr);
+#define AES_KEY_SIZE 16  // AES-128 uses a 128-bit (16 bytes) key
+#define AES_BLOCK_SIZE 16 // AES block size is 16 bytes
+
+OSSL_PARAM* Crypto::getSSLParams() {
+
+    sslParams.clear();
+
+    sslParams.append(OSSL_PARAM_utf8_string((const char *) OSSL_KDF_PARAM_DIGEST, (void*) SSL_TXT_SHA256, strlen(SSL_TXT_SHA256)));
+    sslParams.append(OSSL_PARAM_octet_string((const char *) OSSL_KDF_PARAM_PASSWORD, pass.data(), 16));
+    sslParams.append(OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT, salt, 16));
+    sslParams.append(OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &iter));
+    sslParams.append(OSSL_PARAM_END);
+
+    return sslParams.data();
+}
+// void Crypto::handleErrors(void) {
+//     ERR_print_errors_fp(stderr);
+//     abort();
+// }
 
 Crypto::Crypto(QObject *parent)
     : QObject{parent}
 {
+    OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
     ERR_load_crypto_strings();
     OpenSSL_add_all_algorithms();
 
-    const char *pass = "P7RNFK66";
-    //const char *pass = "12345678";
-    int iter = 16384;
-
     EVP_KDF *kdf = EVP_KDF_fetch(NULL, OSSL_KDF_NAME_PBKDF2, NULL);
     EVP_KDF_CTX *kctx = EVP_KDF_CTX_new(kdf);
-    OSSL_PARAM params[] = {
-                           OSSL_PARAM_utf8_string(OSSL_KDF_PARAM_DIGEST, (void *)SSL_TXT_SHA256, 0),
-                           OSSL_PARAM_octet_string(OSSL_KDF_PARAM_PASSWORD, (void *)pass, strlen(pass)),
-                           OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT, salt, 16),
-                           OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &iter),
-                           OSSL_PARAM_END};
 
-    if (EVP_KDF_derive(kctx, key, 16, params) <= 0) {
-        qDebug() << "EVP_KDF_derive failed";
+    if (!EVP_KDF_derive(kctx, key, 16, getSSLParams())) {
+        handleErrors();
     }
-}
-
-void handleErrors(void) {
-    ERR_print_errors_fp(stderr);
-    abort();
 }
 
 QByteArray Crypto::decryptIV(QByteArray data) {
@@ -58,26 +64,28 @@ QByteArray Crypto::decryptIV(QByteArray data) {
 
 QByteArray Crypto::decodeIV(unsigned char iv[]) {
     EVP_CIPHER_CTX *ctx;
+
     if(!(ctx = EVP_CIPHER_CTX_new())) {
-        handleErrors();
+        handleErrors(); return QByteArray();
     }
     if(!EVP_CIPHER_CTX_init(ctx)) {
-        handleErrors();
+        handleErrors(); return QByteArray();
     }
-    if(!EVP_DecryptInit_ex (ctx, EVP_aes_128_ecb(), NULL, key, iv)) {
-        handleErrors();
+    if(!EVP_DecryptInit_ex2(ctx, EVP_aes_128_ecb(), key, iv, getSSLParams())) {
+        handleErrors(); return QByteArray();
     }
     EVP_CIPHER_CTX_set_padding(ctx, false);
 
     unsigned char buffer[1024], *pointer = buffer;
     int outlen=16;
     EVP_CIPHER_CTX_set_padding(ctx, false);
-    if(!EVP_DecryptUpdate(ctx, pointer, &outlen, iv, 16))
-        handleErrors();
+    if(!EVP_DecryptUpdate(ctx, pointer, &outlen, iv, 16)) {
+        handleErrors();  return QByteArray();
+    }
     pointer += outlen;
-    if(!EVP_DecryptFinal_ex(ctx, pointer, &outlen))
-        handleErrors();
-
+    if(!EVP_DecryptFinal_ex(ctx, pointer, &outlen)) {
+        handleErrors();  return QByteArray();
+    }
     // pointer += outlen;
     return QByteArray::fromRawData((const char *)buffer, outlen);
 }
@@ -97,37 +105,37 @@ QByteArray Crypto::decrypt(QByteArray array) {
     else {
        return "";
     }
-    const char *pass = "P7RNFK66";
-    //const char *pass = "12345678";
-    int iter = 16384;
-    OSSL_PARAM params[] = {
-                           OSSL_PARAM_utf8_string(OSSL_KDF_PARAM_DIGEST, (void *)SSL_TXT_SHA256, 0),
-                           OSSL_PARAM_octet_string(OSSL_KDF_PARAM_PASSWORD, (void *)pass, strlen(pass)),
-                           OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT, salt, 16),
-                           OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &iter),
-                           OSSL_PARAM_END};
 /*    int iter = 16384;
             const QString pass("P7RNFK66");*/
     /* Create and initialise the context */
-    if(!(ctx = EVP_CIPHER_CTX_new()))
-        handleErrors();
+    if(!(ctx = EVP_CIPHER_CTX_new())) {
+        handleErrors();  return QByteArray();
+    }
 
     /* Initialise the decryption operation. */
-    if(!EVP_DecryptInit_ex2(ctx, EVP_aes_128_cbc(),NULL, NULL, params))
-        handleErrors();
+    if(!EVP_DecryptInit_ex2(ctx, EVP_aes_128_cbc(),key, NULL, getSSLParams())) {
+        handleErrors();  return QByteArray();
+    }
 
     /* Set IV length. Not necessary if this is 12 bytes (96 bits) */
-    if(!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_AEAD_SET_IVLEN, 16, NULL))
-         handleErrors();
+    if(!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_AEAD_SET_IVLEN, 16, NULL)) {
+        handleErrors();  return QByteArray();
+    }
 
     // if(!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_SET_KEY_LENGTH, 16, NULL))
     //     handleErrors();
-    unsigned char *decodedIV = (unsigned char *)decodeIV(iv).data();
-    //unsigned char *decodedIV = (unsigned char*)decodeIV(iv).data();
+    // unsigned char decodedIV[16];
+    unsigned char *decodedIV = (unsigned char*)decodeIV(iv).data();
     /* Initialise key and IV */
-    if(!EVP_DecryptInit_ex(ctx, NULL, NULL, key, decodedIV))
-        handleErrors();
-/*
+
+    // if(!EVP_DecryptInit_ex(ctx, NULL, NULL, key, decodedIV))
+    //     handleErrors();
+
+    emit encoded(QString(" 🔒 ").append("Dec IV - ").append(
+        QByteArray::fromRawData((const char*)decodedIV, 16).toHex(' ').toUpper()));
+
+
+    /*
     unsigned char updated_iv[16];
 
     if (!EVP_CIPHER_CTX_get_updated_iv(ctx, updated_iv, sizeof(updated_iv))) {
@@ -141,23 +149,88 @@ QByteArray Crypto::decrypt(QByteArray array) {
      * Provide the message to be decrypted, and obtain the plaintext output.
      * EVP_DecryptUpdate can be called multiple times if necessary
      */
-    if(!EVP_DecryptUpdate(ctx, ciphertext, &len, data, len))
-        handleErrors();
+    if(!EVP_DecryptUpdate(ctx, ciphertext, &len, data, len)) {
+        handleErrors();  return QByteArray();
+    }
 
-    if(!EVP_CIPHER_CTX_set_padding(ctx, false))
-        handleErrors();
+    if(!EVP_CIPHER_CTX_set_padding(ctx, false)) {
+        handleErrors();  return QByteArray();
+    }
+
+    // if(!EVP_CIPHER_CTX_get_original_iv(ctx, decodedIV, 16))
+    //     handleErrors();
+
     /*
      * Finalise the decryption. A positive return value indicates success,
      * anything else is a failure - the plaintext is not trustworthy.
      */
-    if(!EVP_DecryptFinal_ex(ctx, ciphertext + len, &len))
-        handleErrors();
+    if(!EVP_DecryptFinal_ex(ctx, ciphertext + len, &len)) {
+        handleErrors();  return QByteArray();
+    }
 
 
     /* Clean up */
     //EVP_CIPHER_CTX_free(ctx);
 
+    emit decoded(QString(" 🔒 ").append("IV     - ").append(
+        QByteArray::fromRawData((const char*)iv, 16).toHex(' ').toUpper()));
+
+    emit decoded(QString(" 🔒 ").append("Array  - ").append(
+        QByteArray::fromRawData((const char*)data, len).toHex(' ').toUpper()));
+
+    emit decoded(QString(" 🔒 ").append("Key    - ").append(
+        QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
+
+    emit decoded(QString(" 🔒 ").append("Data  - ").append(
+        QByteArray::fromRawData((const char*)ciphertext, len).toHex(' ').toUpper()));
+
     return QByteArray::fromRawData((const char*)ciphertext, len);
+}
+
+QByteArray Crypto::encryptIV(unsigned char iv[]) {
+    // Example plaintext (16 bytes) that you want to encrypt (this simulates the 'iv' in your code)
+    unsigned char ciphertext[128];
+    int len, ciphertext_len;
+
+    // Create and initialize the cipher context
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        handleErrors();  return QByteArray();
+    }
+
+    // Initialize the encryption operation (AES-128-ECB mode, no IV required)
+    if (EVP_EncryptInit_ex2(ctx, EVP_aes_128_ecb(), key, iv, getSSLParams()) != 1) {
+        handleErrors();  return QByteArray();
+    }
+
+    /* Set IV length. Not necessary if this is 12 bytes (96 bits) */
+    // if(!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_AEAD_SET_IVLEN, 16, NULL))
+    //     handleErrors();
+
+    // Encrypt the data (ivToEncrypt)
+    if (EVP_EncryptUpdate(ctx, ciphertext, &len, iv, 16) != 1) {
+        handleErrors();  return QByteArray();
+    }
+    ciphertext_len = len;
+
+    // Finalize encryption
+    if (EVP_EncryptFinal_ex(ctx, ciphertext + len, &len) != 1) {
+        handleErrors();  return QByteArray();
+        EVP_CIPHER_CTX_free(ctx);
+    }
+    ciphertext_len += len;
+
+    // Print the encrypted data (ciphertext) in hex
+    printf("Ciphertext (hex): ");
+    for (int i = 0; i < ciphertext_len; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    // Cleanup
+    EVP_CIPHER_CTX_free(ctx);
+
+    return QByteArray::fromRawData((const char*)ciphertext, 16);
 }
 
 QByteArray Crypto::encrypt(QByteArray array) {
@@ -165,32 +238,47 @@ QByteArray Crypto::encrypt(QByteArray array) {
     int len = 16;
     unsigned char ciphertext[128];
     if(!(aes = EVP_CIPHER_CTX_new())) {
-        handleErrors();
+        handleErrors();  return QByteArray();
     }
-    unsigned char iv[16];
+    unsigned char ivx[16];
     uint buffer[16];
     QRandomGenerator::global()->fillRange(buffer);
     for(int x = 0; x < sizeof(buffer); x++) {
-        iv[x] = (unsigned char)buffer[x];
+        ivx[x] = (unsigned char)buffer[x];
     }
 
-    unsigned char updated_iv[16];
-
-    if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL,  key, iv)) {
-        handleErrors();
+    QByteArray newiv = encryptIV(ivx);
+    //if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL,  key, (const unsigned char*)newiv.data())) {
+    if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL,  key, (const unsigned char*)newiv.data())) {
+        handleErrors();  return QByteArray();
     }
 
     if(!EVP_EncryptUpdate(aes, ciphertext, &len, (const unsigned char*)(array.data()), 16)) {
-        handleErrors();
+        handleErrors();  return QByteArray();
     }
 
-    if (!EVP_CIPHER_CTX_get_updated_iv(aes, updated_iv, sizeof(updated_iv))) {
-        handleErrors();
-    }
+    // if (!EVP_CIPHER_CTX_get_updated_iv(aes, updated_iv, sizeof(updated_iv))) {
+    //     handleErrors();
+    // }
+
     if(!EVP_EncryptFinal_ex(aes, ciphertext + len, &len)) {
-        handleErrors();
+        handleErrors();  return QByteArray();
     }
-    return QByteArray::fromRawData((const char*)updated_iv, 16)
-        .append(QByteArray::fromRawData((const char*)ciphertext, 16));
+
+    emit encoded(QString(" 🔒 ").append("Key   - ").append(
+        QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
+
+    // emit encoded(QString(" 🔒 ").append("IV    - ").append(
+    //     QByteArray::fromRawData((const char*)iv, 16).toHex(' ').toUpper()));
+
+    emit encoded(QString(" 🔒 ").append("Up IV - ").append(
+        newiv.toHex(' ').toUpper()));
+
+    emit encoded(QString(" 🔒 ").append("Data  - ").append(
+        QByteArray::fromRawData((const char*)ciphertext, 16).toHex(' ').toUpper()));
+
+    return newiv.append(QByteArray::fromRawData((const char*)ciphertext, 16));
+    // return QByteArray::fromRawData((const char*)updated_iv, 16)
+    //     .append(QByteArray::fromRawData((const char*)ciphertext, 16));
 }
 

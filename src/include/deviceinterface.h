@@ -84,7 +84,7 @@ signals:
     void tx(const QString str);
     void rx(const QString str);
     void err(const QString str);
-    void chdv(const QString str);
+    void warn(const QString str);
     void specialControl(const QString control, bool enabled);
 };
 

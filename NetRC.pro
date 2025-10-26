@@ -1,4 +1,4 @@
-QT       += core gui multimedia multimediawidgets opengl widgets xml
+QT       += core gui opengl widgets xml network
 APPName = MtkFwTool
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 

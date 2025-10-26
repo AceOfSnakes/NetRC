@@ -496,12 +496,25 @@ void RemoteControl::connectClicked() {
     }
 }
 
-void RemoteControl::displayNear(QDialog & dialog) {
+void RemoteControl::displayNear(QDialog & dialog, QDialog * debug) {
     this->pos().x();
-    if(this->screen()->geometry().width() < (x() + width() + dialog.width() + 6)) {
-        dialog.move(dialog.mapFromGlobal(QPoint(x() - 6 - dialog.width(), y())));
-    } else {
-        dialog.move(dialog.mapFromGlobal(QPoint(x() + width() + 6, y())));
+    int dialogWidth = dialog.width();
+
+    int baseWidth = width();
+    int baseX = x();
+    if(debug != nullptr) {
+       // TODO select right baseX
+
+       baseWidth += debug->width() + 6;
+       baseX = min(x(), debug->x());
+    }
+    // move left
+    if(this->screen()->geometry().width() < (baseX + baseWidth + dialogWidth + 6)) {
+        dialog.move(dialog.mapFromGlobal(QPoint(baseX - 6 - dialogWidth, y())));
+    }
+    // move right
+    else {
+        dialog.move(dialog.mapFromGlobal(QPoint(baseX + baseWidth + 6, y())));
     }
 }
 
@@ -523,7 +536,7 @@ void RemoteControl::newDevice() {
         }
     }
 
-    displayNear(deviceConnector);
+    displayNear(deviceConnector, debugDialog);
     deviceConnector.exec();
 
     if(!deviceConnector.deviceFamily.isEmpty()) {
@@ -926,7 +939,7 @@ void RemoteControl::debugClicked() {
     connect(&deviceInterface, SIGNAL(tx(QString)), debugDialog, SLOT(write(QString)));
     connect(&deviceInterface, SIGNAL(rx(QString)), debugDialog, SLOT(read(QString)));
     connect(&deviceInterface, SIGNAL(err(QString)), debugDialog, SLOT(error(QString)));
-    connect(&deviceInterface, SIGNAL(chdv(QString)), debugDialog, SLOT(chdv(QString)));
+    connect(&deviceInterface, SIGNAL(warn(QString)), debugDialog, SLOT(warn(QString)));
     connect(debugDialog, SIGNAL(send(QString)), &deviceInterface, SLOT(sendCmd(QString)));
     connect(debugDialog, SIGNAL(finished(int)), this, SLOT(closeDebug()));
 

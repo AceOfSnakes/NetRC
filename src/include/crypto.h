@@ -16,11 +16,23 @@
 #define CRYPTO_H
 
 #include <QObject>
-
+#include <openssl/evp.h>
+#include <openssl/kdf.h>
+#include <openssl/ssl.h>
+#include <openssl/aes.h>
+#include <openssl/err.h>
+#include <openssl/params.h>
 class Crypto : public QObject
 {
+
+
     Q_OBJECT
+
+    int iter = 16384;
+
 public:
+    QString pass;
+    QList<OSSL_PARAM> sslParams;
     unsigned char key[16];
     unsigned char salt[16] = {0x63, 0x61, 0xb8, 0x0e, 0x9b, 0xdc, 0xa6, 0x63,
                             0x8d, 0x07, 0x20, 0xf2, 0xcc, 0x56, 0x8f, 0xb9};
@@ -30,8 +42,14 @@ public:
     QByteArray decrypt(QByteArray);
     QByteArray encrypt(QByteArray);
     QByteArray decodeIV(unsigned char iv[]);
-    
+    QByteArray encryptIV(unsigned char iv[]);
+    OSSL_PARAM* getSSLParams();
+public:
 signals:
-};
+    void encoded(const QString &str);
+    void decoded(const QString &str);
+    void info(const QString &str);
+
+    };
 
 #endif // CRYPTO_H

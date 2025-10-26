@@ -45,6 +45,13 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
 
     adjustSize();
     setMaximumSize(minimumSize());
+
+    QFont font = ui->textEdit->font();
+    font.setFamily("Courier new");
+
+    font.setStyleHint(QFont::Monospace, QFont::ForceOutline);
+    ui->textEdit->setFont(font);
+
 }
 
 Debug::~Debug() {
@@ -82,7 +89,7 @@ void Debug::error(const QString str) {
     ui->textEdit->append(QString(" 🔴 ").append(str));
 }
 
-void Debug::chdv(const QString str) {
+void Debug::warn(const QString str) {
     ui->textEdit->append(QString(" 🟡 ").append(str));
 }
 

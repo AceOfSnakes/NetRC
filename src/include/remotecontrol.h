@@ -73,7 +73,7 @@ public:
 
     void enableSpecialControls(bool enabled=false);
     
-    void displayNear(QDialog & dialog);
+    void displayNear(QDialog & dialog, QDialog * debug = nullptr);
     
 protected:
      void changeEvent(QEvent *e);
