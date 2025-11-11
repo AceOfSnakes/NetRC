@@ -64,6 +64,7 @@ isEmpty(QMAKE_TARGET.arch) {
         X64 = true
     }
 }
+
 TARGET = NetRC
 TEMPLATE = app
 INCLUDEPATH += src/include/
