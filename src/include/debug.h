@@ -32,10 +32,10 @@ public:
     explicit Debug(DeviceInterface *deviceInterface, QWidget *parent = nullptr);
     ~Debug();
 public slots:
-    void error(const QString str);
-    void read(const QString str);
-    void write(const QString str);
-    void warn(const QString str);
+    void error(const QString str, bool crypted = false);
+    void read(const QString str, bool crypted = false);
+    void write(const QString str, bool crypted = false);
+    void warn(const QString str, bool crypted = false);
 private slots:
     void changeMaxLines();
     void pauseClicked();
@@ -50,6 +50,7 @@ private:
     QSet<QString> rxFilter;
     bool isRqNotDisplayed(const QString str);
     bool isRsNotDisplayed(const QString str);
+    void display(const QString color, const QString str, bool crypted);
 signals:
     void send(const QString str);
     void iconChanged(QPushButton & button);

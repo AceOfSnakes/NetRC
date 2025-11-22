@@ -131,7 +131,7 @@ QByteArray Crypto::decrypt(QByteArray array) {
     // if(!EVP_DecryptInit_ex(ctx, NULL, NULL, key, decodedIV))
     //     handleErrors();
 
-    emit encoded(QString(" 🔒 ").append("Dec IV - ").append(
+    emit encoded(QString("Dec IV - ").append(
         QByteArray::fromRawData((const char*)decodedIV, 16).toHex(' ').toUpper()));
 
 
@@ -172,16 +172,16 @@ QByteArray Crypto::decrypt(QByteArray array) {
     /* Clean up */
     //EVP_CIPHER_CTX_free(ctx);
 
-    emit decoded(QString(" 🔒 ").append("IV     - ").append(
+    emit decoded(QString("IV     - ").append(
         QByteArray::fromRawData((const char*)iv, 16).toHex(' ').toUpper()));
 
-    emit decoded(QString(" 🔒 ").append("Array  - ").append(
+    emit decoded(QString("Array  - ").append(
         QByteArray::fromRawData((const char*)data, len).toHex(' ').toUpper()));
 
-    emit decoded(QString(" 🔒 ").append("Key    - ").append(
+    emit decoded(QString("Key    - ").append(
         QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
 
-    emit decoded(QString(" 🔒 ").append("Data  - ").append(
+    emit decoded(QString("Data   - ").append(
         QByteArray::fromRawData((const char*)ciphertext, len).toHex(' ').toUpper()));
 
     return QByteArray::fromRawData((const char*)ciphertext, len);
@@ -241,15 +241,16 @@ QByteArray Crypto::encrypt(QByteArray array) {
         handleErrors();  return QByteArray();
     }
     unsigned char ivx[16];
+    unsigned char updated_iv[16];
     uint buffer[16];
     QRandomGenerator::global()->fillRange(buffer);
     for(int x = 0; x < sizeof(buffer); x++) {
         ivx[x] = (unsigned char)buffer[x];
     }
 
-    QByteArray newiv = encryptIV(ivx);
+    //QByteArray newiv = encryptIV(ivx);
     //if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL,  key, (const unsigned char*)newiv.data())) {
-    if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL,  key, (const unsigned char*)newiv.data())) {
+    if(!EVP_EncryptInit_ex(aes, EVP_aes_128_cbc(), NULL, key,(const unsigned char*) updated_iv)) {
         handleErrors();  return QByteArray();
     }
 
@@ -257,24 +258,26 @@ QByteArray Crypto::encrypt(QByteArray array) {
         handleErrors();  return QByteArray();
     }
 
-    // if (!EVP_CIPHER_CTX_get_updated_iv(aes, updated_iv, sizeof(updated_iv))) {
-    //     handleErrors();
-    // }
+    if (!EVP_CIPHER_CTX_get_updated_iv(aes, updated_iv, sizeof(updated_iv))) {
+        handleErrors(); return QByteArray();
+    }
+    QByteArray newiv = QByteArray::fromRawData((const char*)updated_iv, 16);
+
 
     if(!EVP_EncryptFinal_ex(aes, ciphertext + len, &len)) {
         handleErrors();  return QByteArray();
     }
 
-    emit encoded(QString(" 🔒 ").append("Key   - ").append(
+    emit encoded(QString("Key    - ").append(
         QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
 
     // emit encoded(QString(" 🔒 ").append("IV    - ").append(
     //     QByteArray::fromRawData((const char*)iv, 16).toHex(' ').toUpper()));
 
-    emit encoded(QString(" 🔒 ").append("Up IV - ").append(
+    emit encoded(QString("Up IV  - ").append(
         newiv.toHex(' ').toUpper()));
 
-    emit encoded(QString(" 🔒 ").append("Data  - ").append(
+    emit encoded(QString("Data   - ").append(
         QByteArray::fromRawData((const char*)ciphertext, 16).toHex(' ').toUpper()));
 
     return newiv.append(QByteArray::fromRawData((const char*)ciphertext, 16));

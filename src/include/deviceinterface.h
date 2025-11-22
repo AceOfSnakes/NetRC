@@ -81,10 +81,10 @@ signals:
     void updateDeviceInfo();
     void updateDisplayInfo(QRegularExpressionMatch);
     void updateDeviceInfo(QRegularExpressionMatch);
-    void tx(const QString str);
-    void rx(const QString str);
-    void err(const QString str);
-    void warn(const QString str);
+    void tx(const QString str, bool crypted = false);
+    void rx(const QString str, bool crypted = false);
+    void err(const QString str, bool crypted = false);
+    void warn(const QString str, bool crypted = false);
     void specialControl(const QString control, bool enabled);
 };
 

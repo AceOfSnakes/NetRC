@@ -49,10 +49,10 @@ void DeviceInterface::reloadSettings() {
     crypto = nullptr;
     if(deviceSettings.value("crypto").isValid()) {
         crypto = new Crypto(this);
-        connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos); } );
-        connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos); } );
-        connect(crypto, &Crypto::info, this, [&](const QString pos) { emit warn(pos); } );
         crypted = true;
+        connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos, true); } );
+        connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos, true); } );
+        connect(crypto, &Crypto::info, this, [&](const QString pos) { emit warn(pos, crypted); } );
     }
 
     // emit signal for device change
@@ -261,9 +261,9 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
 QByteArray  DeviceInterface::decrypt(QByteArray& data) {
     if(crypted) {
         // emit rx(QString(" 🔒 ").append(placeholder));
-        emit rx(QString("     🔒 ")
-                    .append(data.toHex(' ').toUpper())
-                    .insert(56, "\n             "));
+        // emit rx(QString("     🔒 ")
+        //             .append(data.toHex(' ').toUpper())
+        //             .insert(56, "\n             "));
 
         auto result =  crypto->decrypt(data);
        //qDebug()<<result.toHex(' ').toUpper();
@@ -290,9 +290,9 @@ QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
             QString(data).append(applyTrailer(data)).toUtf8());
 
 //        auto placeholder = QString(array.toHex(' ').toUpper());
-        emit tx(QString("     🔒 ")
-                    .append(array.toHex(' ').toUpper())
-                    .insert(56, "\n             "));
+        // emit tx(QString("     🔒 ")
+        //             .append(array.toHex(' ').toUpper())
+        //             .insert(56, "\n             "));
 //        emit tx();
         return array;
     }

@@ -936,10 +936,10 @@ void RemoteControl::debugClicked() {
 
     ui->debugButton->setChecked(true);
 
-    connect(&deviceInterface, SIGNAL(tx(QString)), debugDialog, SLOT(write(QString)));
-    connect(&deviceInterface, SIGNAL(rx(QString)), debugDialog, SLOT(read(QString)));
-    connect(&deviceInterface, SIGNAL(err(QString)), debugDialog, SLOT(error(QString)));
-    connect(&deviceInterface, SIGNAL(warn(QString)), debugDialog, SLOT(warn(QString)));
+    connect(&deviceInterface, SIGNAL(tx(QString,bool)), debugDialog, SLOT(write(QString,bool)));
+    connect(&deviceInterface, SIGNAL(rx(QString,bool)), debugDialog, SLOT(read(QString,bool)));
+    connect(&deviceInterface, SIGNAL(err(QString,bool)), debugDialog, SLOT(error(QString,bool)));
+    connect(&deviceInterface, SIGNAL(warn(QString,bool)), debugDialog, SLOT(warn(QString,bool)));
     connect(debugDialog, SIGNAL(send(QString)), &deviceInterface, SLOT(sendCmd(QString)));
     connect(debugDialog, SIGNAL(finished(int)), this, SLOT(closeDebug()));
 

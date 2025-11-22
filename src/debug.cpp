@@ -75,22 +75,27 @@ bool Debug::isRsNotDisplayed(const QString str) {
                          (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str)));
 }
 
-void Debug::read(const QString str) {
+void Debug::display(const QString color, const QString str, bool crypted) {
+    ui->textEdit->append(QString(color).
+                         append(crypted? " 🔒 " :" ").append(str));
+}
+
+void Debug::read(const QString str, bool crypted) {
     if(isRsNotDisplayed(str)) { return; }
-    ui->textEdit->append(QString(" 🟢 ").append(str));
+    display("🟢", str, crypted);
 }
 
-void Debug::write(const QString str) {
+void Debug::write(const QString str, bool crypted) {
     if(isRqNotDisplayed(str)) { return; }
-    ui->textEdit->append(QString(" 🔵 ").append(str));
+    display("🔵", str, crypted);
 }
 
-void Debug::error(const QString str) {
-    ui->textEdit->append(QString(" 🔴 ").append(str));
+void Debug::error(const QString str, bool crypted) {
+    display("🔴", str, crypted);
 }
 
-void Debug::warn(const QString str) {
-    ui->textEdit->append(QString(" 🟡 ").append(str));
+void Debug::warn(const QString str, bool crypted) {
+    display("🟡", str, crypted);
 }
 
 void Debug::pauseClicked() {
