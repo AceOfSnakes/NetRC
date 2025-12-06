@@ -14,6 +14,7 @@
 */
 #include "debug.h"
 #include "QCheckBox"
+#include <QMetaEnum>
 #include "ui_debug.h"
 
 Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
@@ -23,7 +24,6 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     devInterface = deviceInterface;
     ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " RX/TX Console");
-    //setWindowTitle(qApp->applicationName() + " RX/TX Console " + deviceInterface->deviceName);
 
     connect(ui->displayAllCheckBox, SIGNAL(stateChanged(int)), this, SLOT(switchAll(int)));
     connect(ui->eraseDebugOutput, SIGNAL(clicked()), this, SLOT(cleanDebugOutput()));
@@ -32,8 +32,11 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     connect(ui->commandLine, SIGNAL(editingFinished()), this, SLOT(sendCommand()));
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendCommand()));
     connect(ui->clearCommandLineButton, SIGNAL(clicked()), this, SLOT(clearCommandLine()));
+    connect(ui->coloredOutputCheckBox, SIGNAL(checkStateChanged(Qt::CheckState)),
+            this, SLOT(changeAgenda()));
 
     ui->maxLines->setText("50");
+    changeAgenda();
 
     foreach(QPushButton *action, this->findChildren<QPushButton*>(
                                       Qt::FindChildrenRecursively)) {
@@ -51,10 +54,18 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
 
     font.setStyleHint(QFont::Monospace, QFont::ForceOutline);
     ui->textEdit->setFont(font);
-
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    sets.setValue("debugEnabled", true);
+    sets.endGroup();
 }
 
 Debug::~Debug() {
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    sets.setValue("debugEnabled", false);
+    sets.endGroup();
+
     delete ui;
 }
 
@@ -75,27 +86,60 @@ bool Debug::isRsNotDisplayed(const QString str) {
                          (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str)));
 }
 
-void Debug::display(const QString color, const QString str, bool crypted) {
-    ui->textEdit->append(QString(color).
-                         append(crypted? " 🔒 " :" ").append(str));
+void Debug::display(const Color color, const QString str, bool crypted) {
+    QString htmlColor;
+    QString circ = circle;
+    if(ui->coloredOutputCheckBox->isChecked()) {
+        ui->textEdit->setTextColor(mapColored.value(color));
+    } else {
+        circ = mapNonColored.value(color);
+        ui->textEdit->setTextColor(QColor( "lightgray" ));
+    }
+    ui->textEdit->append(QString(circ)
+                             .append(crypted? " ⚿ " :" ").append(str));
 }
 
 void Debug::read(const QString str, bool crypted) {
     if(isRsNotDisplayed(str)) { return; }
-    display("🟢", str, crypted);
+    display(inbound, str, crypted);
+}
+
+QString Debug::arrayToString(const QByteArray array) {
+    QString ret = QByteArray::fromRawData((const char*)array,
+                                          array.length()).toHex(' ').toUpper();
+    int correction = 0;
+    int originalLength = ret.length();
+    for(int i = 16; i < array.length(); i += 16 ) {
+        ret.insert(i*3 + correction, "\n     ");
+        correction += ret.length() - originalLength;
+    }
+    return ret;
+}
+
+void Debug::writeArray(const QByteArray array, bool crypted) {
+    QString rq = arrayToString(array);
+    if(isRqNotDisplayed(rq)) { return; }
+    display(outbound, rq, crypted);
+}
+
+void Debug::readArray(const QByteArray array, bool crypted) {
+    QString rs = arrayToString(array);
+    if(isRqNotDisplayed(rs)) { return; }
+    display(inbound, rs, crypted);
 }
 
 void Debug::write(const QString str, bool crypted) {
     if(isRqNotDisplayed(str)) { return; }
-    display("🔵", str, crypted);
+    display(outbound, str, crypted);
 }
 
 void Debug::error(const QString str, bool crypted) {
-    display("🔴", str, crypted);
+    display(alert, str, crypted);
 }
 
 void Debug::warn(const QString str, bool crypted) {
-    display("🟡", str, crypted);
+    if(pause) return;
+    display(information, str, crypted);
 }
 
 void Debug::pauseClicked() {
@@ -130,5 +174,27 @@ void Debug::switchAll(int checkBoxStatus) {
                 QRegularExpression(""),
                 Qt::FindChildrenRecursively)) {
         checkBox->setChecked(checkBoxStatus!= 0);
+    }
+}
+
+void Debug::changeAgenda() {
+    QMetaEnum colorMetaData = QMetaEnum::fromType<Color>();
+    foreach(QLabel *label, this->findChildren<QLabel*>(Qt::FindChildrenRecursively)) {
+        QString color = label->objectName().split("ColorLabel").at(0);
+        bool ok = false;
+        Color m = Color(colorMetaData.keyToValue(color.toUtf8().constData(), &ok));
+        if(label->objectName().endsWith("ColorLabel")){
+            // Colored
+            if(ui->coloredOutputCheckBox->isChecked()) {
+                label->setText(label->text().replace(0, 1, circle));
+                label->setStyleSheet(QString("QLabel { color : ")
+                                         .append(mapColored.value(m).name())
+                                         .append("}"));
+            // Non Colored
+            } else {
+                label->setStyleSheet(QString("QLabel { color : lightgray}"));
+                label->setText(label->text().replace(0, 1, mapNonColored.value(m)));
+            }
+        }
     }
 }

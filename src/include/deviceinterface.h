@@ -83,6 +83,8 @@ signals:
     void updateDeviceInfo(QRegularExpressionMatch);
     void tx(const QString str, bool crypted = false);
     void rx(const QString str, bool crypted = false);
+    void txArray(const QByteArray array, bool crypted = false);
+    void rxArray(const QByteArray array, bool crypted = false);
     void err(const QString str, bool crypted = false);
     void warn(const QString str, bool crypted = false);
     void specialControl(const QString control, bool enabled);

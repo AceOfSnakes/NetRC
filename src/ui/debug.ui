@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>1005</height>
+    <height>1006</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -158,42 +158,16 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>🔴  Error</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string> 🟡 Info</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string> 🔒 Crypted</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string> 🟢 Inbound</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string> 🔵 Outbound</string>
-       </property>
-      </widget>
-     </item>
+    <layout class="QGridLayout" name="gridLayout_2" rowminimumheight="0">
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>12</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>36</number>
+     </property>
      <item row="0" column="9">
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -207,9 +181,54 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>⚿ Crypted flag</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="inboundColorLabel">
+       <property name="text">
+        <string>⬤  Inbound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="outboundColorLabel">
+       <property name="text">
+        <string>⬤ Outbound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="informationColorLabel">
+       <property name="text">
+        <string>⬤ Info</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="alertColorLabel">
+       <property name="text">
+        <string>⬤  Error</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="10">
+      <widget class="QCheckBox" name="coloredOutputCheckBox">
+       <property name="text">
+        <string>Colored output</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item>
+   <item alignment="Qt::AlignmentFlag::AlignLeft">
     <widget class="QTextEdit" name="textEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -415,9 +434,9 @@
        <number>9</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
         <property name="spacing">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="sizeConstraint">
          <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
@@ -454,6 +473,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -584,6 +606,9 @@
              <height>32</height>
             </size>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
           </widget>
          </item>
          <item row="3" column="0" colspan="3">
@@ -706,6 +731,9 @@
              <width>400</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>

@@ -26,17 +26,20 @@ class Debug : public QDialog
 {
     Q_OBJECT
     DeviceInterface *devInterface;
-
 public:
     QMap<QString,QIcon> originalIcons;
     explicit Debug(DeviceInterface *deviceInterface, QWidget *parent = nullptr);
     ~Debug();
+
 public slots:
     void error(const QString str, bool crypted = false);
     void read(const QString str, bool crypted = false);
     void write(const QString str, bool crypted = false);
     void warn(const QString str, bool crypted = false);
+    void writeArray(const QByteArray array, bool crypted = false);
+    void readArray(const QByteArray array, bool crypted = false);
 private slots:
+    void changeAgenda();
     void changeMaxLines();
     void pauseClicked();
     void cleanDebugOutput();
@@ -44,13 +47,35 @@ private slots:
     void clearCommandLine();
     void switchAll(int arg1);
 private:
+
+    QString circle = "⬤";
+
+    enum Color { inbound, outbound , alert, information};
+
+    Q_ENUM(Color);
+
+    QMap<Color, QColor> mapColored {
+            {inbound, QColorConstants::Svg::lightgreen},
+            {outbound, QColorConstants::Svg::lightblue},
+            {information, QColorConstants::Svg::lightgray},
+            {alert, QColorConstants::Svg::tomato}
+        };
+
+    QMap<Color, QString> mapNonColored {
+            {inbound, "<"},
+            {outbound, ">"},
+            {information, "-"},
+            {alert, "!"}
+        };
+
     Ui::Debug *ui;
     bool pause = false;
     QSet<QString> txFilter;
     QSet<QString> rxFilter;
+    QString arrayToString(const QByteArray array);
     bool isRqNotDisplayed(const QString str);
     bool isRsNotDisplayed(const QString str);
-    void display(const QString color, const QString str, bool crypted);
+    void display(Color color, const QString str, bool crypted);
 signals:
     void send(const QString str);
     void iconChanged(QPushButton & button);

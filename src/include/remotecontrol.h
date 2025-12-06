@@ -66,6 +66,7 @@ public:
     void reloadPanels();
     void removeEmpty();
     void restoreSettings();
+    void restoreDebug();
     void initConnect();
     void initTray();
 

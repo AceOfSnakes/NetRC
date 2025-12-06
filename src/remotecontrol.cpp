@@ -92,7 +92,8 @@ RemoteControl::RemoteControl(QWidget *parent) :
 
     initConnect();
     reloadMenu();
-
+    //qDebug() >>
+    restoreDebug();
     show();
     ui->connectButton->setEnabled(true);
     redraw();
@@ -417,28 +418,22 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
 }
 
 void RemoteControl::showAll( ) {
-    qDebug() << "showAll !!!";
     show();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
-        qDebug() << "showAll child" << child;
         child->showNormal();
     }
 }
 
 void RemoteControl::showMinimizedAll( ) {
-    qDebug() << "showMinimizedAll !!!";
     showMinimized();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
-        qDebug() << "showMinimizedAll child  " << child;
         child->showMinimized();
     }
 }
 
 void RemoteControl::hideAll( ) {
-    qDebug() << "hideAll !!!";
     hide();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
-        qDebug() << "hideAll child" << child;
         child->showMinimized();
     }
 }
@@ -631,17 +626,6 @@ void RemoteControl::enableControls(bool enable)
 }
 
 void RemoteControl::onConnect() {
-    /*
-    if (!deviceInterface.isConnected()) {
-        // connect
-        connectDevice();
-    }
-    else {
-        // disconnect
-        enableControls(false);
-        deviceInterface.disconnect();
-        deviceOnline = false;
-    }*/
     checkOnline();
 }
 
@@ -688,7 +672,6 @@ void RemoteControl::commConnected() {
         this->setWindowTitle(app);
         if (RCSettings::isMinimizeToTrayEnabled()) {
             trayIcon->showMessage(deviceName, "Connected", QIcon(QString(":/images/").append(qApp->applicationName()).append(".png")));
-            //ui->statusDisplayWidget->setEnabled(true);
             trayIcon->setToolTip(app);
         }
     }
@@ -720,7 +703,6 @@ void RemoteControl::commDisconnected() {
         trayIcon->setIcon(trayGray);
         ui->statusDisplayWidget->setEnabled(false);
     }
-    // TODO disable special controls
     enableSpecialControls(false);
 }
 
@@ -936,10 +918,12 @@ void RemoteControl::debugClicked() {
 
     ui->debugButton->setChecked(true);
 
-    connect(&deviceInterface, SIGNAL(tx(QString,bool)), debugDialog, SLOT(write(QString,bool)));
-    connect(&deviceInterface, SIGNAL(rx(QString,bool)), debugDialog, SLOT(read(QString,bool)));
-    connect(&deviceInterface, SIGNAL(err(QString,bool)), debugDialog, SLOT(error(QString,bool)));
-    connect(&deviceInterface, SIGNAL(warn(QString,bool)), debugDialog, SLOT(warn(QString,bool)));
+    connect(&deviceInterface, SIGNAL(tx(QString, bool)), debugDialog, SLOT(write(QString, bool)));
+    connect(&deviceInterface, SIGNAL(rx(QString, bool)), debugDialog, SLOT(read(QString, bool)));
+    connect(&deviceInterface, SIGNAL(txArray(QByteArray, bool)), debugDialog, SLOT(writeArray(QByteArray, bool)));
+    connect(&deviceInterface, SIGNAL(rxArray(QByteArray, bool)), debugDialog, SLOT(readArray(QByteArray, bool)));
+    connect(&deviceInterface, SIGNAL(err(QString, bool)), debugDialog, SLOT(error(QString, bool)));
+    connect(&deviceInterface, SIGNAL(warn(QString, bool)), debugDialog, SLOT(warn(QString, bool)));
     connect(debugDialog, SIGNAL(send(QString)), &deviceInterface, SLOT(sendCmd(QString)));
     connect(debugDialog, SIGNAL(finished(int)), this, SLOT(closeDebug()));
 
@@ -983,5 +967,12 @@ void RemoteControl::quit() {
     exit(0);
 }
 
-
+void RemoteControl::restoreDebug() {
+    QSettings sets(qApp->organizationName(), qApp->applicationName());
+    sets.beginGroup("global");
+    if(sets.value("debugEnabled").toBool()) {
+        debugClicked();
+    }
+    sets.endGroup();
+}
 
