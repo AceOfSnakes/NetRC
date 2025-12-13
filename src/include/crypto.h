@@ -45,6 +45,13 @@ public:
     QByteArray encryptIV(unsigned char iv[]);
     OSSL_PARAM* getSSLParams();
 public:
+    QByteArray adaptForCrypto(QByteArray arrayOld);
+    
+    void emitEncriptedMessage(unsigned char * label, unsigned char * data, int dataLength = 16);
+    void emitDecriptedMessage(unsigned char * label, unsigned char * data, int dataLength = 16);
+    void emitInfoMessage(unsigned char * label, unsigned char * data, int dataLength = 16);
+    QString genarateMessage(unsigned char * label, unsigned char * data, int dataLength);
+
 signals:
     void encoded(const QString &str);
     void decoded(const QString &str);

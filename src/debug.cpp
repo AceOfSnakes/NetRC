@@ -70,17 +70,26 @@ Debug::~Debug() {
 }
 
 bool Debug::isRqNotDisplayed(const QString str) {
+
+    Qt::CaseSensitivity caseSensitivity = ui->ignoreCaseCheck->isChecked() ?
+                                              Qt::CaseInsensitive :
+                                              Qt::CaseSensitive;
     return pause ||
            ((!ui->rqRegex->text().isEmpty()) ?
-                         !str.contains(ui->rqRegex->text()) :
+                         !str.contains(ui->rqRegex->text(), caseSensitivity) :
                          (!ui->pingRq->isChecked() &&
                           devInterface->pingCommands.contains(str)));
 }
 
 bool Debug::isRsNotDisplayed(const QString str) {
+
+        Qt::CaseSensitivity caseSensitivity = ui->ignoreCaseCheck->isChecked() ?
+                                              Qt::CaseInsensitive :
+                                              Qt::CaseSensitive;
+
         return pause ||
            ((!ui->rsRegex->text().isEmpty()) ?
-                         !str.contains(ui->rsRegex->text()) :
+                         !str.contains(ui->rsRegex->text(), caseSensitivity) :
                          (!ui->timeRs->isChecked() && devInterface->isTimeRs(str)) ||
                          (!ui->pingRs->isChecked() && devInterface->isPingRs(str)) ||
                          (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str)));

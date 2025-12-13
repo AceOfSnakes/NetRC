@@ -225,6 +225,7 @@ void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGr
     if(QString("group") == settings.value("type").toString()) {
         QGroupBox *inner = new QGroupBox(settings.value("label").toString());
         QGridLayout *lay = new QGridLayout(/*settings.value("label").toString()*/);
+        inner->setEnabled(false);
         inner->setLayout(lay);
         layout->addWidget(
             inner,
@@ -238,7 +239,13 @@ void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGr
         valueEditor->setEnabled(false);
         if(QString("true") == settings.value("editable").toString()) {
             valueEditor->setEnabled(true);
-            valueLabel->setText("* " + valueLabel->text());
+            valueLabel->setText(" *** " + valueLabel->text());
+            QFont font = valueLabel->font();
+            font.setBold(true);
+            font.setItalic(true);
+            valueLabel->setFont(font);
+        } else {
+            valueEditor->setEnabled(false);
         }
     }
 }

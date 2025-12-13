@@ -47,6 +47,7 @@ Crypto::Crypto(QObject *parent)
     : QObject{parent}
 {
     pass = QString("P7RNFK66");
+    emit emitInfoMessage((unsigned char*) "Pass", (unsigned char*) pass.data());
     OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
     ERR_load_crypto_strings();
     OpenSSL_add_all_algorithms();
@@ -92,6 +93,7 @@ QByteArray Crypto::decodeIV(unsigned char iv[]) {
 }
 
 QByteArray Crypto::decrypt(QByteArray array) {
+
     EVP_CIPHER_CTX *ctx;
     unsigned char iv[16];
     unsigned char data[16];
@@ -106,6 +108,7 @@ QByteArray Crypto::decrypt(QByteArray array) {
     else {
        return "";
     }
+    emit emitInfoMessage((unsigned char*) "Pass", (unsigned char*) pass.data());
 /*    int iter = 16384;
             const QString pass("P7RNFK66");*/
     /* Create and initialise the context */
@@ -172,19 +175,10 @@ QByteArray Crypto::decrypt(QByteArray array) {
 
     /* Clean up */
     //EVP_CIPHER_CTX_free(ctx);
-    emit info(QString   ("Pass   - ").append(pass));
-    emit decoded(QString("Key    - ").append(
-        QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
-
-    emit decoded(QString("IV     - ").append(
-        QByteArray::fromRawData((const char*)iv, 16).toHex(' ').toUpper()));
-
-    emit decoded(QString("Array  - ").append(
-        QByteArray::fromRawData((const char*)data, len).toHex(' ').toUpper()));
-
-    emit decoded(QString("Data   - ").append(
-        QByteArray::fromRawData((const char*)ciphertext, len).toHex(' ').toUpper()));
-
+    emitDecriptedMessage((unsigned char*) "Key", (unsigned char*) key);
+    emitDecriptedMessage((unsigned char*) "IV", (unsigned char*) iv);
+    emitDecriptedMessage((unsigned char*) "Array", (unsigned char*) data, len);
+    emitDecriptedMessage((unsigned char*) "Data", (unsigned char*) ciphertext, len);
     return QByteArray::fromRawData((const char*)ciphertext, len);
 }
 
@@ -234,15 +228,47 @@ QByteArray Crypto::encryptIV(unsigned char iv[]) {
     return QByteArray::fromRawData((const char*)ciphertext, 16);
 }
 
-QByteArray Crypto::encrypt(QByteArray array) {
+QByteArray Crypto::adaptForCrypto(QByteArray arrayOld)
+{
+    QByteArray newArray(arrayOld);
+    while(newArray.length()% 16 !=0) {
+        newArray.append("\1");
+    }
+    return newArray;
+}
+
+void Crypto::emitEncriptedMessage(unsigned char * label, unsigned char * data, int dataLength) {
+    QString message = genarateMessage(label, data, dataLength);
+    emit encoded(message);
+}
+
+void Crypto::emitDecriptedMessage(unsigned char * label, unsigned char * data, int dataLength) {
+    QString message = genarateMessage(label, data, dataLength);
+    emit decoded(message);
+}
+
+void Crypto::emitInfoMessage(unsigned char * label, unsigned char * data, int) {
+    QString message = genarateMessage(label, (unsigned char * )"", 0);
+    emit info(message.append(pass));
+}
+
+QString Crypto::genarateMessage(unsigned char * label, unsigned char * data, int dataLength) {
+    return QString().asprintf("%-08s : ", label).append(
+        QByteArray::fromRawData((const char*) data, dataLength).toHex(' ').toUpper());
+}
+
+QByteArray Crypto::encrypt(QByteArray arrayOld) {
     EVP_CIPHER_CTX *aes;
     int len = 16;
     unsigned char ciphertext[128];
-    QByteArray newArray("VOLUME_MUTE on\r\1");
+    emitEncriptedMessage((unsigned char*) "Msg", (unsigned char*) arrayOld.data(), arrayOld.length());
+
+    QByteArray newArray = adaptForCrypto(arrayOld);
+
+    emitEncriptedMessage((unsigned char*) "Dest msg", (unsigned char*) newArray.data(), newArray.length());
     if(!(aes = EVP_CIPHER_CTX_new())) {
         handleErrors();  return QByteArray();
     }
-
     unsigned char ivx[16];
     unsigned char updated_iv[16];
     //unsigned char newArray[16]={ "Notify Identify\0" };
@@ -271,20 +297,12 @@ QByteArray Crypto::encrypt(QByteArray array) {
     if(!EVP_EncryptFinal_ex(aes, ciphertext + len, &len)) {
         handleErrors();  return QByteArray();
     }
-    emit info(QString   ("Pass   - ").append(pass));
-    emit encoded(QString("Key    - ").append(
-        QByteArray::fromRawData((const char*)key, 16).toHex(' ').toUpper()));
-    emit encoded(QString("IV     - ").append(
-        QByteArray::fromRawData((const char*)ivx, 16).toHex(' ').toUpper()));
-    emit encoded(QString("Org    - ").append(
-        QByteArray::fromRawData((const char*)newArray, newArray.length()).toHex(' ').toUpper()));
-    emit encoded(QString("Up IV  - ").append(
-        newiv.toHex(' ').toUpper()));
-    emit encoded(QString("Data   - ").append(
-        QByteArray::fromRawData((const char*)ciphertext + len, len).toHex(' ').toUpper()));
+
+    emitEncriptedMessage((unsigned char*) "Key", key);
+    emitEncriptedMessage((unsigned char*) "IV", ivx);
+    emitEncriptedMessage((unsigned char*) "Up IV", (unsigned char*) newiv.data());
+    emitEncriptedMessage((unsigned char*) "Data", (unsigned char*) ciphertext + len);
 
     return QByteArray::fromRawData((const char*)newiv, 16).append(QByteArray::fromRawData((const char*)ciphertext+len, len));
-    // return QByteArray::fromRawData((const char*)updated_iv, 16)
-    //     .append(QByteArray::fromRawData((const char*)ciphertext, 16));
 }
 
