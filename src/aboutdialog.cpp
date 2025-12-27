@@ -35,10 +35,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
                 .append(QSysInfo::kernelType())
                 .append(" ")
                 .append(QSysInfo::productVersion()
-                .append(" / Kernel version: ")
+                .append("\nKernel version: ")
                 .append(QSysInfo::kernelVersion())
-//                .append("\nGraphics platform: ")
-//                .append(QGuiApplication::platformName())
                 ));
     ui->compiler->setText(Commons::compilerQString());
     ui->buttonBox->clear();
