@@ -4,6 +4,12 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+unix {
+    QMAKE_CC = gcc
+    QMAKE_CXX = g++
+    QMAKE_LINK = g++
+}
+
 static { # everything below takes effect with CONFIG += static
     CONFIG += static
     DEFINES += STATIC
