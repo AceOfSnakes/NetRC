@@ -30,8 +30,8 @@ class DeviceConnector : public QDialog
     Q_OBJECT
 private:
     QRegularExpression reIP; //("[.]");
-    void applyCryptoToUI(QMap<QString, QVariant> crypto, QGridLayout * layout);
-    void applyCryptoBlockToUI(QMap<QString, QVariant> crypto, QGridLayout * layout);
+    void applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout);
+    void applyCryptoBlockToUI(QHash<QString, QVariant> crypto, QGridLayout * layout);
 public:
     explicit DeviceConnector(QVariant & sets, QWidget *parent = nullptr);
     ~DeviceConnector();

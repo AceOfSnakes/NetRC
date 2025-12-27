@@ -216,7 +216,7 @@ void DeviceConnector::reloadDevicesFamily() {
     reloadCryptoSettings();
 }
 
-void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGridLayout * layout) {
+void DeviceConnector::applyCryptoBlockToUI(QHash<QString, QVariant> settings, QGridLayout * layout) {
 
     QString label = settings.value("label").toString();
     QLabel *valueLabel = new QLabel(label);
@@ -230,7 +230,7 @@ void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGr
         layout->addWidget(
             inner,
             idx, 0, 1, 2);
-        applyCryptoToUI(settings.value("settings").toMap(), lay);
+        applyCryptoToUI(settings.value("settings").toHash(), lay);
     } else {
         layout->addWidget(valueLabel, idx, 0);
 
@@ -250,10 +250,10 @@ void DeviceConnector::applyCryptoBlockToUI(QMap<QString, QVariant> settings, QGr
     }
 }
 
-void DeviceConnector::applyCryptoToUI(QMap<QString, QVariant> crypto, QGridLayout * layout) {
+void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout) {
     //ui->cryptoBox = new QGroupBox(this);
     foreach (auto element, crypto) {
-        QMap<QString, QVariant> a = element.toMap();
+        auto a = element.toHash();
         applyCryptoBlockToUI(a, layout);
     }
 }
@@ -269,7 +269,7 @@ void DeviceConnector::reloadCryptoSettings() {
     }
 
     if(crypto.isValid()) {
-        applyCryptoToUI(crypto.toMap(), ui->cryptoGridLayout);
+        applyCryptoToUI(crypto.toHash(), ui->cryptoGridLayout);
         ui->cryptoBox->setVisible(true);
     } else {
         ui->cryptoBox->setVisible(false);

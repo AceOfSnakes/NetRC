@@ -16,6 +16,7 @@
 #define DEBUG_H
 
 #include <QDialog>
+#include <QLabel>
 #include "deviceinterface.h"
 
 namespace Ui {
@@ -51,7 +52,7 @@ private:
     QString circle = "⬤";
 
     enum Color { inbound, outbound , alert, information};
-
+    QWidget * createColoredWidget(QString & x, Color );
     Q_ENUM(Color);
 
     QMap<Color, QColor> mapColored {

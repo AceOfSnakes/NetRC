@@ -47,14 +47,15 @@ void DeviceInterface::reloadSettings() {
     // Crypto settings
     crypted = false;
     crypto = nullptr;
+
     if(deviceSettings.value("crypto").isValid()) {
-        crypto = new Crypto(this);
+        crypto = new Crypto(&deviceSettings["crypto"], this);
         crypted = true;
+
         connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos, true); } );
         connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos, true); } );
         connect(crypto, &Crypto::info, this, [&](const QString pos) { emit warn(pos, crypted); } );
     }
-
     // emit signal for device change
     emit warn(deviceSettings.value("family").toString());
 
@@ -273,7 +274,7 @@ QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
         emit warn("---- Self decrypt start ----");
         crypto->decrypt(array);
         emit warn("---- Self decrypt end ------");
-        //emit tx(array.toHex(' ').toUpper());
+        emit tx(array.toHex(' ').toUpper());
         return array;
     }
     return QString(data)

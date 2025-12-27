@@ -47,6 +47,15 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     changeMaxLines();
 
     adjustSize();
+    //horizontalHeader = self.TableDocs.horizontalHeader()
+
+    // ui->tableWidget->setColumnCount(3);
+
+    // ui->tableWidget->setColumnWidth(0, 5);
+    // ui->tableWidget->setColumnWidth(1, 5);
+    // ui->tableWidget->setColumnWidth(2, 420);
+    // ui->tableWidget->setVisible(false);
+
     setMaximumSize(minimumSize());
 
     QFont font = ui->textEdit->font();
@@ -57,6 +66,9 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.setValue("debugEnabled", true);
+    // ui->textEdit->setMinimumHeight(10);
+    // ui->textEdit->setMaximumHeight(10);
+    // ui->textEdit->setVisible(false);
     sets.endGroup();
 }
 
@@ -95,15 +107,45 @@ bool Debug::isRsNotDisplayed(const QString str) {
                          (!ui->deviceRs->isChecked() && devInterface->isDeviceIdRs(str)));
 }
 
+QWidget *Debug::createColoredWidget(QString & str, Color color){
+    QLabel *ret = new QLabel(str);
+    QColor messageColor;
+
+    if(ui->coloredOutputCheckBox->isChecked()) {
+        messageColor = mapColored.value(color);
+    } else {
+        messageColor = QColor( "lightgray" );
+    }
+    ret->setStyleSheet(QString("QLabel { color : ")
+                            .append(messageColor.name())
+                            .append("}"));
+
+    //ret->setStyleSheet(QString("QLabel {color : ").append(messageColor.toRgb()).append("; }"));
+    return ret;
+}
+
 void Debug::display(const Color color, const QString str, bool crypted) {
     QString htmlColor;
     QString circ = circle;
+    QColor messageColor;
+
+
     if(ui->coloredOutputCheckBox->isChecked()) {
-        ui->textEdit->setTextColor(mapColored.value(color));
+        messageColor = mapColored.value(color);
+        ui->textEdit->setTextColor(messageColor);
     } else {
         circ = mapNonColored.value(color);
-        ui->textEdit->setTextColor(QColor( "lightgray" ));
+        messageColor = QColor( "lightgray" );
     }
+    ui->textEdit->setTextColor(messageColor);
+   // int row = ui->tableWidget->rowCount();
+
+   //  ui->tableWidget->insertRow(row );
+
+   //  ui->tableWidget->setCellWidget(row , 0, createColoredWidget(circ, color));
+   //  ui->tableWidget->setCellWidget(row , 1, createColoredWidget(QString().append(crypted? " ⚿ " :" "), color));
+   //  ui->tableWidget->setCellWidget(row , 2, createColoredWidget(QString().append(str), color));
+
     ui->textEdit->append(QString(circ)
                              .append(crypted? " ⚿ " :" ").append(str));
 }

@@ -534,7 +534,7 @@ void RemoteControl::newDevice() {
     displayNear(deviceConnector, debugDialog);
     deviceConnector.exec();
 
-    if(!deviceConnector.deviceFamily.isEmpty()) {
+    if(!deviceConnector.deviceFamily.isEmpty() && !deviceConnector.deviceIPAddress.isEmpty()) {
         deviceIpAddress = deviceConnector.deviceIPAddress;
         if(!deviceIpAddress.isEmpty()) {
             deviceName = deviceConnector.device;

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>1006</height>
+    <height>1144</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -228,7 +228,7 @@
      </item>
     </layout>
    </item>
-   <item alignment="Qt::AlignmentFlag::AlignLeft">
+   <item>
     <widget class="QTextEdit" name="textEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
