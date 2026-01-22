@@ -168,30 +168,20 @@
      <property name="verticalSpacing">
       <number>36</number>
      </property>
-     <item row="0" column="9">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="0" column="4">
-      <widget class="QLabel" name="label_7">
+      <widget class="QCheckBox" name="cryptCcheckBox">
        <property name="text">
-        <string>⚿ Crypted flag</string>
+        <string>Crypted ⚿</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="inboundColorLabel">
+     <item row="0" column="10">
+      <widget class="QCheckBox" name="coloredOutputCheckBox">
        <property name="text">
-        <string>⬤  Inbound</string>
+        <string>Colored output</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -209,6 +199,13 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="inboundColorLabel">
+       <property name="text">
+        <string>⬤  Inbound</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QLabel" name="alertColorLabel">
        <property name="text">
@@ -216,15 +213,18 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="10">
-      <widget class="QCheckBox" name="coloredOutputCheckBox">
-       <property name="text">
-        <string>Colored output</string>
+     <item row="0" column="9">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>

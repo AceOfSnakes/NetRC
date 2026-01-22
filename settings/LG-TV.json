@@ -1,34 +1,84 @@
 {
-   "powerOff":"#POW",
-   "powerOn":"#POW",
+   "powerOff":"POWER off",
+   "powerOn":"POWER on",
 
-   "pingCommands":[
-      "NOTIFY IDENTIFY"
+   "panel":[
+      [
+         {
+            "columns":2,
+            "position":0
+         },         
+         {
+            "btn":"caption",
+            "title":"Caption"
+         },
+         {
+            "btn":"tv",
+            "title":"TV"
+         }
+
+      ]
    ],
 
-   "number0":"",
-   "number1":"",
-   "number2":"",
-   "number3":"",
-   "number4":"",
-   "number5":"",
-   "number6":"",
-   "number7":"",
-   "number8":"",
-   "number9":"",
+   "caption": "KEY_ACTION captionsubtitle",
+   "tv": "KEY_ACTION livetv",
 
 
-   "colorRed": "",
-   "colorBlue": "",
-   "colorGreen": "",
-   "colorYellow": "",
+   "navPause":"KEY_ACTION pause",
+   "navPlay":"KEY_ACTION play",
+   "navStop":"KEY_ACTION stop",
+
+   "navForward":"KEY_ACTION fastforward",
+   "navBackward":"KEY_ACTION rewind",
+
+   "down":"KEY_ACTION arrowdown",
+   "left":"KEY_ACTION arrowleft",
+   "right":"KEY_ACTION arrowright",
+   "up":"KEY_ACTION arrowup",
+   "ok":"KeY_ACTION ok",
+
+
+   "volUp":"KEY_ACTION volumeup",
+   "volDown":"KEY_ACTION volumedown",
+   "mute":"KEY_ACTION volumemute",
+
+   "chUp":"KEY_ACTION channelup",
+   "chDown":"KEY_ACTION channeldown",
+
+
+   "number0":"KEY_ACTION number0",
+   "number1":"KEY_ACTION number1",
+   "number2":"KEY_ACTION number2",
+   "number3":"KEY_ACTION number3",
+   "number4":"KEY_ACTION number4",
+   "number5":"KEY_ACTION number5",
+   "number6":"KEY_ACTION number6",
+   "number7":"KEY_ACTION number7",
+   "number8":"KEY_ACTION number8",
+   "number9":"KEY_ACTION number9",
+
+
+   "colorRed": "KEY_ACTION redbutton",
+   "colorBlue": "KEY_ACTION bluebutton",
+   "colorGreen": "KEY_ACTION greenbutton",
+   "colorYellow": "KEY_ACTION yellowbutton",
 
 
    "pingResponseErr":"QPW OK OFF",
-   "pingResponseOk":"NOTIFY IDENTIFY",
+   "pingResponseOk":"ON",
    "prefferedPort":9761,
+
+   "pingCommands":[
+      "GET_IPCONTROL_STATE"
+   ],
+
+   "deviceNameRegExp":"CH:%s",
+   "deviceNameRq":"CURRENT_CH",
+
    "lf": true,
    "family":"LG Smart TV",
+
+
    "crypto" : {
      "1-cipher" : {
          "label": "Cipher",

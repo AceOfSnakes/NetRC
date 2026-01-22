@@ -117,6 +117,7 @@ void DeviceInterface::readString() {
         QByteArray response = QByteArray::fromRawData(data.data(), count);
         emit rxArray(response, true);
         QString res = decrypt(response);
+        res= res.trimmed();
         interpretString(res);
     }
     else {
@@ -253,8 +254,9 @@ void DeviceInterface::checkSpecialResponse(const QString& response) {
 QByteArray DeviceInterface::decrypt(QByteArray& data) {
     if(crypted) {
         auto result = crypto->decrypt(data);
-        emit rx(result);
-        return result;
+        auto res = result.split('\r').at(0).split(('\n')).at(0);
+        emit rx(res);
+        return res;
     }
     emit rx(data);
     return data;
@@ -262,19 +264,20 @@ QByteArray DeviceInterface::decrypt(QByteArray& data) {
 
 QString DeviceInterface::applyTrailer(QString) {
     return QString().append(deviceSettings.value("crlf", false).toBool() ? "\r\n":
-                         deviceSettings.value("lf", false).toBool() ? "\0xD" :" 0xA");
+                         deviceSettings.value("lf", false).toBool() ? "\0xD" :"\0xA");
 }
 
 QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
     emit tx(data);
     if(crypted) {
+        //emit warn(data);
          QByteArray array = crypto->encrypt(
-            QString(data).append(applyTrailer(data)).toUtf8());
+            QString(data).append("\r").toUtf8());
         // Decrypt crypted
-        emit warn("---- Self decrypt start ----");
-        crypto->decrypt(array);
-        emit warn("---- Self decrypt end ------");
-        emit tx(array.toHex(' ').toUpper());
+        // emit warn("---- Self decrypt start ----");
+        // emit rx(crypto->decrypt(array));
+        // emit warn("---- Self decrypt end ------");
+        // emit tx(array.toHex(' ').toUpper());
         return array;
     }
     return QString(data)

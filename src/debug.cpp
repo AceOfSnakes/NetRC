@@ -35,7 +35,7 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     connect(ui->coloredOutputCheckBox, SIGNAL(checkStateChanged(Qt::CheckState)),
             this, SLOT(changeAgenda()));
 
-    ui->maxLines->setText("50");
+    ui->maxLines->setText("500");
     changeAgenda();
 
     foreach(QPushButton *action, this->findChildren<QPushButton*>(
@@ -43,18 +43,10 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
         originalIcons.insert(action->objectName(),action->icon());
     }
     this->setWindowFlags(windowFlags() &(~Qt::WindowMinMaxButtonsHint));
-    //this->setWindowFlags(Qt::WindowNoState);
+
     changeMaxLines();
 
     adjustSize();
-    //horizontalHeader = self.TableDocs.horizontalHeader()
-
-    // ui->tableWidget->setColumnCount(3);
-
-    // ui->tableWidget->setColumnWidth(0, 5);
-    // ui->tableWidget->setColumnWidth(1, 5);
-    // ui->tableWidget->setColumnWidth(2, 420);
-    // ui->tableWidget->setVisible(false);
 
     setMaximumSize(minimumSize());
 
@@ -66,9 +58,7 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.setValue("debugEnabled", true);
-    // ui->textEdit->setMinimumHeight(10);
-    // ui->textEdit->setMaximumHeight(10);
-    // ui->textEdit->setVisible(false);
+
     sets.endGroup();
 }
 
@@ -128,7 +118,9 @@ void Debug::display(const Color color, const QString str, bool crypted) {
     QString htmlColor;
     QString circ = circle;
     QColor messageColor;
-
+    if(crypted && !ui->cryptCcheckBox->isChecked()) {
+        return;
+    }
 
     if(ui->coloredOutputCheckBox->isChecked()) {
         messageColor = mapColored.value(color);
