@@ -14,6 +14,7 @@
 */
 #include "remotecontrol.h"
 #include "ui_remotecontrol.h"
+#include <QThread>
 #include <QDebug>
 #include <QMetaType>
 
@@ -381,10 +382,16 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
         for (column = 0; column < buttons_count; column++) {
             QMap<QString, QVariant>button = buttons.at(
                         offset + (row * buttons_count) + column).toVariant().toMap();
+
             QString title = button.value("title").toString();
+            QString icon = button.value("icon").toString();
             QString btnGroup = button.value("group").toString();
-            if(!title.isEmpty()) {
+            if(!title.isEmpty() || !icon.isEmpty()) {
                 QPushButton *btn = new QPushButton(title);
+                if(!icon.isEmpty()) {
+                    btn->setIcon(QIcon(icon));
+                }
+
                 //btn->setFont(fixedFont);
                 btn->setFont(QFont(btn->font().family(), 7, QFont::Bold));
                 btn->setObjectName(QString().asprintf("rc_btn_").append(button.value("btn").toString()));
@@ -633,6 +640,7 @@ void RemoteControl::checkOnlineInternal() {
     if(deviceOnline) {
         foreach (QVariant ping_command, deviceInterface.pingCommands) {
             sendCmd(ping_command.toString());
+            //_sleep(1000);
         }
     }
 }
@@ -805,6 +813,7 @@ void RemoteControl::reconnect() {
                         QRegularExpression(QString("rc_lbl_").append(key)), Qt::FindChildrenRecursively);
             for(QLabel* label: labels) {
                 label->setText(lbls.value(key));
+//                label->setText(
             }
         }
     }

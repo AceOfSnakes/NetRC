@@ -15,6 +15,7 @@
 #include "debug.h"
 #include "QCheckBox"
 #include <QMetaEnum>
+#include <QDateTime>
 #include "ui_debug.h"
 
 Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
@@ -137,9 +138,13 @@ void Debug::display(const Color color, const QString str, bool crypted) {
    //  ui->tableWidget->setCellWidget(row , 0, createColoredWidget(circ, color));
    //  ui->tableWidget->setCellWidget(row , 1, createColoredWidget(QString().append(crypted? " ⚿ " :" "), color));
    //  ui->tableWidget->setCellWidget(row , 2, createColoredWidget(QString().append(str), color));
-
-    ui->textEdit->append(QString(circ)
-                             .append(crypted? " ⚿ " :" ").append(str));
+   // qDebug() << QDateTime::currentDateTime();
+    ui->textEdit->append(
+        QDateTime::currentDateTime().time().toString("HH:mm:ss:zzz")
+            .append(" ").append(QString(circ)
+            .append(crypted ?
+            QString(" ⚿").append(str.startsWith("\n")? "" :"\n"): "")
+            .append(str)));
 }
 
 void Debug::read(const QString str, bool crypted) {
@@ -150,10 +155,12 @@ void Debug::read(const QString str, bool crypted) {
 QString Debug::arrayToString(const QByteArray array) {
     QString ret = QByteArray::fromRawData((const char*)array,
                                           array.length()).toHex(' ').toUpper();
+    ret.insert(0,"\n");
     int correction = 0;
     int originalLength = ret.length();
     for(int i = 16; i < array.length(); i += 16 ) {
-        ret.insert(i*3 + correction, "\n     ");
+        ret.insert(i*3 + correction, "\n");
+        ret.removeAt(i*3 + correction + 1);
         correction += ret.length() - originalLength;
     }
     return ret;

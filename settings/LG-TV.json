@@ -5,31 +5,86 @@
    "panel":[
       [
          {
-            "columns":2,
+            "columns":3,
             "position":0
          },         
          {
             "btn":"caption",
             "title":"Caption"
-         },
+         },            
+         {},
          {
             "btn":"tv",
             "title":"TV"
          }
 
+      ],
+      [
+         {
+            "columns":4,
+            "position":4
+         },         
+         {
+            "btn":"ad",
+            "title":"AD"
+         },
+         {
+            "btn":"rec",
+	    "title":"Rec^"
+         },
+{},
+         {
+            "btn":"stop",
+            "icon":":images/nav/play/stop.png"
+         },
+         {
+            "btn":"rewind",
+            "icon":":images/nav/play/backward.png"
+         },
+         {
+            "btn":"play",
+            "icon":":images/nav/play/play.png"
+         },
+         {
+            "btn":"pause",
+            "icon":":images/nav/play/pause.png"
+         },
+         {
+            "btn":"forward",
+	    "icon": ":images/nav/play/forward.png"
+         }
+      ],
+      [
+         {
+            "columns":3,
+            "position":3
+         },         
+         {
+            "btn":"netflix",
+            "title":"Netflix"
+         },
+         {
+            "btn":"home",
+            "title":"Home"
+         },
+         {
+            "btn":"youtube",
+            "title":"Youtube"
+         }
       ]
+
    ],
 
    "caption": "KEY_ACTION captionsubtitle",
    "tv": "KEY_ACTION livetv",
 
 
-   "navPause":"KEY_ACTION pause",
-   "navPlay":"KEY_ACTION play",
-   "navStop":"KEY_ACTION stop",
+   "pause":"KEY_ACTION pause",
+   "play":"KEY_ACTION play",
+   "stop":"KEY_ACTION stop",
 
-   "navForward":"KEY_ACTION fastforward",
-   "navBackward":"KEY_ACTION rewind",
+   "forward":"KEY_ACTION fastforward",
+   "rewind":"KEY_ACTION rewind",
 
    "down":"KEY_ACTION arrowdown",
    "left":"KEY_ACTION arrowleft",
@@ -64,12 +119,13 @@
    "colorYellow": "KEY_ACTION yellowbutton",
 
 
-   "pingResponseErr":"QPW OK OFF",
+   "pingResponseErr":"eeee",
    "pingResponseOk":"ON",
    "prefferedPort":9761,
 
    "pingCommands":[
-      "GET_IPCONTROL_STATE"
+      "GET_IPCONTROL_STATE",
+      "CURRENT_APP"
    ],
 
    "deviceNameRegExp":"CH:%s",
