@@ -172,7 +172,6 @@ QByteArray Crypto::decrypt(QByteArray array) {
        return "";
     }
 
-    qDebug() << array.size() << len;
     for (int i = 0; i < array.size(); i++) {
         if (i < 16) {
             ivx[i] = array.at(i);

@@ -143,7 +143,7 @@ void Debug::display(const Color color, const QString str, bool crypted) {
         QDateTime::currentDateTime().time().toString("HH:mm:ss:zzz")
             .append(" ").append(QString(circ)
             .append(crypted ?
-            QString(" ⚿").append(str.startsWith("\n")? "" :"\n"): "")
+            QString(" ⚿").append(str.startsWith("\n")? "" :"\n"): " ")
             .append(str)));
 }
 

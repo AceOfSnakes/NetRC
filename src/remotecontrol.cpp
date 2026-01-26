@@ -226,8 +226,9 @@ void RemoteControl::initConnect()
     connect(signalMapper, SIGNAL(mappedString(const QString&)), this, SLOT(sendCmd(QString)));
 
     // Timer for checking online device status
-    QTimer *timer = new QTimer(this);
+    timer  = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(checkOnlineInternal()));
+
     timer->start(1000);
 
     // Buttons
@@ -637,10 +638,15 @@ void RemoteControl::onConnect() {
 }
 
 void RemoteControl::checkOnlineInternal() {
-    if(deviceOnline) {
-        foreach (QVariant ping_command, deviceInterface.pingCommands) {
-            sendCmd(ping_command.toString());
-            //_sleep(1000);
+    if (deviceOnline) {
+        if (deviceInterface.sendOnePingAtTime) {
+            sendCmd(deviceInterface.pingCommands.at(currentPingIndex).toString());
+            currentPingIndex ++;
+            currentPingIndex %= deviceInterface.pingCommands.size();
+        } else {
+            foreach (QVariant ping_command, deviceInterface.pingCommands) {
+                sendCmd(ping_command.toString());
+            }
         }
     }
 }
@@ -817,9 +823,16 @@ void RemoteControl::reconnect() {
             }
         }
     }
+    currentPingIndex = 0;
 
     deviceInterface.reloadDeviceSettings(settings.toMap());
     deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
+    if(deviceInterface.sendOnePingAtTime ) {
+        timer->setInterval(1000 / deviceInterface.pingCommands.size());
+    }
+    else {
+        timer->setInterval(1000);
+    }
     enabledButtons.clear();
 
 }

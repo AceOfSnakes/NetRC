@@ -30,6 +30,7 @@ public:
     QVariantMap            deviceSettings;
     QString                deviceName;
     QVariantList           pingCommands = {};
+    bool                   sendOnePingAtTime = true;
     Crypto*                crypto = nullptr;
 
     DeviceInterface();

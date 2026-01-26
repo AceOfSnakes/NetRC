@@ -124,8 +124,8 @@
    "prefferedPort":9761,
 
    "pingCommands":[
-      "GET_IPCONTROL_STATE",
-      "CURRENT_APP"
+      "CURRENT_APP",
+      "GET_IPCONTROL_STATE"
    ],
 
    "deviceNameRegExp":"CH:%s",

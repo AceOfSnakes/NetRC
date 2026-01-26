@@ -20,6 +20,7 @@
 #include <QSignalMapper>
 #include <QSystemTrayIcon>
 #include <QStyle>
+#include <QTimer>
 #include "deviceinterface.h"
 #include "debug.h"
 
@@ -30,6 +31,9 @@ class RemoteControl;
 class RemoteControl : public QMainWindow
 {
     Q_OBJECT
+
+    QTimer *timer;
+
     QMap<QString,QString> defaultTooltips;
     QMap<QString,QString> defaultLabels;
     QVariant              settings;
@@ -45,6 +49,7 @@ class RemoteControl : public QMainWindow
     QString            deviceIpAddress;
     QString            deviceFamily;
     QString            deviceName;
+    int                currentPingIndex = 0;
 
     void connectDevice();
 
