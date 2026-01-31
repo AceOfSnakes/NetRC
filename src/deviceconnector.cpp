@@ -286,7 +286,7 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(createCryptoWidget(cryptoSettings.key.salt.toHex(' ').toUpper()), layidx++, 1);
 
 
-    inner = new QGroupBox("IV (Initial vector)", this);
+    inner = new QGroupBox("IV (Initialization vector)", this);
     lay = new QGridLayout();
 
     inner->setLayout(lay);
