@@ -42,7 +42,7 @@ public:
     ~RemoteDevice();
     QString ip;
     unsigned int port;
-    QTcpSocket* socket;
+    QTcpSocket* socket = nullptr;
 private slots:
     void _dataAvailable(){emit dataAvailable();}
     void _tcpError(QAbstractSocket::SocketError socketError){emit tcpError(socketError);}
@@ -60,8 +60,9 @@ class AutoSearchDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AutoSearchDialog(QWidget *parent = 0, QString pingCommand="?RGD",
-                              QString pingResponseStart="RGD", QString pingResponseStartOff="");
+    explicit AutoSearchDialog(QWidget *parent = 0, QString pingCommand = "?RGD",
+                              QString pingResponseStart = "RGD", QString pingResponseStartOff = "",
+                              int prefferedPort = 0);
     ~AutoSearchDialog();
 
     int                     result;
@@ -69,6 +70,7 @@ public:
     QString                 selectedAddress;
     QString                 selectedDevice;
     int                     selectedPort;
+    int                     prefferedPort;
     QVector<RemoteDevice*>  deviceInList;
 
 protected:

@@ -108,7 +108,8 @@ void DeviceConnector::autoSearchClicked() {
         autoSearchDialog = new AutoSearchDialog(this,
                                                 settings.toMap().value("pingCommands").toList().at(0).toString(),
                                                 settings.toMap().value("pingResponseOk").toString(),
-                                                settings.toMap().value("pingResponseErr").toString());
+                                                settings.toMap().value("pingResponseErr").toString(),
+                                                settings.toMap().value("prefferedPort").toInt());
         autoSearchDialog->setWindowTitle(qApp->applicationName()
                                          .append(". Auto Search \"")
                                          .append(settings.toMap().value("family").toString()
