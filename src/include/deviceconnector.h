@@ -19,6 +19,7 @@
 #include <QRegularExpression>
 #include <QGridLayout>
 #include <QVariant>
+#include "crypto.h"
 #include <QRegularExpression>
 
 namespace Ui {
@@ -31,10 +32,11 @@ class DeviceConnector : public QDialog
 private:
     QRegularExpression reIP; //("[.]");
     void applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout);
-    void applyCryptoBlockToUI(QHash<QString, QVariant> crypto, QGridLayout * layout);
+    void applyCryptoBlockToUI(QGridLayout * layout, QString);
 public:
     explicit DeviceConnector(QVariant & sets, QWidget *parent = nullptr);
     ~DeviceConnector();
+    Crypto::CryptoSettings cryptoSettings;
     QString  device;
     QString  deviceAddress;
     QString  deviceIPAddress;
@@ -44,6 +46,7 @@ public:
     QVariant settings;
     void setDevice(QString deviceFamily, QString device, QString address,
                    unsigned int port, QPixmap logo);
+
     void loadLogo();
     
     void reloadCryptoSettings();
@@ -64,6 +67,10 @@ private:
     Ui::DeviceConnector *ui;
     void reloadDevicesFamily();
     QString getIpAddress();
+    QWidget* createCryptoWidget(QByteArray value, bool editable = false);
+    QWidget* createCryptoWidget(QString & value, bool editable = false);
+    QWidget* createCryptoWidget(int & value, bool editable = false);
+    void applyCryptoWidgetStyle(QWidget * widget, bool editable = false);
     void select(const QVariant action);
     void setIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port);
 };

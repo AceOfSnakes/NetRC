@@ -150,6 +150,10 @@ void DeviceConnector::setIpAddress(QString ip1, QString ip2, QString ip3, QStrin
 void DeviceConnector::applyButtonClicked()
 {
     QString addr = getIpAddress();
+
+    qDebug() << "Password" << cryptoSettings.key.password;
+    qDebug() << "cipher" << cryptoSettings.cipher;
+
     deviceIPAddress = addr;
     deviceAddress = addr.append(":").append(ui->lineEditIPPort->text());
     device = ui->line_DeviceName->text();
@@ -217,52 +221,100 @@ void DeviceConnector::reloadDevicesFamily() {
     reloadCryptoSettings();
 }
 
-void DeviceConnector::applyCryptoBlockToUI(QHash<QString, QVariant> settings, QGridLayout * layout) {
-
-    QString label = settings.value("label").toString();
-    QLabel *valueLabel = new QLabel(label);
-        valueLabel->setMinimumWidth(100);
-    int idx = layout->rowCount();
-    if(QString("group") == settings.value("type").toString()) {
-        QGroupBox *inner = new QGroupBox(settings.value("label").toString());
-        QGridLayout *lay = new QGridLayout(/*settings.value("label").toString()*/);
-        inner->setEnabled(false);
-        inner->setLayout(lay);
-        layout->addWidget(
-            inner,
-            idx, 0, 1, 2);
-        applyCryptoToUI(settings.value("settings").toHash(), lay);
-    } else {
-        layout->addWidget(valueLabel, idx, 0);
-
-        QWidget *valueEditor = new QLineEdit(settings.value("value").toString());
-        layout->addWidget(valueEditor, idx, 1);
-        valueEditor->setEnabled(false);
-        if(QString("true") == settings.value("editable").toString()) {
-            valueEditor->setEnabled(true);
-            valueLabel->setText(" *** " + valueLabel->text());
-            QFont font = valueLabel->font();
-            font.setBold(true);
-            font.setItalic(true);
-            valueLabel->setFont(font);
-        } else {
-            valueEditor->setEnabled(false);
-        }
+void DeviceConnector::applyCryptoWidgetStyle(QWidget * widget, bool editable) {
+    QFont font = widget->font();
+    font.setFamily("Courier New");
+    font.setPointSize(9);
+    font.setStyleHint(QFont::Monospace);
+    widget->setFont(font);
+    if (!editable) {
+        widget->setEnabled(false);
     }
 }
 
+QWidget * DeviceConnector::createCryptoWidget(QString & value, bool editable) {
+    QWidget *ret = new QLineEdit(value);
+    applyCryptoWidgetStyle(ret, editable);
+    return ret;
+}
+
+QWidget * DeviceConnector::createCryptoWidget(int & value, bool editable) {
+    QWidget *ret = new QLineEdit(QString::number(value));
+    applyCryptoWidgetStyle(ret, editable);
+    return ret;
+}
+
+QWidget * DeviceConnector::createCryptoWidget(QByteArray value, bool editable) {
+    QWidget *ret = new QLineEdit(value);
+    applyCryptoWidgetStyle(ret, editable);
+    return ret;
+}
+
 void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout) {
-    //ui->cryptoBox = new QGroupBox(this);
-    foreach (auto element, crypto) {
-        auto a = element.toHash();
-        applyCryptoBlockToUI(a, layout);
-    }
+    qDebug() << "" << cryptoSettings.key.password;
+    int idx = 0;
+    layout->setColumnMinimumWidth(0, 102);
+    layout->addWidget(new QLabel(" Cipher"), idx, 0);
+    layout->addWidget(createCryptoWidget(cryptoSettings.cipher), idx++, 1);
+
+    layout->addWidget(new QLabel(" Padding"), idx, 0);
+    layout->addWidget(createCryptoWidget(cryptoSettings.padding), idx++, 1);
+
+    QGroupBox *inner = new QGroupBox("Key", this);
+    QGridLayout *lay = new QGridLayout();
+    inner->setLayout(lay);
+
+    lay->setColumnMinimumWidth(0, 90);
+    layout->addWidget(
+         inner,
+         idx++, 0, 1, 2);
+    int layidx = 0;
+
+    lay->addWidget(new QLabel("Password Type"), layidx, 0);
+    lay->addWidget(new QLineEdit(), layidx++, 1);
+
+    lay->addWidget(new QLabel("Password"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.key.password, true), layidx++, 1);
+
+    lay->addWidget(new QLabel("Code iterations"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.key.iterations), layidx++, 1);
+
+    lay->addWidget(new QLabel("Size (bits)"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.key.bitsSize), layidx++, 1);
+
+    lay->addWidget(new QLabel("Salt"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.key.salt.toHex(' ').toUpper()), layidx++, 1);
+
+
+    inner = new QGroupBox("IV (Initial vector)", this);
+    lay = new QGridLayout();
+
+    inner->setLayout(lay);
+    // valueLabel->setMinimumWidth(100);
+    lay->setColumnMinimumWidth(0, 90);
+    layout->addWidget(
+        inner,
+        idx, 0, 1, 2);
+
+    layidx = 0;
+
+    lay->addWidget(new QLabel("Type"), layidx, 0);
+    lay->addWidget(new QLineEdit(), layidx++, 1);
+
+    lay->addWidget(new QLabel("Size (bits)"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.iv.bitsSize), layidx++, 1);
+
+    lay->addWidget(new QLabel("Cipher"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.iv.cipher), layidx++, 1);
+
+    lay->addWidget(new QLabel("Value"), layidx, 0);
+    lay->addWidget(createCryptoWidget(cryptoSettings.iv.value.toHex(' ').toUpper()), layidx++, 1);
 }
 
 void DeviceConnector::reloadCryptoSettings() {
 
     QVariant crypto = settings.toHash().value("crypto");
-
+    //crypto.to
     QLayoutItem *child;
     while ((child = ui->cryptoGridLayout->takeAt(0)) != nullptr) {
         child->widget()->hide();

@@ -32,8 +32,37 @@ class Crypto : public QObject
     int iter = 16384;
 
 public:
+    enum PasswordType { CUSTOM_PASSWORD, VALUE };
+    struct KeySettings {
+        PasswordType passwordType = CUSTOM_PASSWORD;
+        QString type = "PBKDF2";
+        QByteArray password = QByteArray("12345678", 8);
+        int iterations = 16384;
+        int bitsSize = 128;
+        QByteArray salt =
+            QByteArray("\x63\x61\xB8\x0E\x9B\xDC\xA6\x63\x8D\x07\x20\xF2\xCC\x56\x8F\xB9", 16);;
+    };
+
+    enum IVType { RANDOM_IV, VALUE_IV };
+
+    struct IvSettings {
+        IVType type = VALUE_IV;
+        int bitsSize = 128;
+        QString cipher = "aes_128_ecb";
+        QByteArray value =
+            QByteArray("0123456789ABCDEF", 16);
+    };
+
+    struct CryptoSettings {
+        QString cipher = "aes-128-cbc";
+        QString padding = "Pkcs7";
+        KeySettings key;
+        IvSettings iv;
+    };
+
     // QString pass;
-    QList<OSSL_PARAM> sslParams;
+    QList<OSSL_PARAM>
+        sslParams;
 
     //unsigned char pass[8] = {'1', '2', '3', '4', '5', '6', '7', '8'} ;
     unsigned char pass[8] = {'P', '7', 'R', 'N', 'F', 'K', '6', '6'};

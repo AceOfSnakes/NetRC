@@ -136,61 +136,14 @@
 
 
    "crypto" : {
-     "1-cipher" : {
-         "label": "Cipher",
-         "type": "group",
-         "settings": {
-             "cipher" : {
-                 "value": "aes-128-cbc",
-                 "label": "Cipher"
-             },
-             "padding" : {
-                 "value": "Pkcs7",
-                 "label": "Padding"
-             }
-         }
-     },
-     "3-iv" : {
-         "label": "IV (initialization vector)",
-         "type": "group",
-         "settings": {
-             "iv" : {
-                 "label": "IV",
-                 "value" : "random"
-             },
-             "ivLength" : {
-                 "label": "Size (bits)",
-                 "value" : 128
-             }
-         }
-     },
-     "2-key" : {
-         "label": "Key",
-         "type": "group",
-         "settings": {
-             "keyCode" : {
-                 "label": "Code",
-                 "editable" : "true",
-                 "value" : "12345678"
-             },
-             "keyType" : {
-                 "label": "Type:",
-                 "value" : "PBKDF2"
-             },
-
-             "keyIterations": {
-                 "label": "Custom iteration",
-                 "value" : 16384
-             },
-             "keySize": {
-                 "label": "Size (bits)",
-                 "value" : 128
-             },
-             "keySalt": {
-                 "label": "Salt",
-         	 "value": "6361b80e9bdca6638d0720f2cc56"
-            }
-        }
+       "cipher" : "aes-128-cbc",
+       "padding" : "Pkcs7",
+       "key": {
+	 "passwordType": "CUSTOM_PASSWORD"
+       },
+       "iv" : {
+         "type": "RANDOM_IV"
+       }
      }
   }
 } 
