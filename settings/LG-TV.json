@@ -8,29 +8,69 @@
             "columns":3,
             "position":0
          },         
-         {
-            "btn":"caption",
-            "title":"Caption"
-         },            
-         {},
+         {},{},  
          {
             "btn":"tv",
             "title":"TV"
-         }
+         },
+ 
+         {
+            "btn":"input",
+            "title":"Imput"
+         },            
+         {
+            "btn":"settings",
+            "title":"Settings"
+         },            
 
+         {
+            "btn":"caption",
+            "title":"Caption"
+         }            
       ],
       [
          {
-            "columns":4,
-            "position":4
+            "columns":3,
+            "position":3
          },         
          {
-            "btn":"ad",
-            "title":"AD"
+            "btn":"back",
+            "title":"Back"
+         },            
+         {
+            "btn":"qinfo",
+            "title":"QInfo"
+         },            
+
+         {
+            "btn":"exit",
+            "title":"Exit"
+         }
+      ],
+      [
+         {
+            "columns":3,
+            "position":5
+         },         
+         {
+            "btn":"text",
+            "title":"Text"
+         },            
+{},
+         {
+            "btn":"topt",
+            "title":"T.Opt"
+         }
+      ],
+
+      [
+         {
+            "columns":4,
+            "position":6
+         },         
+         {
          },
          {
-            "btn":"rec",
-	    "title":"Rec^"
          },
 {},
          {
@@ -81,7 +121,11 @@
 
    "pause":"KEY_ACTION pause",
    "play":"KEY_ACTION play",
+   "exit":"KEY_ACTION exit",
    "stop":"KEY_ACTION stop",
+
+   "text":"KEY_ACTION teletext",
+   "topt":"KEY_ACTION teletextoption",
 
    "forward":"KEY_ACTION fastforward",
    "rewind":"KEY_ACTION rewind",
@@ -90,12 +134,15 @@
    "left":"KEY_ACTION arrowleft",
    "right":"KEY_ACTION arrowright",
    "up":"KEY_ACTION arrowup",
-   "ok":"KeY_ACTION ok",
+   "ok":"KEY_ACTION ok",
 
+
+   "qinfo":"KEY_ACTION programminfo",
 
    "volUp":"KEY_ACTION volumeup",
    "volDown":"KEY_ACTION volumedown",
    "mute":"KEY_ACTION volumemute",
+   "input": "KEY_ACTION deviceinput",
 
    "chUp":"KEY_ACTION channelup",
    "chDown":"KEY_ACTION channeldown",
@@ -112,11 +159,23 @@
    "number8":"KEY_ACTION number8",
    "number9":"KEY_ACTION number9",
 
+   "numberClear":"KEY_ACTION channellist",
+   "numberGo":"KEY_ACTION programguide",
+
 
    "colorRed": "KEY_ACTION redbutton",
    "colorBlue": "KEY_ACTION bluebutton",
    "colorGreen": "KEY_ACTION greenbutton",
    "colorYellow": "KEY_ACTION yellowbutton",
+
+
+   "youtube" : "APP_LAUNCH youtube.leanback.v4",
+   "netflix" :"APP_LAUNCH netflix",
+   "home" : "KEY_ACTION smarthome",
+
+   "back" : "KEY_ACTION smarthome",
+   "settings" : "KEY_ACTION settingmenu",
+
 
 
    "pingResponseErr":"eeee",
@@ -144,6 +203,5 @@
        "iv" : {
          "type": "RANDOM_IV"
        }
-     }
-  }
+   }
 } 

@@ -1959,7 +1959,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="rc_btn_colorBlue">
+           <widget class="QPushButton" name="rc_btn_colorGreen">
             <property name="minimumSize">
              <size>
               <width>46</width>
@@ -1991,7 +1991,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="rc_btn_colorGreen">
+           <widget class="QPushButton" name="rc_btn_colorYellow">
             <property name="minimumSize">
              <size>
               <width>46</width>
@@ -2023,7 +2023,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="rc_btn_colorYellow">
+           <widget class="QPushButton" name="rc_btn_colorBlue">
             <property name="minimumSize">
              <size>
               <width>46</width>

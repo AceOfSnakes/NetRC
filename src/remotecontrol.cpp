@@ -76,10 +76,11 @@ RemoteControl::RemoteControl(QWidget *parent) :
     font.setBold(true);
     font.setStyleHint(QFont::Monospace);
     ui->statusDisplayWidget->setFont(font);
+    qDebug()<< "proxy start";
 
     QNetworkProxy proxy;
     QNetworkProxy::setApplicationProxy(proxy);
-
+    qDebug()<< "proxy end";
     initTray();
     powerButtonOnIcon.addFile( ":/images/power_green.png", QSize(128, 128));
     powerButtonOffIcon.addFile( ":/images/power_red.png", QSize(128, 128));
