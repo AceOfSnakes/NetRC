@@ -16,6 +16,7 @@
 #define CRYPTO_H
 
 #include <QObject>
+#include <QMetaType>
 #include <QVariant>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
@@ -33,6 +34,8 @@ class Crypto : public QObject
 
 public:
     enum PasswordType { CUSTOM_PASSWORD, VALUE };
+    Q_ENUM(Crypto::PasswordType);
+   //Q_DECLARE_METATYPE(PasswordType);
     struct KeySettings {
         PasswordType passwordType = CUSTOM_PASSWORD;
         QString type = "PBKDF2";
@@ -44,7 +47,8 @@ public:
     };
 
     enum IVType { RANDOM_IV, VALUE_IV };
-
+    Q_ENUM(Crypto::IVType);
+    //Q_DECLARE_METATYPE (Crypto::IVType);
     struct IvSettings {
         IVType type = VALUE_IV;
         int bitsSize = 128;

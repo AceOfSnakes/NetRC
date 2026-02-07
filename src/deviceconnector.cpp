@@ -42,7 +42,8 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     if(!family.isEmpty()) {
         ui->deviceProtocol->addItem(family);
     }
-    if(settings.toMap().value("pingResponseOk").toString().isEmpty()) {
+    if(settings.toMap().value("ping"
+                               "").toString().isEmpty()) {
         ui->groupBoxConnect->setEnabled(false);
         ui->deviceProtocol->setEnabled(true);
     }
@@ -271,9 +272,16 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     int layidx = 0;
 
     lay->addWidget(new QLabel("Password Type"), layidx, 0);
-    lay->addWidget(new QLineEdit(), layidx++, 1);
+    QComboBox * passType = new QComboBox();
+    QMetaEnum metaEnum = QMetaEnum::fromType<Crypto::PasswordType>();
+    qDebug() << "metaEnum.keyCount()" << metaEnum.keyCount();
+    for(int i = 0; i < metaEnum.keyCount(); i++) {
+        passType->addItem(QString().asprintf("%d", i));
+    }
+//    passType->setEnabled(false);
+    lay->addWidget(passType, layidx++, 1);
 
-    lay->addWidget(new QLabel("Password"), layidx, 0);
+    lay->addWidget(new QLabel("Password ***"), layidx, 0);
     lay->addWidget(createCryptoWidget(cryptoSettings.key.password, true), layidx++, 1);
 
     lay->addWidget(new QLabel("Code iterations"), layidx, 0);
@@ -298,8 +306,15 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
 
     layidx = 0;
 
-    lay->addWidget(new QLabel("Type"), layidx, 0);
-    lay->addWidget(new QLineEdit(), layidx++, 1);
+    lay->addWidget(new QLabel("IV Type"), layidx, 0);
+
+    QComboBox * ivType = new QComboBox();
+    metaEnum = QMetaEnum::fromType<Crypto::IVType>();
+    qDebug() << "metaEnum.keyCount()" << metaEnum.keyCount();
+    for(int i = 0; i < metaEnum.keyCount(); i++) {
+        ivType->addItem(QString().asprintf("%d",i));
+    }
+    lay->addWidget(ivType, layidx++, 1);
 
     lay->addWidget(new QLabel("Size (bits)"), layidx, 0);
     lay->addWidget(createCryptoWidget(cryptoSettings.iv.bitsSize), layidx++, 1);

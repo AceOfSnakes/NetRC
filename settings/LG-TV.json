@@ -10,11 +10,6 @@
          },         
          {},{},  
          {
-            "btn":"tv",
-            "title":"TV"
-         },
- 
-         {
             "btn":"input",
             "title":"Imput"
          },            
@@ -26,7 +21,12 @@
          {
             "btn":"caption",
             "title":"Caption"
-         }            
+         },
+         {
+            "btn":"tv",
+            "title":"TV"
+         }
+
       ],
       [
          {
@@ -176,19 +176,13 @@
    "back" : "KEY_ACTION smarthome",
    "settings" : "KEY_ACTION settingmenu",
 
-
-
-   "pingResponseErr":"eeee",
-   "pingResponseOk":"ON",
+   "pingResponseErr": "",
+   "pingResponseOk":"APP:",
    "prefferedPort":9761,
 
    "pingCommands":[
-      "CURRENT_APP",
-      "GET_IPCONTROL_STATE"
+      "CURRENT_APP"
    ],
-
-   "deviceNameRegExp":"CH:%s",
-   "deviceNameRq":"CURRENT_CH",
 
    "lf": true,
    "family":"LG Smart TV",
