@@ -187,7 +187,9 @@ bool DeviceInterface::isTimeRs(const QString& data) {
 }
 
 bool DeviceInterface::isPingErrRs(const QString& data) {
-    return data.contains(pingResponseErr) ;
+    qDebug() << data;
+    return pingResponseErr.isEmpty() ? data.isEmpty():
+               data.contains(pingResponseErr);
 }
 
 bool DeviceInterface::isPingOkRs(const QString& data) {
