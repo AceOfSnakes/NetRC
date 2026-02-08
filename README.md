@@ -32,4 +32,4 @@ Some useful files for make device protocol JSON configuration file can be found 
 # Adapted for devices
 | Oppo-UHD-203 | Pioneer_BDP-140 | LG -QNED86A6A (Draft) | Pioneer VSX923 
 | :---------: |  :---------: | :---------:  | :---------: 
-![NetRC](./doc/OPPO_UDP-203/online.png)</br></br></br></br> ![Pioneer_BDP-140](./doc/Pioneer_BDP-140/online.png) | ![LG-QNED86A6A/](./doc/LG-QNED86A6A/online.png) | ![Pioneer_VSX923/](./doc/Pioneer_VSX923/online.png)</br></br></br></br>
+![NetRC](./doc/OPPO_UDP-203/online.png) | ![Pioneer_BDP-140](./doc/Pioneer_BDP-140/online.png) | ![LG-QNED86A6A/](./doc/LG-QNED86A6A/online.png) | ![Pioneer_VSX923/](./doc/Pioneer_VSX923/online.png)
