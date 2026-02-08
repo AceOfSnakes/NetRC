@@ -274,7 +274,6 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(new QLabel("Password Type"), layidx, 0);
     QComboBox * passType = new QComboBox();
     QMetaEnum metaEnum = QMetaEnum::fromType<Crypto::PasswordType>();
-    qDebug() << "metaEnum.keyCount()" << metaEnum.keyCount();
     for(int i = 0; i < metaEnum.keyCount(); i++) {
         passType->addItem(QString().asprintf("%d", i));
     }

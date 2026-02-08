@@ -43,7 +43,6 @@ Crypto::Crypto(QVariant *sets, QObject *parent)
 
     qDebug() << *sets;
     auto map = sets->toMap();
-    auto value = map.constFind("3-iv.settings.iv.value");
     OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
     ERR_load_crypto_strings();
     OpenSSL_add_all_algorithms();
@@ -163,8 +162,8 @@ QByteArray Crypto::decrypt(QByteArray array) {
 
     EVP_CIPHER_CTX *ctx;
     unsigned char ivx[16];
-    unsigned char data[32];
-    unsigned char ciphertext[128];
+    unsigned char data[1024];
+    unsigned char ciphertext[1024];
     int len = array.size() - 16;
     int outLen1 = 0;
     int outLen2 = 0;
