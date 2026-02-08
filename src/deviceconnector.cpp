@@ -58,6 +58,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
             }
         }
     }
+
     connect(ui->autoSearchButton, SIGNAL(clicked()), this, SLOT(autoSearchClicked()));
     connect(ui->applyButton, SIGNAL(clicked()), this, SLOT(applyButtonClicked()));
     connect(ui->deleteConfig, SIGNAL(clicked()), this, SLOT(deleteFamilyClicked()));
@@ -321,7 +322,7 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
 
     lay->addWidget(ivType, layidx++, 1);
 
-    lay->addWidget(new QLabel("Size (bits)"), layidx, 0);
+    lay->addWidget(new QLabel("IV Size (bits)"), layidx, 0);
     lay->addWidget(createCryptoWidget(cryptoSettings.iv.bitsSize), layidx++, 1);
 
     lay->addWidget(new QLabel("Cipher"), layidx, 0);
@@ -344,8 +345,10 @@ void DeviceConnector::reloadCryptoSettings() {
     if(crypto.isValid()) {
         applyCryptoToUI(crypto.toHash(), ui->cryptoGridLayout);
         ui->cryptoBox->setVisible(true);
+        ui->autoSearchButton ->setDisabled(true);
     } else {
         ui->cryptoBox->setVisible(false);
+        ui->autoSearchButton ->setDisabled(false);
     }
 
     ui->cryptoLine->setVisible(crypto.isValid());
