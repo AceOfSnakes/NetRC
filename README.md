@@ -30,6 +30,6 @@ Some useful files for make device protocol JSON configuration file can be found 
 1. Connect To Device /  Auto Search Device [TBD]
 
 # Tested device
-
-# Tested OS
+|||||
+![NetRC](./doc/OPPO_UDP-203/online.png)![Pioneer_BDP-140](./doc/Pioneer_BDP-140/online.png)![LG-QNED86A6A/](./doc/LG-QNED86A6A/online.png)![LG-QNED86A6A/](./doc/Pioneer_VSX923/online.png)
 
