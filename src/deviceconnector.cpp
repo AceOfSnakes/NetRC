@@ -274,9 +274,11 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(new QLabel("Password Type"), layidx, 0);
     QComboBox * passType = new QComboBox();
     QMetaEnum metaEnum = QMetaEnum::fromType<Crypto::PasswordType>();
+    qDebug() << metaEnum.keyCount();
     for(int i = 0; i < metaEnum.keyCount(); i++) {
-        passType->addItem(QString().asprintf("%d", i));
+        passType->addItem(QString().asprintf("%s", metaEnum.valueToKey(i)));
     }
+    passType->setDisabled(true);
 //    passType->setEnabled(false);
     lay->addWidget(passType, layidx++, 1);
 
@@ -311,8 +313,12 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     metaEnum = QMetaEnum::fromType<Crypto::IVType>();
     qDebug() << "metaEnum.keyCount()" << metaEnum.keyCount();
     for(int i = 0; i < metaEnum.keyCount(); i++) {
-        ivType->addItem(QString().asprintf("%d",i));
+        ivType->addItem(QString().asprintf("%s", metaEnum.valueToKey(i)));
     }
+    ivType->setDisabled(true);
+
+
+
     lay->addWidget(ivType, layidx++, 1);
 
     lay->addWidget(new QLabel("Size (bits)"), layidx, 0);
