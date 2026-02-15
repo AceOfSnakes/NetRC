@@ -49,5 +49,9 @@
         <file>images/NetRC-128.png</file>
         <file>images/app/netflix.png</file>
         <file>images/app/youtube.png</file>
+        <file>images/app/vk.png</file>
+        <file>images/app/logo/netflix.png</file>
+        <file>images/app/logo/vk.png</file>
+        <file>images/app/logo/youtube.png</file>
     </qresource>
 </RCC>
