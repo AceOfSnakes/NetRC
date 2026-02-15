@@ -47,5 +47,7 @@
         <file>images/nav/special/x.png</file>
         <file>commons/style/black.qss</file>
         <file>images/NetRC-128.png</file>
+        <file>images/app/netflix.png</file>
+        <file>images/app/youtube.png</file>
     </qresource>
 </RCC>

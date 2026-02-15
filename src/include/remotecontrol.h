@@ -46,6 +46,7 @@ class RemoteControl : public QMainWindow
     QSignalMapper*     signalMapper;
     unsigned int       deviceIpPort = 0;
     QPixmap            img;
+    Crypto::CryptoSettings  cryptoSettings;
     QString            deviceIpAddress;
     QString            deviceFamily;
     QString            deviceName;

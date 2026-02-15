@@ -16,6 +16,7 @@
 #define DEVICECONNECTOR_H
 
 #include <QDialog>
+#include <QLineEdit>
 #include <QRegularExpression>
 #include <QGridLayout>
 #include <QVariant>
@@ -31,7 +32,7 @@ class DeviceConnector : public QDialog
     Q_OBJECT
 private:
     QRegularExpression reIP; //("[.]");
-    void applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout);
+    void applyCryptoToUI(QGridLayout * layout);
     void applyCryptoBlockToUI(QGridLayout * layout, QString);
 public:
     explicit DeviceConnector(QVariant & sets, QWidget *parent = nullptr);
@@ -40,18 +41,20 @@ public:
     QString  device;
     QString  deviceAddress;
     QString  deviceIPAddress;
+    boolean  cryptoEnabled = false;
     unsigned int devicePort;
     QString  deviceFamily;
     QPixmap  img;
     QVariant settings;
     void setDevice(QString deviceFamily, QString device, QString address,
-                   unsigned int port, QPixmap logo);
+                   unsigned int port, QPixmap logo, Crypto::CryptoSettings cryptosettings);
 
     void loadLogo();
     
-    void reloadCryptoSettings();
+    void reloadCryptoSettings(bool resetCrypto = true);
     
 private slots:
+    void resetCryptoToDefault();
     void autoSearchClicked();
     void applyButtonClicked();
     void loadConfigClicked();
@@ -67,8 +70,8 @@ private:
     Ui::DeviceConnector *ui;
     void reloadDevicesFamily();
     QString getIpAddress();
-    QWidget* createCryptoWidget(QByteArray value, bool editable = false);
-    QWidget* createCryptoWidget(QString & value, bool editable = false);
+    QLineEdit * createCryptoWidget(QByteArray value, bool editable = false);
+    QLineEdit * createCryptoWidget(QString & value, bool editable = false);
     QWidget* createCryptoWidget(int & value, bool editable = false);
     void applyCryptoWidgetStyle(QWidget * widget, bool editable = false);
     void select(const QVariant action);

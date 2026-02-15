@@ -16,6 +16,7 @@
 #define CRYPTO_H
 
 #include <QObject>
+#include <QDataStream>
 #include <QMetaType>
 #include <QVariant>
 #include <openssl/evp.h>
@@ -24,70 +25,57 @@
 #include <openssl/aes.h>
 #include <openssl/err.h>
 #include <openssl/params.h>
+
+
 class Crypto : public QObject
 {
-
-
     Q_OBJECT
-
-    int iter = 16384;
 
 public:
     enum PasswordType { CUSTOM_PASSWORD, VALUE };
     Q_ENUM(PasswordType);
-   //Q_DECLARE_METATYPE(PasswordType);
     struct KeySettings {
         PasswordType passwordType = CUSTOM_PASSWORD;
-        QString type = "PBKDF2";
-        QByteArray password = QByteArray("12345678", 8);
-        int iterations = 16384;
-        int bitsSize = 128;
+        QString type = "";
+        QByteArray password = QByteArray("********", 8);
+        int iterations = 0;
+        int bitsSize = 0;
+
         QByteArray salt =
-            QByteArray("\x63\x61\xB8\x0E\x9B\xDC\xA6\x63\x8D\x07\x20\xF2\xCC\x56\x8F\xB9", 16);;
+            QByteArray("****************", 8);
     };
 
     enum IVType { RANDOM_IV, VALUE_IV };
     Q_ENUM(IVType);
-    //Q_DECLARE_METATYPE (Crypto::IVType);
     struct IvSettings {
-        IVType type = VALUE_IV;
-        int bitsSize = 128;
-        QString cipher = "aes_128_ecb";
+        IVType type = RANDOM_IV;
+        int bitsSize = 0;
+        QString cipher = "";
+
         QByteArray value =
-            QByteArray("0123456789ABCDEF", 16);
+            QByteArray("****************", 16);
     };
 
     struct CryptoSettings {
-        QString cipher = "aes-128-cbc";
-        QString padding = "Pkcs7";
+        QString cipher = "";
+        QString padding = "";
+
         KeySettings key;
         IvSettings iv;
     };
-
-    // QString pass;
-    QList<OSSL_PARAM>
-        sslParams;
-
-    //unsigned char pass[8] = {'1', '2', '3', '4', '5', '6', '7', '8'} ;
-    unsigned char pass[8] = {'P', '7', 'R', 'N', 'F', 'K', '6', '6'};
+    CryptoSettings cryptoSettings;
+    QList<OSSL_PARAM> sslParams;
     unsigned char key[16];
-    // unsigned char salt[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
-    //                           '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    enum Direction { inbound, outbound , information};
+    enum Direction { inbound, outbound, information };
 
-    unsigned char salt[16] = {0x63, 0x61, 0xb8, 0x0e, 0x9b, 0xdc, 0xa6, 0x63,
-                            0x8d, 0x07, 0x20, 0xf2, 0xcc, 0x56, 0x8f, 0xb9};
-
-    explicit Crypto(QVariant *sets, QObject *parent = nullptr);
-    //QByteArray decryptIV(QByteArray);
+    explicit Crypto(CryptoSettings cryptoSettings, QVariant *sets, QObject *parent = nullptr);
+    void updateCryptoSettings(CryptoSettings cryptoSettings);
     QByteArray decrypt(QByteArray);
     QByteArray encrypt(QByteArray);
-    //QByteArray decodeIV(unsigned char iv[]);
-    //QByteArray encryptIV(unsigned char iv[]);
     QByteArray encryptIV(QByteArray iv);
     QByteArray decryptIV(QByteArray iv);
-    OSSL_PARAM* getSSLParams();
+    OSSL_PARAM *getSSLParams();
 public:
     QByteArray adaptForCrypto(QByteArray arrayOld);
     
@@ -97,12 +85,28 @@ public:
     QString genarateMessage(unsigned char * label, unsigned char * data, int dataLength);
     void dispalayKeyVars(Direction direction = Direction::information);
     void emitOpenSSLErrors();
+
+    static QJsonObject convertCryptoToJson(const CryptoSettings& person);
+    static QJsonObject convertIvToJson(const IvSettings& person);
+    static QJsonObject convertKeyToJson(const KeySettings& person);
+
+    static CryptoSettings parseCryptoData(const QJsonObject& data);
+    static IvSettings parseIvData(const QJsonObject& data);
+    static KeySettings parseKeyData(const QJsonObject& data);
+
 signals:
     void encoded(const QString &str);
     void decoded(const QString &str);
     void info(const QString &str);
-    //static int opensslErrorCb(const char* str, size_t len, void* u);
-
     };
 
+Q_DECLARE_METATYPE(Crypto::CryptoSettings);
+Q_DECLARE_METATYPE(Crypto::IvSettings);
+Q_DECLARE_METATYPE(Crypto::KeySettings);
+
+#ifndef QT_NO_DEBUG_OUTPUT
+QDebug operator<<(QDebug dbg, const Crypto::IvSettings &settings);
+QDebug operator<<(QDebug dbg, const Crypto::KeySettings &settings);
+QDebug operator<<(QDebug dbg, const Crypto::CryptoSettings &settings);
+#endif
 #endif // CRYPTO_H

@@ -85,6 +85,7 @@ SOURCES += src/main.cpp\
         src/deviceconnector.cpp \
         src/deviceinterface.cpp \
         src/discoverydevice.cpp \
+        src/appsettings.cpp \
         src/rcsettings.cpp \
         src/crypto.cpp \
         src/remotecontrol.cpp 
@@ -93,6 +94,7 @@ HEADERS  += src/include/remotecontrol.h \
     src/commons/include/commons.h \
     src/commons/include/filedialogwithhistory.h \
     src/commons/include/settings.h \
+    src/include/appsettings.h \
     src/include/debug.h \
     src/include/aboutdialog.h \
     src/include/autosearchdialog.h \

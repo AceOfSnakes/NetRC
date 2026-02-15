@@ -14,8 +14,10 @@
 */
 #include "crypto.h"
 #include "QDebug"
+
 #include <QRandomGenerator>
 #include <QJsonObject>
+#include <QMetaEnum>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
 #include <openssl/ssl.h>
@@ -24,25 +26,33 @@
 #include <openssl/core_names.h>
 #include <QRandomGenerator>
 
-//#define AES_KEY_SIZE 16  // AES-128 uses a 128-bit (16 bytes) key
-//#define AES_BLOCK_SIZE 16 // AES block size is 16 bytes
-
 OSSL_PARAM* Crypto::getSSLParams() {
     sslParams.clear();
-    sslParams.append(OSSL_PARAM_utf8_string((const char *) OSSL_KDF_PARAM_DIGEST, (void*) SSL_TXT_SHA256, strlen(SSL_TXT_SHA256)));
-    sslParams.append(OSSL_PARAM_octet_string((const char *) OSSL_KDF_PARAM_PASSWORD, pass, 8));
-    sslParams.append(OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT, salt, 16));
-    sslParams.append(OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &iter));
+    sslParams.append(OSSL_PARAM_utf8_string((const char *) OSSL_KDF_PARAM_DIGEST,
+                                            (void*) SSL_TXT_SHA256, strlen(SSL_TXT_SHA256)));
+
+    sslParams.append(OSSL_PARAM_octet_string((const char *) OSSL_KDF_PARAM_PASSWORD,
+                                             (void *) cryptoSettings.key.password.constData(), 8));
+    sslParams.append(OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT,
+                                             (void *) cryptoSettings.key.salt.constData(), 16));
+    sslParams.append(OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &cryptoSettings.key.iterations));
     sslParams.append(OSSL_PARAM_END);
 
     return sslParams.data();
 }
 
-Crypto::Crypto(QVariant *sets, QObject *parent)
-    : QObject{parent} {
+Crypto::Crypto(CryptoSettings cSettings, QVariant *sets, QObject *parent)
+    : QObject(parent) {
+    updateCryptoSettings(cSettings);
+    //qDebug() << *sets;
+}
 
-    qDebug() << *sets;
-    auto map = sets->toMap();
+void  Crypto::updateCryptoSettings(CryptoSettings csets) {
+    qDebug() << "Crypto::updateCryptoSettings" << csets;
+    cryptoSettings = csets;
+
+    //qDebug() << cryptoSettings;
+
     OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
     ERR_load_crypto_strings();
     OpenSSL_add_all_algorithms();
@@ -88,14 +98,20 @@ void Crypto::dispalayKeyVars(Direction direction) {
     //emitInfoMessage((unsigned char *)"Pass", (unsigned char *)pass, 8);
     switch (direction) {
     case outbound:
-        emitEncryptedMessage((unsigned char *) "Pass", (unsigned char *)pass, 8);
-        emitEncryptedMessage((unsigned char *) "Salt", (unsigned char *)salt, 16);
-        emitEncryptedMessage((unsigned char *) "Key", (unsigned char *)key, 16);
+        emitEncryptedMessage((unsigned char *) "Pass",
+                             (unsigned char *) cryptoSettings.key.password.constData(), 8);
+        emitEncryptedMessage((unsigned char *) "Salt",
+                             (unsigned char *) cryptoSettings.key.salt.constData(), 16);
+        emitEncryptedMessage((unsigned char *) "Key",
+                             (unsigned char *) key, 16);
         break;
     case inbound:
-        emitDecryptedMessage((unsigned char *) "Pass", (unsigned char *)pass, 8);
-        emitDecryptedMessage((unsigned char *) "Salt", (unsigned char *)salt, 16);
-        emitDecryptedMessage((unsigned char *) "Key", (unsigned char *)key, 16);
+        emitDecryptedMessage((unsigned char *) "Pass",
+                             (unsigned char *) cryptoSettings.key.password.constData(), 8);
+        emitDecryptedMessage((unsigned char *) "Salt",
+                             (unsigned char *) cryptoSettings.key.salt.constData(), 16);
+        emitDecryptedMessage((unsigned char *) "Key",
+                             (unsigned char *) key, 16);
         break;
     default:
     break;
@@ -274,3 +290,108 @@ void Crypto::emitOpenSSLErrors() {
     if (!errors.isEmpty())
         emit info(errors.trimmed());
 }
+
+QJsonObject Crypto::convertCryptoToJson(const CryptoSettings& data) {
+    QJsonObject jsonObject;
+    jsonObject["cipher"] = data.cipher;
+    jsonObject["padding"] = data.padding;
+    jsonObject["key"] = convertKeyToJson(data.key);
+    jsonObject["iv"] = convertIvToJson(data.iv);
+    return jsonObject;
+}
+
+Crypto::CryptoSettings Crypto::parseCryptoData(const QJsonObject& data) {
+    CryptoSettings retData;
+    retData.cipher = data["cipher"].toString();
+    retData.padding = data["padding"].toString();
+    retData.key = parseKeyData(data["key"].toVariant().toJsonObject());
+    retData.iv = parseIvData(data["iv"].toVariant().toJsonObject());
+    return retData;
+}
+
+QJsonObject Crypto::convertKeyToJson(const KeySettings& data) {
+    QJsonObject jsonObject;
+    jsonObject["type"] = data.type;
+    QMetaEnum metaEnum = QMetaEnum::fromType<PasswordType>();
+    jsonObject["passwordType"] = metaEnum.key(data.passwordType);
+    jsonObject["bitsSize"] = data.bitsSize;
+    jsonObject["iterations"] = data.iterations;
+    jsonObject["password"] = QString(data.password);
+    jsonObject["salt"] = QString(data.salt.toHex().toUpper());
+    return jsonObject;
+}
+
+Crypto::KeySettings Crypto::parseKeyData(const QJsonObject& data) {
+    KeySettings retData;
+    retData.type = data["type"].toString();
+    retData.bitsSize = data["bitsSize"].toInt();
+    retData.iterations = data["iterations"].toInt();
+    QMetaEnum metaEnum = QMetaEnum::fromType<PasswordType>();
+    retData.passwordType = static_cast<PasswordType>(metaEnum.keyToValue(qPrintable(data["passwordType"].toString())));
+    retData.password = QByteArray(data["password"].toString().toStdString());
+    retData.salt = QByteArray::fromHex(QByteArray(data["salt"].toString().toStdString()));
+    return retData;
+}
+
+Crypto::IvSettings Crypto::parseIvData(const QJsonObject& data) {
+    IvSettings retData;
+    retData.cipher = data["cipher"].toString();
+    retData.bitsSize = data["bitsSize"].toInt();
+    retData.value = QByteArray::fromHex(QByteArray(data["value"].toString().toStdString()));
+    QMetaEnum metaEnum = QMetaEnum::fromType<IVType>();
+    retData.type = static_cast<IVType>(metaEnum.keyToValue(qPrintable(data["type"].toString())));
+    return retData;
+
+}
+
+QJsonObject Crypto::convertIvToJson(const IvSettings& data) {
+    QJsonObject jsonObject;
+    jsonObject["cipher"] = data.cipher;
+    QMetaEnum metaEnum = QMetaEnum::fromType<IVType>();
+    jsonObject["type"] = metaEnum.key(data.type);
+    jsonObject["bitsSize"] = data.bitsSize;
+    jsonObject["value"] = QString(data.value.toHex().toUpper());
+    return jsonObject;
+}
+
+#ifndef QT_NO_DEBUG_OUTPUT
+
+// Overload the << operator for QDebug
+QDebug operator<<(QDebug dbg, const Crypto::KeySettings &settings) {
+    QDebugStateSaver saver(dbg); // Saves and restores the QDebug state (e.g., space/nospace)
+    dbg.setAutoInsertSpaces(true);
+    dbg << "KeySettings("
+        << "Type:" << settings.type << ","
+        << "Password Type:" << settings.passwordType << ","
+        << "Password:" << settings.password << ","
+        << "Size bits:" << settings.bitsSize << ","
+        << "Iterations:" << settings.iterations << ","
+        << "Salt: " << settings.salt.toHex().toUpper()
+        << ")";
+    return dbg;
+}
+
+QDebug operator<<(QDebug dbg, const Crypto::IvSettings &settings) {
+    QDebugStateSaver saver(dbg); // Saves and restores the QDebug state (e.g., space/nospace)
+    dbg.setAutoInsertSpaces(true);
+    dbg << "IVSettings("
+        << "Type:" << settings.type << ","
+        << "Cipher:"<< settings.cipher << ","
+        << "Size bits:" << settings.bitsSize << ","
+        << "Value:" << settings.value.toHex().toUpper()
+        << ")";
+    return dbg;
+}
+
+QDebug operator<<(QDebug dbg, const Crypto::CryptoSettings &settings) {
+    QDebugStateSaver saver(dbg); // Saves and restores the QDebug state (e.g., space/nospace)
+    dbg.setAutoInsertSpaces(true);
+    dbg << "CryptoSettings("
+        << "cipher:" << settings.cipher << ","
+        << "padding:" << settings.padding << ","
+        << "\n" << settings.key
+        << "\n" << settings.iv
+        << ")";
+    return dbg;
+}
+#endif

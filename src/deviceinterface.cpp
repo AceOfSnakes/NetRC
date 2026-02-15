@@ -43,14 +43,14 @@ void DeviceInterface::reloadSettings() {
     pingResponseErr = deviceSettings.value("pingResponseErr").toString();
     pingResponsePlay = deviceSettings.value("pingResponsePlay").toString();
     pingPlayCommand = deviceSettings.value("pingPlayCommand").toString();
-
     // Crypto settings
     crypted = false;
     crypto = nullptr;
 
     if(deviceSettings.value("crypto").isValid()) {
-        crypto = new Crypto(&deviceSettings["crypto"], this);
         crypted = true;
+        crypto = new Crypto(cryptoSettings,
+                            &deviceSettings["crypto"], this);
 
         connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos, true); } );
         connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos, true); } );
@@ -64,6 +64,7 @@ void DeviceInterface::reloadSettings() {
 }
 
 void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
+    //qDebug() << settings;
     deviceSettings = settings;
     deviceSettings.detach();
     pingCommands.clear();
@@ -71,9 +72,21 @@ void DeviceInterface::reloadDeviceSettings(QVariantMap  settings) {
     emit settingsChanged();
 }
 
-void DeviceInterface::connectToDevice(const QString& PlayerIpAddress, const unsigned int PlayerIpPort) {
+void DeviceInterface::updateCryptoSettings(Crypto::CryptoSettings csets) {
+    if(crypted) {
+        crypto->updateCryptoSettings(csets);
+    }
+}
+
+void DeviceInterface::connectToDevice(const QString& deviceIpAddress,
+                                      const unsigned int deviceIpPort,
+                                      Crypto::CryptoSettings csets) {
+    if(crypted) {
+        crypto->updateCryptoSettings(csets);
+    }
     disconnect();
-    socket.connectToHost(PlayerIpAddress, PlayerIpPort, QAbstractSocket::ReadWrite, QAbstractSocket::IPv4Protocol);
+    socket.connectToHost(deviceIpAddress, deviceIpPort, QAbstractSocket::ReadWrite,
+                         QAbstractSocket::IPv4Protocol);
 }
 
 void DeviceInterface::disconnect() {

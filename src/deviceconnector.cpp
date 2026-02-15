@@ -13,6 +13,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <QFileDialog>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 #include <QImage>
 #include <QMessageBox>
@@ -24,6 +26,7 @@
 #include "ui_deviceconnector.h"
 #include "rcsettings.h"
 #include "autosearchdialog.h"
+
 
 DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     QDialog(parent),
@@ -83,10 +86,14 @@ DeviceConnector::~DeviceConnector() {
 
 void DeviceConnector::setDevice(QString deviceFamily, QString device,
                                 QString address, unsigned int port,
-                                QPixmap logo) {
+                                QPixmap logo,
+                                Crypto::CryptoSettings cryptosettings) {
 
     ui->deviceProtocol->setCurrentText(deviceFamily);
     ui->line_DeviceName->setText(device);
+
+    this->cryptoSettings = cryptosettings;
+    reloadCryptoSettings(false);
 
     if(!ui->line_DeviceName->text().isEmpty()) {
         ui->knownDevicesComboBox->setCurrentText(ui->line_DeviceName->text());
@@ -153,9 +160,6 @@ void DeviceConnector::applyButtonClicked()
 {
     QString addr = getIpAddress();
 
-    qDebug() << "Password" << cryptoSettings.key.password;
-    qDebug() << "cipher" << cryptoSettings.cipher;
-
     deviceIPAddress = addr;
     deviceAddress = addr.append(":").append(ui->lineEditIPPort->text());
     device = ui->line_DeviceName->text();
@@ -168,8 +172,13 @@ void DeviceConnector::applyButtonClicked()
         sets.beginGroup(QString(device).replace("/","@@"));
         sets.setValue("deviceName", device);
         sets.setValue("deviceFamily", deviceFamily);
+
         sets.setValue("devicePort", devicePort);
         sets.setValue("deviceIPAddress", deviceIPAddress);
+
+        if(cryptoEnabled) {
+            sets.setValue("cryptoVariantJSON", Crypto::convertCryptoToJson(cryptoSettings));
+        }
         if(!img.isNull()) {
             sets.setValue("deviceLogo", img.toImage());
         }
@@ -234,8 +243,8 @@ void DeviceConnector::applyCryptoWidgetStyle(QWidget * widget, bool editable) {
     }
 }
 
-QWidget * DeviceConnector::createCryptoWidget(QString & value, bool editable) {
-    QWidget *ret = new QLineEdit(value);
+QLineEdit * DeviceConnector::createCryptoWidget(QString & value, bool editable) {
+    QLineEdit *ret = new QLineEdit(value);
     applyCryptoWidgetStyle(ret, editable);
     return ret;
 }
@@ -246,15 +255,14 @@ QWidget * DeviceConnector::createCryptoWidget(int & value, bool editable) {
     return ret;
 }
 
-QWidget * DeviceConnector::createCryptoWidget(QByteArray value, bool editable) {
-    QWidget *ret = new QLineEdit(value);
+QLineEdit * DeviceConnector::createCryptoWidget(QByteArray value, bool editable) {
+    QLineEdit *ret = new QLineEdit(value);
     applyCryptoWidgetStyle(ret, editable);
     return ret;
 }
 
-void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayout * layout) {
-    qDebug() << "" << cryptoSettings.key.password;
-    int idx = 0;
+void DeviceConnector::applyCryptoToUI(QGridLayout * layout) {
+    int idx = 1;
     layout->setColumnMinimumWidth(0, 102);
     layout->addWidget(new QLabel(" Cipher"), idx, 0);
     layout->addWidget(createCryptoWidget(cryptoSettings.cipher), idx++, 1);
@@ -275,7 +283,6 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(new QLabel("Password Type"), layidx, 0);
     QComboBox * passType = new QComboBox();
     QMetaEnum metaEnum = QMetaEnum::fromType<Crypto::PasswordType>();
-    qDebug() << metaEnum.keyCount();
     for(int i = 0; i < metaEnum.keyCount(); i++) {
         passType->addItem(QString().asprintf("%s", metaEnum.valueToKey(i)));
     }
@@ -284,7 +291,13 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(passType, layidx++, 1);
 
     lay->addWidget(new QLabel("Password ***"), layidx, 0);
-    lay->addWidget(createCryptoWidget(cryptoSettings.key.password, true), layidx++, 1);
+    QLineEdit *passedit = createCryptoWidget(cryptoSettings.key.password, true);
+    passedit->setMaxLength(8);
+    connect(passedit, &QLineEdit::textChanged, this, [&](const QString &value) {
+        cryptoSettings.key.password = value.toUtf8();
+    });
+
+    lay->addWidget(passedit, layidx++, 1);
 
     lay->addWidget(new QLabel("Code iterations"), layidx, 0);
     lay->addWidget(createCryptoWidget(cryptoSettings.key.iterations), layidx++, 1);
@@ -312,7 +325,6 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
 
     QComboBox * ivType = new QComboBox();
     metaEnum = QMetaEnum::fromType<Crypto::IVType>();
-    qDebug() << "metaEnum.keyCount()" << metaEnum.keyCount();
     for(int i = 0; i < metaEnum.keyCount(); i++) {
         ivType->addItem(QString().asprintf("%s", metaEnum.valueToKey(i)));
     }
@@ -332,8 +344,7 @@ void DeviceConnector::applyCryptoToUI(QHash<QString, QVariant> crypto, QGridLayo
     lay->addWidget(createCryptoWidget(cryptoSettings.iv.value.toHex(' ').toUpper()), layidx++, 1);
 }
 
-void DeviceConnector::reloadCryptoSettings() {
-
+void DeviceConnector::reloadCryptoSettings(bool reloadCrypto) {
     QVariant crypto = settings.toHash().value("crypto");
     //crypto.to
     QLayoutItem *child;
@@ -343,12 +354,24 @@ void DeviceConnector::reloadCryptoSettings() {
     }
 
     if(crypto.isValid()) {
-        applyCryptoToUI(crypto.toHash(), ui->cryptoGridLayout);
+        if(reloadCrypto) {
+            cryptoSettings = Crypto::parseCryptoData(crypto.toJsonObject());
+        }
+        QPushButton*  resetButton = new QPushButton("Reset to default");
+        ui->cryptoGridLayout->addWidget(resetButton, 0, 1);
+        connect(resetButton, SIGNAL(clicked()), this, SLOT(resetCryptoToDefault()));
+
+        if(ui->line_DeviceName->text().isEmpty()) {
+            ui->cryptoGridLayout->itemAtPosition(0, 1)->widget()->setEnabled(false);
+        }
+        applyCryptoToUI(ui->cryptoGridLayout);
         ui->cryptoBox->setVisible(true);
         ui->autoSearchButton ->setDisabled(true);
+        cryptoEnabled = true;
     } else {
         ui->cryptoBox->setVisible(false);
         ui->autoSearchButton ->setDisabled(false);
+        cryptoEnabled = false;
     }
 
     ui->cryptoLine->setVisible(crypto.isValid());
@@ -357,7 +380,10 @@ void DeviceConnector::reloadCryptoSettings() {
     setMaximumSize(minimumSize());
     repaint();
 }
-
+void DeviceConnector::resetCryptoToDefault() {
+    cryptoSettings = Crypto::parseCryptoData(settings.toMap().value("crypto").toJsonObject());
+    reloadCryptoSettings();
+}
 void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
     if(!arg1.isEmpty()) {
         select(RCSettings::load(arg1));
@@ -368,6 +394,7 @@ void DeviceConnector::deviceProtocolCurrentIndexChanged(const QString &arg1) {
         if(ui->deviceProtocol->findText(arg1) > 0) {
             ui->deviceProtocol->setCurrentIndex(ui->deviceProtocol->findText(arg1));
         }
+
         onLogoRemoved(true);
         reloadCryptoSettings();
     }
@@ -399,7 +426,8 @@ void DeviceConnector::onKnownDevicesComboBoxCurrentIndexChanged(int index) {
                 sets.toMap().value("deviceName", "").toString(),
                 sets.toMap().value("deviceIPAddress", "").toString(),
                 sets.toMap().value("devicePort").toUInt(),
-                img);
+                img,
+                Crypto::parseCryptoData(sets.toMap().value("cryptoVariantJSON").toJsonObject()));
         loadLogo();
     }
 }
@@ -441,4 +469,5 @@ void DeviceConnector::onLogoRemoved(bool) {
     ui->logoLabel->setPixmap(img);
     ui->logoLabel->setText("NetRC");
 }
+
 

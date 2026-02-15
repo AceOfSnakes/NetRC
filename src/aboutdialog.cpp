@@ -49,7 +49,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     contributors = info.entryInfoList(QDir::Files);
     QDir info1(":/images/contributors/author");
     contributors.append(info1.entryInfoList(QDir::Files));
-    qDebug()<< contributors;
+    //qDebug()<< contributors;
     if(contributors.length() > 0) {
         QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect();
         ui->labelAuthor->setGraphicsEffect(effect);
@@ -70,10 +70,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
 AboutDialog::~AboutDialog() {
     delete ui;
 }
-QPixmap GetNew(QImage& img)
-{
+
+QPixmap GetNew(QImage& img) {
     return QPixmap::fromImage(img);
 }
+
 void  AboutDialog::changeContributor() {
     contributor = contributor % contributors.length();
     QImage img;

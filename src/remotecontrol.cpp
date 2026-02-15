@@ -13,6 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "remotecontrol.h"
+#include "appsettings.h"
 #include "ui_remotecontrol.h"
 #include <QThread>
 #include <QDebug>
@@ -76,11 +77,10 @@ RemoteControl::RemoteControl(QWidget *parent) :
     font.setBold(true);
     font.setStyleHint(QFont::Monospace);
     ui->statusDisplayWidget->setFont(font);
-    qDebug()<< "proxy start";
 
     QNetworkProxy proxy;
     QNetworkProxy::setApplicationProxy(proxy);
-    qDebug()<< "proxy end";
+
     initTray();
     powerButtonOnIcon.addFile( ":/images/power_green.png", QSize(128, 128));
     powerButtonOffIcon.addFile( ":/images/power_red.png", QSize(128, 128));
@@ -104,6 +104,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, &RemoteControl::colorSchemeChanged);
 }
+
 void RemoteControl::colorSchemeChanged(Qt::ColorScheme scheme) {
     qDebug()<< scheme;
 }
@@ -128,7 +129,7 @@ void RemoteControl::restoreSettings() {
     QSettings settings(qApp->organizationName(),
                        qApp->applicationName());
 
-    settings.beginGroup("global");
+    settings.beginGroup(AppSettings::MAIN_SECTION);
     if(!settings.value("theme").isValid()) {
         settings.setValue("theme", QResource(":/commons/style/black.qss").uncompressedData().constData());
     }
@@ -207,8 +208,7 @@ void RemoteControl::changeTheme(QByteArray style) {
     repaintDebugDialog();
 }
 
-void RemoteControl::initConnect()
-{
+void RemoteControl::initConnect() {
     // Device interface
     connect((&deviceInterface), SIGNAL(deviceConnected()), this, SLOT(commConnected()));
     connect((&deviceInterface), SIGNAL(deviceDisconnected()), this, SLOT(commDisconnected()));
@@ -309,9 +309,8 @@ void RemoteControl::redraw() {
 
 void RemoteControl::initSetting(const QString & set, QVariant & value) {
     QSettings sets(qApp->organizationName(),qApp->applicationName());
-    sets.beginGroup("global");
-
-    sets.beginGroup("view");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::VIEW_SECTION);
     if (!sets.value(set).isValid()) {
         sets.setValue(set, value);
     }
@@ -390,8 +389,10 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
             QString btnGroup = button.value("group").toString();
             if(!title.isEmpty() || !icon.isEmpty()) {
                 QPushButton *btn = new QPushButton(title);
+                btn->setIconSize(QSize(50,20));
                 if(!icon.isEmpty()) {
-                    btn->setIcon(QIcon(icon));
+                    QIcon ic(icon);
+                    btn->setIcon(ic);
                 }
 
                 //btn->setFont(fixedFont);
@@ -493,7 +494,8 @@ void RemoteControl::connectClicked() {
         deviceInterface.disconnect();
     } else {
         if(deviceIpPort != 0) {
-            deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
+            qDebug() << "connectClicked()" << deviceName;
+            deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
         } else {
             connectCustomMenuRequested(QPoint());
         }
@@ -524,8 +526,10 @@ void RemoteControl::displayNear(QDialog & dialog, QDialog * debug) {
 
 void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
+    qDebug() << "newDevice()" << settings << cryptoSettings;
     deviceConnector.setDevice(deviceFamily, deviceName,
-                              deviceIpAddress, deviceIpPort, img);
+                              deviceIpAddress, deviceIpPort, img,
+                              cryptoSettings);
 
     if(this->styleSheet().isEmpty()) {
         const QPalette defaultPalette;
@@ -557,6 +561,7 @@ void RemoteControl::newDevice() {
     }
 
 }
+
 void RemoteControl::connectCustomMenuRequested(const QPoint &pos) {
     QList<QString> devices = RCSettings::devicesList();
 
@@ -576,9 +581,11 @@ void RemoteControl::connectCustomMenuRequested(const QPoint &pos) {
 
 void RemoteControl::connectDevice() {
     if (!deviceInterface.isConnected()) {
-        deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
+        qDebug() << "connectDevice()" << deviceName;
+        deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
     }
 }
+
 void RemoteControl::updateDeviceInfo () {
     ui->statusDisplayWidget->item(7)->setText(deviceInterface.deviceName);
 }
@@ -669,8 +676,8 @@ void RemoteControl::commConnected() {
 
     if(RCSettings::isSaveLatestDeviceEnabled()) {
         QSettings sets(qApp->organizationName(), qApp->applicationName());
-        sets.beginGroup("global");
-        sets.beginGroup("devices");
+        sets.beginGroup(AppSettings::MAIN_SECTION);
+        sets.beginGroup(AppSettings::DEVICES_SECTION);
         sets.setValue("latestDevice", deviceName);
         sets.endGroup();
         sets.endGroup();
@@ -795,13 +802,13 @@ void RemoteControl::reconnect() {
         QVariant var = settings.toMap().value("panel");
         QList<QWidget*>old = ui->centralWidget->findChildren<QWidget*>(
                     QRegularExpression("Panel_"), Qt::FindChildrenRecursively);
-        for(QWidget* rem: old) {
+        for(QWidget* rem: std::as_const(old)) {
             delete rem;
         }
         if(var.isValid()) {
             QJsonArray array =  var.toJsonArray();
             int idx = 0;
-            for (const QJsonValue & value: array) {
+            for (const QJsonValue & value: std::as_const(array)) {
                 addPanel(idx++, value.toArray());
 
             }
@@ -818,7 +825,7 @@ void RemoteControl::reconnect() {
         for (const QString & key: lbls.keys()) {
             QList<QLabel*> labels = ui->centralWidget->findChildren<QLabel*>(
                         QRegularExpression(QString("rc_lbl_").append(key)), Qt::FindChildrenRecursively);
-            for(QLabel* label: labels) {
+            for(QLabel* label: std::as_const(labels)) {
                 label->setText(lbls.value(key));
 //                label->setText(
             }
@@ -827,7 +834,9 @@ void RemoteControl::reconnect() {
     currentPingIndex = 0;
 
     deviceInterface.reloadDeviceSettings(settings.toMap());
-    deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort);
+    qDebug() << "reconnect()" << deviceName;
+
+    deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
     if(deviceInterface.sendOnePingAtTime ) {
         timer->setInterval(1000 / deviceInterface.pingCommands.size());
     }
@@ -874,8 +883,8 @@ void RemoteControl::reloadLogo(QPixmap &img)
 
 void RemoteControl::reloadAndReconnect(QString device) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("devices");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::DEVICES_SECTION);
 
     sets.beginGroup(device);
 
@@ -883,6 +892,10 @@ void RemoteControl::reloadAndReconnect(QString device) {
     deviceName = sets.value("deviceName", "").toString();
     deviceIpPort = sets.value("devicePort", deviceIpPort).toUInt();
     deviceIpAddress = sets.value("deviceIPAddress", deviceIpAddress).toString();
+    cryptoSettings = Crypto::parseCryptoData(
+        sets.value("cryptoVariantJSON").toJsonObject());
+    deviceInterface.updateCryptoSettings(cryptoSettings);
+
     img = QPixmap::fromImage(sets.value("deviceLogo").value<QImage>());
     reloadLogo(img);
     sets.endGroup();
@@ -894,8 +907,8 @@ void RemoteControl::reloadAndReconnect(QString device) {
 
 void RemoteControl::reloadLatestDevice() {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("devices");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::DEVICES_SECTION);
     QString device = sets.value("latestDevice", "").toString();
     sets.endGroup();
     sets.endGroup();
@@ -907,7 +920,7 @@ void RemoteControl::reloadLatestDevice() {
 void RemoteControl::closeEvent(QCloseEvent *event) {
     QSettings settings(qApp->organizationName(),
                        qApp->applicationName());
-    settings.beginGroup("global");
+    settings.beginGroup(AppSettings::MAIN_SECTION);
     settings.setValue("geometryX", geometry().x());
     settings.setValue("geometryY", geometry().y());
     settings.endGroup();
@@ -992,7 +1005,7 @@ void RemoteControl::quit() {
 
 void RemoteControl::restoreDebug() {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
     if(sets.value("debugEnabled").toBool()) {
         debugClicked();
     }

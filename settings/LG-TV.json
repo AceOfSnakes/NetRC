@@ -189,13 +189,22 @@
 
 
    "crypto" : {
-       "cipher" : "aes-128-cbc",
-       "padding" : "Pkcs7",
-       "key": {
-	 "passwordType": "CUSTOM_PASSWORD"
-       },
-       "iv" : {
-         "type": "RANDOM_IV"
-       }
-   }
+     "cipher": "aes-128-cbc",
+     "iv": {
+        "bitsSize": 128,
+        "cipher": "aes_128_ecb",
+        "type": "RANDOM_IV",
+        "value": "30313233343536373839414243444546"
+      },
+      "key": {
+        "bitsSize": 128,
+        "iterations": 16384,
+        "password": "XXXXXXXX",
+        "passwordType": "CUSTOM_PASSWORD",
+        "salt": "6361B80E9BDCA6638D0720F2CC568FB9",
+        "type": "PBKDF2"
+      },
+      "padding": "pkcs7"
+  }
+   
 } 

@@ -13,6 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "rcsettings.h"
+#include "appsettings.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSettings>
@@ -23,8 +24,8 @@ RCSettings::RCSettings() {
 
 QVariant RCSettings::load(QString family) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("family");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::FAMILY_SECTION);
     QVariant val = sets.value(family);
     sets.endGroup();
     sets.endGroup();
@@ -33,14 +34,14 @@ QVariant RCSettings::load(QString family) {
 
 void RCSettings::remove(QString family) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("family");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::FAMILY_SECTION);
     sets.remove(family);
     sets.endGroup();
-    sets.beginGroup("devices");
+    sets.beginGroup(AppSettings::DEVICES_SECTION);
     foreach(QString key, sets.childGroups()) {
         sets.beginGroup(key);
-        QString fam =sets.value("deviceFamily").toString();
+        QString fam = sets.value("deviceFamily").toString();
         sets.endGroup();
         if(fam == family) {
             sets.remove(key);
@@ -67,8 +68,8 @@ QVariant RCSettings::load(QFile &file) {
 
 void RCSettings::updateSettings(QString & family, QVariant value) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("family");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::FAMILY_SECTION);
     sets.setValue(family, value);
     sets.endGroup();
     sets.endGroup();
@@ -76,8 +77,8 @@ void RCSettings::updateSettings(QString & family, QVariant value) {
 
 QVariant RCSettings::deviceSettings(QString device) {
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("devices");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::DEVICES_SECTION);
     QString section = device.replace("/", "@@");
     sets.beginGroup(section);
     QMap<QString,QVariant> value;
@@ -99,8 +100,8 @@ void RCSettings::removeDevice(QString device) {
 QList<QString> RCSettings::devicesList() {
     QStringList values;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("devices");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::DEVICES_SECTION);
     values = sets.childGroups();
     sets.endGroup();
     sets.endGroup();
@@ -119,8 +120,8 @@ QList<QString> RCSettings::devicesList() {
 QList<QString> RCSettings::settingsList() {
     QStringList result;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("family");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::FAMILY_SECTION);
     result = sets.allKeys();
     sets.endGroup();
     sets.endGroup();
@@ -130,8 +131,8 @@ QList<QString> RCSettings::settingsList() {
 bool RCSettings::isMinimizeToTrayEnabled() {
     bool result = false;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("view");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::VIEW_SECTION);
     result = sets.value("minimizeToTray", true).toBool();
     sets.endGroup();
     sets.endGroup();
@@ -141,8 +142,8 @@ bool RCSettings::isMinimizeToTrayEnabled() {
 bool RCSettings::isDevelopmentModeEnabled() {
     bool result = false;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("view");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::VIEW_SECTION);
     result = sets.value("devMode", false).toBool();
     sets.endGroup();
     sets.endGroup();
@@ -152,8 +153,8 @@ bool RCSettings::isDevelopmentModeEnabled() {
 bool RCSettings::isSaveLatestDeviceEnabled() {
     bool result = false;
     QSettings sets(qApp->organizationName(), qApp->applicationName());
-    sets.beginGroup("global");
-    sets.beginGroup("view");
+    sets.beginGroup(AppSettings::MAIN_SECTION);
+    sets.beginGroup(AppSettings::VIEW_SECTION);
     result = sets.value("saveLatestDevice", true).toBool();
     sets.endGroup();
     sets.endGroup();

@@ -32,7 +32,8 @@ public:
     QVariantList           pingCommands = {};
     bool                   sendOnePingAtTime = true;
     Crypto*                crypto = nullptr;
-
+    Crypto::CryptoSettings cryptoSettings;
+    bool                   crypted;
     DeviceInterface();
     bool isConnected();
     void reloadSettings();
@@ -43,13 +44,13 @@ public:
     bool isDeviceIdRs(const QString& data);
     QByteArray decrypt(QByteArray& data);
     QByteArray encrypt(const QString& data, const char *newParameter = "\r");
+    void updateCryptoSettings(Crypto::CryptoSettings csets);
     
 private:
     QString        deviceId;
     QTcpSocket     socket;
     bool           connected;
     bool           crlf;
-    bool           crypted;
 
     QRegularExpression     timestampRegex;
     QRegularExpression     deviceIdRegex;
@@ -68,7 +69,7 @@ private slots:
     void readString();
     void tcpDisconnected();
 public slots:
-    void connectToDevice(const QString &PlayerIpAddress, const unsigned int PlayerIpPort);
+    void connectToDevice(const QString &deviceIpAddress, const unsigned int deviceIpPort, Crypto::CryptoSettings csets);
     void disconnect();
     bool sendCmd(const QString& cmd);
     void reloadDeviceSettings(QVariantMap settings);
