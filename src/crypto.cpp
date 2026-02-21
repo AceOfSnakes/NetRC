@@ -35,7 +35,7 @@ OSSL_PARAM* Crypto::getSSLParams() {
                                              (void *) cryptoSettings.key.password.constData(), 8));
     sslParams.append(OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT,
                                              (void *) cryptoSettings.key.salt.constData(), 16));
-    sslParams.append(OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &cryptoSettings.key.iterations));
+    sslParams.append(OSSL_PARAM_int(OSSL_KDF_PARAM_ITER, &(cryptoSettings.key.iterations)));
     sslParams.append(OSSL_PARAM_END);
 
     return sslParams.data();

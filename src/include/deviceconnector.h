@@ -41,7 +41,7 @@ public:
     QString  device;
     QString  deviceAddress;
     QString  deviceIPAddress;
-    boolean  cryptoEnabled = false;
+    bool     cryptoEnabled = false;
     unsigned int devicePort;
     QString  deviceFamily;
     QPixmap  img;
