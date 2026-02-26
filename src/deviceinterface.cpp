@@ -91,6 +91,10 @@ void DeviceInterface::connectToDevice(const QString& deviceIpAddress,
 
 void DeviceInterface::disconnect() {
     connected = false;
+    if(socket.state() == QAbstractSocket::ConnectingState ) {
+        socket.abort();
+    }
+
     socket.disconnectFromHost();
     socket.close();
 }
