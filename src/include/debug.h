@@ -78,7 +78,7 @@ private:
     bool isRsNotDisplayed(const QString str);
     void display(Color color, const QString str, bool crypted);
 signals:
-    void send(const QString str);
+    void send(const QString & str);
     void iconChanged(QPushButton & button);
 };
 

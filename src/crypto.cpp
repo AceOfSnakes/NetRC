@@ -41,7 +41,7 @@ OSSL_PARAM* Crypto::getSSLParams() {
     return sslParams.data();
 }
 
-Crypto::Crypto(CryptoSettings cSettings, QVariant *sets, QObject *parent)
+Crypto::Crypto(CryptoSettings cSettings, QObject *parent)
     : QObject(parent) {
     updateCryptoSettings(cSettings);
     //qDebug() << *sets;
@@ -68,7 +68,7 @@ void  Crypto::updateCryptoSettings(CryptoSettings csets) {
 QByteArray Crypto::adaptForCrypto(QByteArray arrayOld)
 {
     QByteArray newArray(arrayOld);
-    while(newArray.length()% 16 !=0) {
+    while(newArray.length() % 16 !=0) {
         newArray.append("\2");
     }
     return newArray;

@@ -69,7 +69,7 @@ public:
 
     enum Direction { inbound, outbound, information };
 
-    explicit Crypto(CryptoSettings cryptoSettings, QVariant *sets, QObject *parent = nullptr);
+    explicit Crypto(CryptoSettings cryptoSettings, QObject *parent = nullptr);
     void updateCryptoSettings(CryptoSettings cryptoSettings);
     QByteArray decrypt(QByteArray);
     QByteArray encrypt(QByteArray);

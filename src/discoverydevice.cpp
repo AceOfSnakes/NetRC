@@ -30,6 +30,14 @@ void DiscoveryDevice::connectDevice(QString ip, unsigned int port) {
     connect((socket), SIGNAL(error(QAbstractSocket::SocketError)), this,  SLOT(_tcpError(QAbstractSocket::SocketError)));
     qDebug() << "DiscoveryDevice::connectDevice";
     socket->connectToHost(ip, port);
+    // try to connect ar abort after 0.5 seconds
+    int attempts = 0;
+    if(!socket->waitForConnected(100)) {
+        attempts ++;
+        if (attempts == 5) {
+            socket->abort();
+        }
+    }
 }
 
 int DiscoveryDevice::bytesAvailable() {
@@ -53,6 +61,9 @@ QString DiscoveryDevice::errorString() {
 }
 
 void DiscoveryDevice::close() {
+    if(socket->state() == QAbstractSocket::ConnectingState) {
+        socket->abort();
+    }
     socket->close();
     socket->disconnect();
 }

@@ -526,7 +526,7 @@ void RemoteControl::displayNear(QDialog & dialog, QDialog * debug) {
 
 void RemoteControl::newDevice() {
     DeviceConnector deviceConnector(settings, this);
-    qDebug() << "newDevice()" << settings << cryptoSettings;
+    //qDebug() << "newDevice()" << settings << cryptoSettings;
     deviceConnector.setDevice(deviceFamily, deviceName,
                               deviceIpAddress, deviceIpPort, img,
                               cryptoSettings);

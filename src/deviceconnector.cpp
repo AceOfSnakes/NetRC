@@ -77,7 +77,6 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     connect(ui->removeKnownDevice, SIGNAL(clicked(bool)),
             this, SLOT(onRemoveKnownDevice()));
     reloadDevicesFamily();
-
 }
 
 DeviceConnector::~DeviceConnector() {
@@ -111,7 +110,6 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device,
 }
 
 void DeviceConnector::autoSearchClicked() {
-    AutoSearchDialog *autoSearchDialog = nullptr;
     do {
         delete autoSearchDialog;
         autoSearchDialog = new AutoSearchDialog(this,
@@ -123,6 +121,11 @@ void DeviceConnector::autoSearchClicked() {
                                          .append(". Auto Search \"")
                                          .append(settings.toMap().value("family").toString()
                                                  .append("\"")));
+
+        /*connect(this, SIGNAL(send(const Qstring&)),
+                autoSearchDialog,
+                SLOT(showDebug(const QString&)));
+*/
         autoSearchDialog->exec();
     } while(autoSearchDialog->result == 2);
 

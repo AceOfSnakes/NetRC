@@ -21,6 +21,7 @@
 #include <QGridLayout>
 #include <QVariant>
 #include "crypto.h"
+#include "autosearchdialog.h"
 #include <QRegularExpression>
 
 namespace Ui {
@@ -31,6 +32,7 @@ class DeviceConnector : public QDialog
 {
     Q_OBJECT
 private:
+    AutoSearchDialog *autoSearchDialog = nullptr;
     QRegularExpression reIP; //("[.]");
     void applyCryptoToUI(QGridLayout * layout);
     void applyCryptoBlockToUI(QGridLayout * layout, QString);
@@ -76,6 +78,8 @@ private:
     void applyCryptoWidgetStyle(QWidget * widget, bool editable = false);
     void select(const QVariant action);
     void setIpAddress(QString ip1, QString ip2, QString ip3, QString ip4, QString port);
+signals:
+    void send(const QString str);
 };
 
 #endif // DEVICECONNECTOR_H

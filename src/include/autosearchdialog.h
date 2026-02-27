@@ -58,8 +58,18 @@ signals:
 class AutoSearchDialog : public QDialog
 {
     Q_OBJECT
-
+private:
+    QString circle = "⬤";
 public:
+    enum DebugColor { inboundColor, outboundColor , alertColor, informationColor};
+    QMap<DebugColor, QColor> mapColored {
+        {inboundColor, QColorConstants::Svg::lightgreen},
+        {outboundColor, QColorConstants::Svg::lightblue},
+        {informationColor, QColorConstants::Svg::lightgray},
+        {alertColor, QColorConstants::Svg::tomato}
+    };
+
+    Q_ENUM(DebugColor);
     explicit AutoSearchDialog(QWidget *parent = 0, QString pingCommand = "?RGD",
                               QString pingResponseStart = "RGD", QString pingResponseStartOff = "",
                               int prefferedPort = 0);
@@ -72,6 +82,10 @@ public:
     int                     selectedPort;
     int                     prefferedPort;
     QVector<RemoteDevice*>  deviceInList;
+    Ui::AutoSearchDialog *ui;
+
+public slots:
+    void showDebug(const QString &value, const AutoSearchDialog::DebugColor &);
 
 protected:
     void changeEvent(QEvent *e);
@@ -101,9 +115,15 @@ private slots:
     void deviceListWidgetDoubleClicked(QListWidgetItem *);
 
 private:
-    Ui::AutoSearchDialog *ui;
+
     void closeEvent(QCloseEvent *event);
     QString parseResponse(QNetworkReply *reply, QUrl &url);
+
+signals:
+    void processResponse(const QString &response);
+    void processError(const QString &response);
+    void processRequest(const QString &response);
 };
 
+Q_DECLARE_METATYPE(AutoSearchDialog::DebugColor);
 #endif // AUTOSEARCHDIALOG_H

@@ -21,8 +21,6 @@
 #include <QRegularExpression>
 #include <QDebug>
 
-string trim(const string &t, const string &ws);
-
 DeviceInterface::DeviceInterface() {
     connected = false;
     // socket
@@ -49,8 +47,7 @@ void DeviceInterface::reloadSettings() {
 
     if(deviceSettings.value("crypto").isValid()) {
         crypted = true;
-        crypto = new Crypto(cryptoSettings,
-                            &deviceSettings["crypto"], this);
+        crypto = new Crypto(cryptoSettings, this);
 
         connect(crypto, &Crypto::decoded, this, [&](const QString pos) { emit rx(pos, true); } );
         connect(crypto, &Crypto::encoded, this, [&](const QString pos) { emit tx(pos, true); } );
@@ -85,6 +82,7 @@ void DeviceInterface::connectToDevice(const QString& deviceIpAddress,
         crypto->updateCryptoSettings(csets);
     }
     disconnect();
+    socket.abort();
     socket.connectToHost(deviceIpAddress, deviceIpPort, QAbstractSocket::ReadWrite,
                          QAbstractSocket::IPv4Protocol);
 }
@@ -146,11 +144,12 @@ void DeviceInterface::readString() {
             if (lineLength > 0) {
 
                 receivedString.append((const char*)&data[lineStartPos], 0, lineLength);
-                receivedString = trim(receivedString, "\r");
-                receivedString = trim(receivedString, "\n");
                 if (receivedString != "") {
                     QString str;
                     str = str.fromUtf8(receivedString.c_str());
+                    QRegularExpression re("(\r\n|\r|\n)$");
+                    str = str.replace(re, "");
+
                     emit rx(str);
                     interpretString(str);
                 }
