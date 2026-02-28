@@ -34,7 +34,7 @@ contains(QMAKE_TARGET.arch, x86_64) {
     message("Compiling for a 64-bit system")
     X64 = true
 }
-
+CONFIG += c++17
 isEmpty(X64) {
   INCLUDEPATH += f:/usr/lib32/openssl3/include
   LIBS += -L/usr/local/lib

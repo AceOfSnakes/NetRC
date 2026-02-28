@@ -18,6 +18,7 @@
 #include <QObject>
 #include <QDataStream>
 #include <QMetaType>
+#include <QMetaEnum>
 #include <QVariant>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>

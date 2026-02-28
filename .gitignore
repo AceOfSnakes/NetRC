@@ -3,4 +3,5 @@
 *.pro.user
 build/*
 rpm/*
+rpm
 *.list

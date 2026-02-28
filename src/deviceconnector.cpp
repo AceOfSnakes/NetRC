@@ -25,6 +25,7 @@
 #include "filedialogwithhistory.h"
 #include "ui_deviceconnector.h"
 #include "rcsettings.h"
+#include "crypto.h"
 #include "autosearchdialog.h"
 
 
