@@ -25,6 +25,7 @@
 #include <QUdpSocket>
 #include <QListWidgetItem>
 #include <QSettings>
+#include "crypto.h"
 
 using namespace std;
 namespace Ui {
@@ -45,7 +46,9 @@ public:
     QTcpSocket* socket = nullptr;
 private slots:
     void _dataAvailable(){emit dataAvailable();}
-    void _tcpError(QAbstractSocket::SocketError socketError){emit tcpError(socketError);}
+    void _tcpError(QAbstractSocket::SocketError socketError){
+        emit tcpError(socketError);
+    }
     void _tcpConnected(){emit tcpConnected();}
     void _tcpDisconnected(){emit tcpDisconnected();}
 signals:
@@ -60,6 +63,8 @@ class AutoSearchDialog : public QDialog
     Q_OBJECT
 private:
     QString circle = "⬤";
+    Crypto::CryptoSettings cryptoSettings;
+    bool cryptoEnabled = false;
 public:
     enum DebugColor { inboundColor, outboundColor , alertColor, informationColor};
     QMap<DebugColor, QColor> mapColored {
@@ -84,6 +89,25 @@ public:
     QVector<RemoteDevice*>  deviceInList;
     Ui::AutoSearchDialog *ui;
 
+    void applyCryptoSettings(Crypto::CryptoSettings sets) {
+        cryptoSettings = sets;
+        if(cryptoEngine != nullptr) {
+            delete cryptoEngine;
+            cryptoEngine = nullptr;
+        }
+        cryptoEngine = new Crypto(cryptoSettings);
+        qDebug() << "AutoSearchDialog cryptoSettings" << cryptoSettings;
+        cryptoEnabled = true;
+    }
+
+    void resetCryptoSettings() {
+        if(cryptoEngine != nullptr) {
+            delete cryptoEngine;
+            cryptoEngine = nullptr;
+        }
+        cryptoEnabled = false;
+    }
+
 public slots:
     void showDebug(const QString &value, const AutoSearchDialog::DebugColor &);
 
@@ -92,11 +116,13 @@ protected:
     QString pingCommand;
     QString pingResponseStart;
     QString pingResponseStartOff;
-
+    Crypto  *cryptoEngine = nullptr;
     QMap<QString,RemoteDevice*>  remoteDevices;
-    QVector<QUdpSocket*>    multicatsSockets;
-    QHostAddress            groupAddress;
+    QVector<QUdpSocket*>         multicatsSockets;
+    QHostAddress                 groupAddress;
+
     QString removeDevice(QMap<QString,RemoteDevice*> &remoteDevices, RemoteDevice* device);
+
     void sendMsg();
     void reconnect(QString & key,QString & ip,int port,RemoteDevice* device);
 private slots:

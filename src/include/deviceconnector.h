@@ -32,7 +32,7 @@ class DeviceConnector : public QDialog
 {
     Q_OBJECT
 private:
-    AutoSearchDialog *autoSearchDialog = nullptr;
+    AutoSearchDialog   *autoSearchDialog = nullptr;
     QRegularExpression reIP; //("[.]");
     void applyCryptoToUI(QGridLayout * layout);
     void applyCryptoBlockToUI(QGridLayout * layout, QString);

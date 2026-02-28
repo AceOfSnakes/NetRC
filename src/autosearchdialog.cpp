@@ -58,6 +58,7 @@ void RemoteDevice::connectRemoteDevice(QString ip, unsigned int port) {
 
 RemoteDevice::~RemoteDevice() {
     if(socket != nullptr) {
+        socket->abort();
         delete socket;
     }
 }
@@ -84,7 +85,8 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
     foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
         if (iface.flags() & QNetworkInterface::IsUp && !(iface.flags() & QNetworkInterface::IsLoopBack)) {
             QUdpSocket* socket = new QUdpSocket(this);
-            if (!socket->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
+            if (!socket->bind(QHostAddress::AnyIPv4, 0,
+                              QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
                 delete socket;
                 continue;
             }
@@ -149,14 +151,24 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
 }
 
 AutoSearchDialog::~AutoSearchDialog() {
-    foreach (RemoteDevice* tmp, remoteDevices) {
-        delete tmp;
+
+    // foreach (RemoteDevice* tmp, remoteDevices) {
+    //     qDebug() << "SocketState" << tmp->socket->state();
+    //     qDebug() << tmp;
+    //     tmp->socket->abort();
+    //     delete tmp;
+    // }
+    // remoteDevices.clear();
+    // foreach (RemoteDevice* tmp, deviceInList) {
+    //     qDebug() << "deviceInList SocketState" << tmp->socket->state();
+    //     qDebug() << tmp;
+    //      tmp->socket->abort();
+    //      delete tmp;
+    // }
+    // deviceInList.clear();
+    if(cryptoEngine != nullptr) {
+        delete cryptoEngine;
     }
-    remoteDevices.clear();
-    foreach (RemoteDevice* tmp, deviceInList) {
-        delete tmp;
-    }
-    deviceInList.clear();
 
     delete ui;
 }
@@ -255,8 +267,6 @@ void AutoSearchDialog::newDevice(QString , QString ip, QString location) {
     QNetworkAccessManager mgr;
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
-    // the HTTP request
-
     QString modelName;
 
     QNetworkRequest req(QUrl(QString(location.toLatin1())));
@@ -297,8 +307,12 @@ void AutoSearchDialog::tcpConnected() {
     QObject* sender = QObject::sender();
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
     emit processRequest(QString("%1 %2 ").arg(device->ip).arg(device->port).append(pingCommand));
-
-    device->socket->write(QString().append(pingCommand).append("\r\n").toLatin1().data());
+    // Write ping command
+    QByteArray sendCmd = QString().append(pingCommand).append("\r\n").toLatin1().data();
+    if(cryptoEnabled) {
+        sendCmd = cryptoEngine->encrypt(QString().append(pingCommand).append("\r").toLatin1());
+    }
+    device->socket->write(sendCmd);
 }
 
 void AutoSearchDialog::tcpDisconnected() {
@@ -308,7 +322,10 @@ QString AutoSearchDialog::removeDevice(QMap<QString,RemoteDevice*>  &m_RemoteDev
     foreach(QString key,m_RemoteDevices.keys()) {
         if(device == m_RemoteDevices.value(key)) {
             m_RemoteDevices.remove(key);
-            int index=key.lastIndexOf("/");
+            int index = key.lastIndexOf("/");
+            qDebug() << "Remove device state" << device->socket->state();
+            // device->socket->abort();
+            // delete device->socket;
             key.truncate(index);
             return key;
         }
@@ -347,6 +364,12 @@ void AutoSearchDialog::readString() {
     QString str;
 
     str = str.fromUtf8(m_ReceivedString.c_str());
+    if(cryptoEnabled) {
+        str = cryptoEngine->decrypt(QByteArray::fromRawData(m_ReceivedString.c_str(), count));
+        QRegularExpression re("(\r\n|\r|\n)(.*)$");
+        str = str.replace(re, "");
+    }
+
     QRegularExpression re("(\r\n|\r|\n)$");
     str = str.replace(re, "");
 

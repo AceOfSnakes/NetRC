@@ -45,8 +45,7 @@ DeviceConnector::DeviceConnector(QVariant &sets, QWidget *parent) :
     if(!family.isEmpty()) {
         ui->deviceProtocol->addItem(family);
     }
-    if(settings.toMap().value("ping"
-                               "").toString().isEmpty()) {
+    if(settings.toMap().value("ping").toString().isEmpty()) {
         ui->groupBoxConnect->setEnabled(false);
         ui->deviceProtocol->setEnabled(true);
     }
@@ -111,7 +110,9 @@ void DeviceConnector::setDevice(QString deviceFamily, QString device,
 
 void DeviceConnector::autoSearchClicked() {
     do {
-        delete autoSearchDialog;
+        if(autoSearchDialog != nullptr) {
+            delete autoSearchDialog;
+        }
         autoSearchDialog = new AutoSearchDialog(this,
                                                 settings.toMap().value("pingCommands").toList().at(0).toString(),
                                                 settings.toMap().value("pingResponseOk").toString(),
@@ -121,11 +122,17 @@ void DeviceConnector::autoSearchClicked() {
                                          .append(". Auto Search \"")
                                          .append(settings.toMap().value("family").toString()
                                                  .append("\"")));
+        if(cryptoEnabled) {
+            autoSearchDialog->applyCryptoSettings(cryptoSettings);
+        } else {
+            autoSearchDialog->resetCryptoSettings();
+        }
 
-        /*connect(this, SIGNAL(send(const Qstring&)),
+        /*
+        connect(this, SIGNAL(send(const Qstring&)),
                 autoSearchDialog,
                 SLOT(showDebug(const QString&)));
-*/
+        */
         autoSearchDialog->exec();
     } while(autoSearchDialog->result == 2);
 
@@ -145,6 +152,7 @@ void DeviceConnector::autoSearchClicked() {
         ui->line_DeviceName->setText(autoSearchDialog->selectedDevice);
     }
     delete autoSearchDialog;
+    autoSearchDialog = nullptr;
 }
 QString DeviceConnector::getIpAddress() {
     return ui->lineEditIP1->text().append(".").append(ui->lineEditIP2->text()).append(".")
@@ -159,8 +167,7 @@ void DeviceConnector::setIpAddress(QString ip1, QString ip2, QString ip3, QStrin
     ui->lineEditIPPort->setText(port);
 }
 
-void DeviceConnector::applyButtonClicked()
-{
+void DeviceConnector::applyButtonClicked() {
     QString addr = getIpAddress();
 
     deviceIPAddress = addr;
@@ -369,11 +376,11 @@ void DeviceConnector::reloadCryptoSettings(bool reloadCrypto) {
         }
         applyCryptoToUI(ui->cryptoGridLayout);
         ui->cryptoBox->setVisible(true);
-        ui->autoSearchButton ->setDisabled(true);
+        //ui->autoSearchButton ->setDisabled(true);
         cryptoEnabled = true;
     } else {
         ui->cryptoBox->setVisible(false);
-        ui->autoSearchButton ->setDisabled(false);
+        //ui->autoSearchButton ->setDisabled(false);
         cryptoEnabled = false;
     }
 
