@@ -22,5 +22,5 @@ Connect and add | Auto search | Remove device protocol
 # Known devices
 [OPPO UDP-203](../OPPO_UDP-203) | [Pioneer BDP-140](../Pioneer_BDP-140) | [Pioneer VSX-923](../Pioneer_VSX923) | [Pioneer VSX-923 Pass Trough](../Pioneer_VSX923) | LG-QNED86A6A
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![OPPO UDP-203](../devices/Oppo-203.png) | ![Pioneer BDP-140](../devices//BDP-140.png) | ![Pioneer VSX-923](../devices//VSX-923.png) | ![Pioneer VSX-923](../devices//VSX-923-pt.png) ![LG-QNED86A6A](../devices/LG.png) 
+![OPPO UDP-203](../devices/Oppo-203.png) | ![Pioneer BDP-140](../devices//BDP-140.png) | ![Pioneer VSX-923](../devices//VSX-923.png) | ![Pioneer VSX-923](../devices//VSX-923-pt.png) | ![LG-QNED86A6A](../devices/LG.png) 
 
