@@ -1,5 +1,4 @@
 NetRC opt/NetRC
 settings/*  opt/NetRC/settings
-#src/*.json  opt/avrpioremote
 src/images/NetRC.png opt/NetRC
 debian/*.desktop usr/share/applications

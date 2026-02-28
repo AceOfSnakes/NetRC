@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+./prepare
+pwd
+qmake
+make

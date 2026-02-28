@@ -1,12 +1,13 @@
-TARGET=/tmp/xxx
-SOURCE=./
-rm -rf $TARGET
-mkdir -p $TARGET/debian
-cp ${SOURCE}/debian/ -r $TARGET/
-cp -r ../src/ $TARGET/src/
-cp -r ../settings/ $TARGET/settings/
-cp  ../* $TARGET/
-cd $TARGET
-ln -s /usr/bin/qmake6 ./qmake
-pwd
-dpkg-buildpackage -b -uc -us -d
+#!/bin/bash 
+
+PWDFROM=.
+
+. ./prepare.sh
+echo "--->" $PWDFROM
+cd $PWDFROM
+
+echo "==============================================================="
+echo $0 PWD: $(pwd)
+echo "==============================================================="
+
+dpkg-buildpackage -B -uc -us --hook-done='for f in ../*amd64.deb; do mv "$f" "${f%%_amd64.deb}_$(uname -m).deb"; done'

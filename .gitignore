@@ -2,3 +2,5 @@
 *.obj
 *.pro.user
 build/*
+rpm/*
+*.list

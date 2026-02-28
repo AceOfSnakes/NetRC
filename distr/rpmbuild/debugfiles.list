@@ -1,0 +1,4 @@
+%dir /usr/lib/debug
+%dir /usr/lib/debug/opt
+%dir /usr/lib/debug/opt/NetRC
+/usr/lib/debug/opt/NetRC/NetRC-26.03-1.x86_64.debug

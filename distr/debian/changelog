@@ -1,3 +1,9 @@
+netrc (26.03) RELEASED; urgency=medium
+
+  * Add LG TV support with crypted messages exchange
+
+ -- Ace Of Snakes <AceOfSnakesMain@gmail.com>  Sun, 01 Mar 2026 00:00:00 +0300
+
 netrc (25.04) RELEASED; urgency=medium
 
   * Solve some problems with icons

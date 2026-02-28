@@ -2,25 +2,40 @@
 
 # See debhelper(7) (uncomment to enable).
 # Output every command that modifies files on the build system.
-#export DH_VERBOSE = 1
-
+export DH_VERBOSE = 1
+export DEB_BUILD_ARCH=$(uname -m)
 
 # See FEATURE AREAS in dpkg-buildflags(1).
-#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 # See ENVIRONMENT in dpkg-buildflags(1).
 # Package maintainers to append CFLAGS.
 #export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
 # Package maintainers to append LDFLAGS.
 #export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
-
-
 %:
 	dh $@ --buildsystem qmake6
 
 
-# dh_make generated override targets.
-# This is an example for Cmake (see <https://bugs.debian.org/641051>).
+# Create binary tarball for RPM build
+
+DEB_SOURCE := $(shell dpkg-parsechangelog --show-field Source)
+DEB_VERSION := $(shell dpkg-parsechangelog --show-field Version)
+DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+
+override_dh_auto_install:
+	$(MAKE) install INSTALL_ROOT=$(CURDIR)/debian/netrc
+
+override_dh_install:
+	dh_install
+	tar --numeric-owner --owner=0 --group=0  \
+	 -cJf /tmp/NetRC/../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_BUILD_ARCH).txz \
+	 -C debian/netrc .
+
+#This is an example for Cmake (see <https://bugs.debian.org/641051>).
 #override_dh_auto_configure:
 #	dh_auto_configure -- \
-#	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
+#	override_dh_builddeb:
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip
