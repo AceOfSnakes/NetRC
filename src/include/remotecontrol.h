@@ -42,7 +42,7 @@ class RemoteControl : public QMainWindow
 
     DeviceInterface    deviceInterface;
     bool               offlineStatus;
-    bool               deviceOnline;
+    bool               deviceOnline = false;
     QSignalMapper*     signalMapper;
     unsigned int       deviceIpPort = 0;
     QPixmap            img;

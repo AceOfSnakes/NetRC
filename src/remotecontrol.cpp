@@ -54,7 +54,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     deviceInterface(),
     ui(new Ui::RemoteControl)
 {
-
+    qDebug() << "start";
     defaultLabels.insert("channel", "Ch");
     defaultLabels.insert("volume", "Vol");
 
@@ -365,6 +365,7 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     int  offset = 0;
     uint buttons_count = 3;
     // Check panel settings
+
     QMap<QString, QVariant>sets = buttons.at(0).toVariant().toMap();
     uint columns = sets.value("columns").toUInt();
     QString group = sets.value("group").toString();
@@ -913,7 +914,7 @@ void RemoteControl::reloadLatestDevice() {
     sets.endGroup();
     sets.endGroup();
 
-    if(RCSettings::isSaveLatestDeviceEnabled()) {
+    if(RCSettings::isSaveLatestDeviceEnabled() && !device.isEmpty()) {
         reloadAndReconnect(QString(device).replace("/", "@@"));
     }
 }
