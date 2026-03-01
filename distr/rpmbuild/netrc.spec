@@ -32,8 +32,8 @@ qmake6 NetRC.pro
 
 mkdir -p %{buildroot}
 
-cp -a settings/* %{buildroot}/
-cp -a NetRC %{buildroot}/
+#cp -a settings/* %{buildroot}/
+#cp -a NetRC %{buildroot}/
 
 %install
 #rm -rf %{buildroot}
