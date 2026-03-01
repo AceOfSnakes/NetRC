@@ -31,6 +31,23 @@ public:
     QMap<QString,QIcon> originalIcons;
     explicit Debug(DeviceInterface *deviceInterface, QWidget *parent = nullptr);
     ~Debug();
+    enum Color { inbound, outbound , alert, information};
+    QWidget * createColoredWidget(QString & x, Color );
+    Q_ENUM(Color);
+
+    QMap<Color, QColor> mapColored {
+            {inbound, QColorConstants::Svg::lightgreen},
+            {outbound, QColorConstants::Svg::lightblue},
+            {information, QColorConstants::Svg::lightgray},
+            {alert, QColorConstants::Svg::tomato}
+        };
+
+    QMap<Color, QString> mapNonColored {
+            {inbound, "<"},
+            {outbound, ">"},
+            {information, "-"},
+            {alert, "!"}
+        };
 
 public slots:
     void error(const QString str, bool crypted = false);
@@ -51,23 +68,6 @@ private:
 
     QString circle = "⬤";
 
-    enum Color { inbound, outbound , alert, information};
-    QWidget * createColoredWidget(QString & x, Color );
-    Q_ENUM(Color);
-
-    QMap<Color, QColor> mapColored {
-            {inbound, QColorConstants::Svg::lightgreen},
-            {outbound, QColorConstants::Svg::lightblue},
-            {information, QColorConstants::Svg::lightgray},
-            {alert, QColorConstants::Svg::tomato}
-        };
-
-    QMap<Color, QString> mapNonColored {
-            {inbound, "<"},
-            {outbound, ">"},
-            {information, "-"},
-            {alert, "!"}
-        };
 
     Ui::Debug *ui;
     bool pause = false;

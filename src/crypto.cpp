@@ -328,8 +328,8 @@ Crypto::KeySettings Crypto::parseKeyData(const QJsonObject& data) {
     retData.iterations = data["iterations"].toInt();
     QMetaEnum metaEnum = QMetaEnum::fromType<PasswordType>();
     retData.passwordType = static_cast<PasswordType>(metaEnum.keyToValue(qPrintable(data["passwordType"].toString())));
-    retData.password = QByteArray(data["password"].toString().toStdString());
-    retData.salt = QByteArray::fromHex(QByteArray(data["salt"].toString().toStdString()));
+    retData.password = QByteArray::fromStdString(data["password"].toString().toStdString());
+    retData.salt = QByteArray::fromHex(QByteArray::fromStdString(data["salt"].toString().toStdString()));
     return retData;
 }
 
@@ -337,7 +337,7 @@ Crypto::IvSettings Crypto::parseIvData(const QJsonObject& data) {
     IvSettings retData;
     retData.cipher = data["cipher"].toString();
     retData.bitsSize = data["bitsSize"].toInt();
-    retData.value = QByteArray::fromHex(QByteArray(data["value"].toString().toStdString()));
+    retData.value = QByteArray::fromHex(QByteArray::fromStdString(data["value"].toString().toStdString()));
     QMetaEnum metaEnum = QMetaEnum::fromType<IVType>();
     retData.type = static_cast<IVType>(metaEnum.keyToValue(qPrintable(data["type"].toString())));
     return retData;
