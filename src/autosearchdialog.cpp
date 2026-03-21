@@ -85,11 +85,13 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
     foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
         if (iface.flags() & QNetworkInterface::IsUp && !(iface.flags() & QNetworkInterface::IsLoopBack)) {
             QUdpSocket* socket = new QUdpSocket(this);
+
             if (!socket->bind(QHostAddress::AnyIPv4, 0,
                               QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
                 delete socket;
                 continue;
             }
+
             if (!socket->joinMulticastGroup(groupAddress)) {
                 delete socket;
                 continue;

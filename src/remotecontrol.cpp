@@ -95,11 +95,13 @@ RemoteControl::RemoteControl(QWidget *parent) :
     initConnect();
     reloadMenu();
     //qDebug() >>
-    restoreDebug();
     show();
     ui->connectButton->setEnabled(true);
     redraw();
     reloadLatestDevice();
+
+    restoreDebug();
+
     qApp->installEventFilter(this);
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, &RemoteControl::colorSchemeChanged);
