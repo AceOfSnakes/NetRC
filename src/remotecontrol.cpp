@@ -830,8 +830,15 @@ void RemoteControl::reconnect() {
                         QRegularExpression(QString("rc_lbl_").append(key)), Qt::FindChildrenRecursively);
             for(QLabel* label: std::as_const(labels)) {
                 label->setText(lbls.value(key));
-//                label->setText(
             }
+            QList<QPushButton*> btns = ui->centralWidget->findChildren<QPushButton*>(
+                        QRegularExpression(QString("rc_btn_").append(key)), Qt::FindChildrenRecursively);
+            for(QPushButton* btn: std::as_const(btns)) {
+                btn->setIcon(QIcon());
+                btn->setText(lbls.value(key));
+                btn->setStyleSheet("font: bold 11px Arial;");
+            }
+
         }
     }
     currentPingIndex = 0;

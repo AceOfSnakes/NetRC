@@ -18,6 +18,7 @@
 #include <QDialog>
 #include <QLabel>
 #include "deviceinterface.h"
+#include <QWidget>
 
 namespace Ui {
 class Debug;

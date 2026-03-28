@@ -633,6 +633,12 @@
          <property name="frameShape">
           <enum>QFrame::Shape::StyledPanel</enum>
          </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+         </property>
          <property name="showDropIndicator" stdset="0">
           <bool>false</bool>
          </property>
@@ -1160,7 +1166,7 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>9</pointsize>
               <bold>true</bold>
              </font>
             </property>

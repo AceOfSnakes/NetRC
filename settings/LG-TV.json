@@ -31,7 +31,7 @@
       [
          {
             "columns":3,
-            "position":3
+            "position":4
          },         
          {
             "btn":"back",
@@ -45,38 +45,27 @@
          {
             "btn":"exit",
             "title":"Exit"
-         }
-      ],
-      [
+         },
          {
-            "columns":3,
-            "position":5
-         },         
-         {
-            "btn":"text",
-            "title":"Text"
+            "btn":"list",
+            "title":"List"
          },            
-{},
          {
-            "btn":"topt",
-            "title":"T.Opt"
-         }
-      ],
-
-      [
-         {
-            "columns":4,
-            "position":6
+            "btn":"sleep",
+            "title":"Sleep"
          },         
-         {
-         },
-         {
-         },
-{},
+
          {
             "btn":"stop",
             "icon":":images/nav/play/stop.png"
-         },
+         }
+      ],
+      [
+         {
+            "columns":4,
+            "position":5
+         },         
+
          {
             "btn":"rewind",
             "icon":":images/nav/play/backward.png"
@@ -104,13 +93,20 @@
             "title":"Netflix"
          },
          {
-            "btn":"home",
-            "title":"Home"
+            "btn":"vkvideo",
+            "title":"VK Video"
          },
          {
             "btn":"youtube",
             "title":"Youtube"
-         }
+         },
+         {},
+         {
+            "btn":"home",
+            "title":"Home"
+         },
+	{}
+
       ]
 
    ],
@@ -124,8 +120,8 @@
    "exit":"KEY_ACTION exit",
    "stop":"KEY_ACTION stop",
 
-   "text":"KEY_ACTION teletext",
-   "topt":"KEY_ACTION teletextoption",
+   "list":"KEY_ACTION channellist",
+   "sleep":"KEY_ACTION sleepreserve",
 
    "forward":"KEY_ACTION fastforward",
    "rewind":"KEY_ACTION rewind",
@@ -159,7 +155,7 @@
    "number8":"KEY_ACTION number8",
    "number9":"KEY_ACTION number9",
 
-   "numberClear":"KEY_ACTION channellist",
+   "numberClear":"KEY_ACTION userguide",
    "numberGo":"KEY_ACTION programguide",
 
 
@@ -170,10 +166,12 @@
 
 
    "youtube" : "APP_LAUNCH youtube.leanback.v4",
+   "vkvideo" : "APP_LAUNCH vkvideo",
+
    "netflix" :"APP_LAUNCH netflix",
    "home" : "KEY_ACTION smarthome",
 
-   "back" : "KEY_ACTION smarthome",
+   "back" : "KEY_ACTION returnback",
    "settings" : "KEY_ACTION settingmenu",
 
    "pingResponseErr": "",
@@ -183,10 +181,15 @@
    "pingCommands":[
       "CURRENT_APP"
    ],
-
+  "labels": {
+       "numberClear": "Guide",
+       "numberGo": "Prg Guide"
+   },
+ 
    "lf": true,
    "family":"LG Smart TV",
 
+   "deviceNameRegExp":"APP:([^ ]*)",
 
    "crypto" : {
      "cipher": "aes-128-cbc",

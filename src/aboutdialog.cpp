@@ -15,7 +15,10 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "commons.h"
+#include "debug.h"
+
 #include <QImage>
+#include <QListWidget>
 #include <QGraphicsOpacityEffect>
 #include <QApplication>
 #include <QtGui>
@@ -65,6 +68,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
         // });
         connect(anim, SIGNAL(currentLoopChanged(int)), this, SLOT(changeContributor()));
     }
+
 }
 
 AboutDialog::~AboutDialog() {

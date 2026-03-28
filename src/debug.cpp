@@ -14,9 +14,14 @@
 */
 #include "debug.h"
 #include "QCheckBox"
+#include <QListWidget>
 #include <QMetaEnum>
 #include <QDateTime>
 #include "ui_debug.h"
+
+
+
+
 
 Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     QDialog(parent),
@@ -59,7 +64,6 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.setValue("debugEnabled", true);
-
     sets.endGroup();
 }
 
