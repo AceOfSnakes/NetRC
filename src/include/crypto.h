@@ -77,7 +77,7 @@ public:
     QByteArray encryptIV(QByteArray iv);
     QByteArray decryptIV(QByteArray iv);
     OSSL_PARAM *getSSLParams();
-public:
+//public:
     QByteArray adaptForCrypto(QByteArray arrayOld);
     
     void emitEncryptedMessage(unsigned char * label, unsigned char * data, int dataLength = 16);
@@ -94,7 +94,7 @@ public:
     static CryptoSettings parseCryptoData(const QJsonObject& data);
     static IvSettings parseIvData(const QJsonObject& data);
     static KeySettings parseKeyData(const QJsonObject& data);
-
+    static QString arrayToString(const QByteArray array);
 signals:
     void encoded(const QString &str);
     void decoded(const QString &str);

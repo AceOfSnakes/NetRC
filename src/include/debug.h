@@ -74,7 +74,7 @@ private:
     bool pause = false;
     QSet<QString> txFilter;
     QSet<QString> rxFilter;
-    QString arrayToString(const QByteArray array);
+//    QString arrayToString(const QByteArray array);
     bool isRqNotDisplayed(const QString str);
     bool isRsNotDisplayed(const QString str);
     void display(Color color, const QString str, bool crypted);

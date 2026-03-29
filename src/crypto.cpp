@@ -89,9 +89,32 @@ void Crypto::emitInfoMessage(unsigned char * label, unsigned char * data, int le
     emit info(message.append(QByteArray::fromRawData((const char*) data, length).toStdString()));
 }
 
+QString Crypto::arrayToString(const QByteArray array) {
+    QString ret = QByteArray::fromRawData((const char*)array,
+                                          array.length()).toHex(' ').toUpper();
+    ret.insert(0,"\n");
+    int correction = 0;
+    int originalLength = ret.length();
+    for(int i = 16; i < array.length(); i += 16 ) {
+        ret.insert(i*3 + correction, "\n");
+        ret.removeAt(i*3 + correction + 1);
+        correction += ret.length() - originalLength;
+    }
+    return ret;
+}
+
 QString Crypto::genarateMessage(unsigned char * label, unsigned char * data, int dataLength) {
-    return QString().asprintf("%-8s : ", label).append(
-        QByteArray::fromRawData((const char*) data, dataLength).toHex(' ').toUpper());
+    size_t len = strlen((char * )label) / 2;
+    QString str = QString((char*)label);
+    int totalLength = 15;
+    int padding = (totalLength + str.length()) / 2; // Bereken midden
+
+    QString centeredLabel = str.rightJustified(padding, ' ').leftJustified(totalLength, ' ');
+
+    return QString().asprintf("%15s %15s %15s", "===============",
+                              centeredLabel.toLocal8Bit().constData(),
+                              "===============").append(
+        arrayToString(QByteArray::fromRawData((const char*) data, dataLength)));
 }
 
 void Crypto::dispalayKeyVars(Direction direction) {

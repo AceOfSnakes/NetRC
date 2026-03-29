@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>420</width>
     <height>1144</height>
    </rect>
   </property>
@@ -21,13 +21,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>520</width>
+    <width>420</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>520</width>
+    <width>443</width>
     <height>1144</height>
    </size>
   </property>
@@ -48,7 +48,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>500</width>
+       <width>400</width>
        <height>0</height>
       </size>
      </property>
@@ -178,7 +178,7 @@
      <item row="0" column="10">
       <widget class="QCheckBox" name="coloredOutputCheckBox">
        <property name="text">
-        <string>Colored output</string>
+        <string>Colored</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -238,8 +238,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>500</width>
-       <height>501</height>
+       <width>400</width>
+       <height>480</height>
       </size>
      </property>
      <property name="focusPolicy">
@@ -260,7 +260,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>500</width>
+       <width>400</width>
        <height>48</height>
       </size>
      </property>
@@ -422,7 +422,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>500</width>
+       <width>400</width>
        <height>0</height>
       </size>
      </property>

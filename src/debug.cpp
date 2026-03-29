@@ -156,28 +156,14 @@ void Debug::read(const QString str, bool crypted) {
     display(inbound, str, crypted);
 }
 
-QString Debug::arrayToString(const QByteArray array) {
-    QString ret = QByteArray::fromRawData((const char*)array,
-                                          array.length()).toHex(' ').toUpper();
-    ret.insert(0,"\n");
-    int correction = 0;
-    int originalLength = ret.length();
-    for(int i = 16; i < array.length(); i += 16 ) {
-        ret.insert(i*3 + correction, "\n");
-        ret.removeAt(i*3 + correction + 1);
-        correction += ret.length() - originalLength;
-    }
-    return ret;
-}
-
 void Debug::writeArray(const QByteArray array, bool crypted) {
-    QString rq = arrayToString(array);
+    QString rq = Crypto::arrayToString(array);
     if(isRqNotDisplayed(rq)) { return; }
     display(outbound, rq, crypted);
 }
 
 void Debug::readArray(const QByteArray array, bool crypted) {
-    QString rs = arrayToString(array);
+    QString rs = Crypto::arrayToString(array);
     if(isRqNotDisplayed(rs)) { return; }
     display(inbound, rs, crypted);
 }
