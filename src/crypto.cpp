@@ -104,10 +104,10 @@ QString Crypto::arrayToString(const QByteArray array) {
 }
 
 QString Crypto::genarateMessage(unsigned char * label, unsigned char * data, int dataLength) {
-    size_t len = strlen((char * )label) / 2;
+
     QString str = QString((char*)label);
     int totalLength = 15;
-    int padding = (totalLength + str.length()) / 2; // Bereken midden
+    int padding = (totalLength + str.length()) / 2;
 
     QString centeredLabel = str.rightJustified(padding, ' ').leftJustified(totalLength, ' ');
 
@@ -118,7 +118,7 @@ QString Crypto::genarateMessage(unsigned char * label, unsigned char * data, int
 }
 
 void Crypto::dispalayKeyVars(Direction direction) {
-    //emitInfoMessage((unsigned char *)"Pass", (unsigned char *)pass, 8);
+
     switch (direction) {
     case outbound:
         emitEncryptedMessage((unsigned char *) "Pass",

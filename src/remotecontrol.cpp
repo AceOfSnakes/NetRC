@@ -45,6 +45,7 @@
 #include "commons.h"
 #include "deviceconnector.h"
 #include "rcsettings.h"
+#include "RemoteButton.h"
 #include "settings.h"
 
 RemoteControl::RemoteControl(QWidget *parent) :
@@ -66,6 +67,8 @@ RemoteControl::RemoteControl(QWidget *parent) :
                                       Qt::FindChildrenRecursively)) {
         originalIcons.insert(action->objectName(), action->icon());
     }
+    circle = new RemoteButton(ui->widget);
+    //circle->setObjectName("rc_btn_circle");
 
     this->setWindowIcon(QIcon(QString(":/images/").append(qApp->applicationName()).append(".png")));
     restoreSettings();
@@ -101,10 +104,10 @@ RemoteControl::RemoteControl(QWidget *parent) :
     reloadLatestDevice();
 
     restoreDebug();
-
     qApp->installEventFilter(this);
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, &RemoteControl::colorSchemeChanged);
+
 }
 
 void RemoteControl::colorSchemeChanged(Qt::ColorScheme scheme) {
@@ -587,6 +590,9 @@ void RemoteControl::connectDevice() {
         qDebug() << "connectDevice()" << deviceName;
         deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
     }
+    qDebug() << "Repaint circle";
+    circle->update();
+
 }
 
 void RemoteControl::updateDeviceInfo () {
@@ -641,7 +647,8 @@ void RemoteControl::enableControls(bool enable)
                 button->setEnabled(false);
             }
         }
-    };
+    }
+    circle->repaint();
 }
 
 void RemoteControl::onConnect() {
@@ -854,7 +861,6 @@ void RemoteControl::reconnect() {
         timer->setInterval(1000);
     }
     enabledButtons.clear();
-
 }
 void RemoteControl::iconChanged(QPushButton & button) {
     qDebug() << "IconChanged";

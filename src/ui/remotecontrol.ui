@@ -1358,46 +1358,6 @@
             <property name="spacing">
              <number>4</number>
             </property>
-            <item row="1" column="8">
-             <widget class="QPushButton" name="rc_btn_chUp">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Channel Up</string>
-              </property>
-              <property name="text">
-               <string>▲</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="rc_btn_volUp">
               <property name="minimumSize">
@@ -1432,213 +1392,18 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
-             <spacer name="horizontalSpacer_14">
+            <item row="4" column="3">
+             <spacer name="verticalSpacer_18">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>20</width>
+                <height>10</height>
                </size>
               </property>
              </spacer>
-            </item>
-            <item row="0" column="8">
-             <widget class="QLabel" name="rc_lbl_channel">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>12</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <bold>true</bold>
-                <kerning>true</kerning>
-               </font>
-              </property>
-              <property name="text">
-               <string>Ch</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="rc_lbl_volume">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>12</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Vol</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="8">
-             <widget class="QPushButton" name="rc_btn_chDown">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Channel Down</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>eevfvrfevg</string>
-              </property>
-              <property name="text">
-               <string>▼</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5">
-             <widget class="QPushButton" name="rc_btn_right">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-                <kerning>true</kerning>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Right</string>
-              </property>
-              <property name="text">
-               <string>⮞</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QPushButton" name="rc_btn_up">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Up</string>
-              </property>
-              <property name="text">
-               <string>⮝</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <widget class="QPushButton" name="rc_btn_down">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Down</string>
-              </property>
-              <property name="text">
-               <string>⮟</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
             </item>
             <item row="2" column="1">
              <widget class="QPushButton" name="rc_btn_mute">
@@ -1672,93 +1437,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="rc_btn_left">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Left</string>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LayoutDirection::RightToLeft</enum>
-              </property>
-              <property name="text">
-               <string>⮜</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="4">
-             <widget class="QPushButton" name="rc_btn_ok">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string>Ok</string>
-              </property>
-              <property name="text">
-               <string>OK</string>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="7">
+            <item row="2" column="5">
              <spacer name="horizontalSpacer_17">
               <property name="orientation">
                <enum>Qt::Orientation::Horizontal</enum>
@@ -1811,20 +1490,31 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="4">
-             <spacer name="verticalSpacer_18">
-              <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+            <item row="0" column="1">
+             <widget class="QLabel" name="rc_lbl_volume">
+              <property name="enabled">
+               <bool>false</bool>
               </property>
-              <property name="sizeHint" stdset="0">
+              <property name="maximumSize">
                <size>
-                <width>20</width>
-                <height>10</height>
+                <width>32</width>
+                <height>12</height>
                </size>
               </property>
-             </spacer>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Vol</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
             </item>
-            <item row="2" column="9">
+            <item row="2" column="7">
              <spacer name="horizontalSpacer_12">
               <property name="orientation">
                <enum>Qt::Orientation::Horizontal</enum>
@@ -1837,7 +1527,110 @@
               </property>
              </spacer>
             </item>
-            <item row="0" column="4">
+            <item row="2" column="2">
+             <spacer name="horizontalSpacer_14">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="6">
+             <widget class="QPushButton" name="rc_btn_chUp">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Channel Up</string>
+              </property>
+              <property name="text">
+               <string>▲</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="6">
+             <widget class="QPushButton" name="rc_btn_chDown">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Channel Down</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>eevfvrfevg</string>
+              </property>
+              <property name="text">
+               <string>▼</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
              <spacer name="verticalSpacer_17">
               <property name="orientation">
                <enum>Qt::Orientation::Vertical</enum>
@@ -1849,6 +1642,83 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="0" column="6">
+             <widget class="QLabel" name="rc_lbl_channel">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>12</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+                <kerning>true</kerning>
+               </font>
+              </property>
+              <property name="text">
+               <string>Ch</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" rowspan="3" colspan="4">
+             <widget class="QWidget" name="widget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>130</width>
+                <height>130</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>130</width>
+                <height>130</height>
+               </size>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item row="0" column="0">
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
            </layout>
           </item>

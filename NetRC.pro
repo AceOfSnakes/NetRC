@@ -76,6 +76,7 @@ TEMPLATE = app
 INCLUDEPATH += src/include/
 INCLUDEPATH += src/commons/include/
 SOURCES += src/main.cpp\
+        src/RemoteButton.cpp \
         src/commons/commons.cpp \
         src/commons/filedialogwithhistory.cpp \
         src/commons/settings.cpp \
@@ -94,6 +95,7 @@ HEADERS  += src/include/remotecontrol.h \
     src/commons/include/commons.h \
     src/commons/include/filedialogwithhistory.h \
     src/commons/include/settings.h \
+    src/include/RemoteButton.h \
     src/include/appsettings.h \
     src/include/debug.h \
     src/include/aboutdialog.h \
