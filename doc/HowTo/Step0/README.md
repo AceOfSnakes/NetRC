@@ -71,4 +71,4 @@ Or type your device IP
 
 Predefined | Custom
 ----------- | ------------
-![Predefined](images/predefined.png) | ![Custom](images/custom.png)  
+![Predefined](../../OPPO_UDP-203/online.png) | ![Custom](images/custom.png)  
