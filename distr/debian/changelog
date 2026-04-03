@@ -1,3 +1,9 @@
+netrc (26.04) RELEASED; urgency=medium
+
+  * add wheel button
+
+ -- Ace Of Snakes <AceOfSnakesMain@gmail.com>  Wed, 01 Apr 2026 00:00:00 +0300
+
 netrc (26.03) RELEASED; urgency=medium
 
   * Add LG TV support with crypted messages exchange

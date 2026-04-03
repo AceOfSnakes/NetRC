@@ -1,4 +1,5 @@
 NetRC opt/NetRC
 settings/*  opt/NetRC/settings
+src/commons/style/*  opt/NetRC/style
 src/images/NetRC.png opt/NetRC
 debian/*.desktop usr/share/applications

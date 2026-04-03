@@ -1,5 +1,5 @@
 Name:           netrc
-Version:        26.03
+Version:        26.04
 Release:        1%{?dist}
 Summary:        NetRC Qt application
 
@@ -51,6 +51,7 @@ mkdir -p %{buildroot}
 echo =========== Install Filder %{__pwd}
 
 cp -r rpm/SOURCES/settings %{buildroot}/opt/NetRC/settings/
+cp -r rpm/SOURCES/style %{buildroot}/opt/NetRC/style/
 cp -a rpm/SOURCES/NetRC %{buildroot}/opt/NetRC
 cp -a rpm/SOURCES/src/images/NetRC.png %{buildroot}/opt/NetRC/NetRC.png
 cp -a rpm/SOURCES/NetRC.desktop %{buildroot}/usr/share/applications/NetRC.desktop
@@ -59,6 +60,7 @@ cp -a rpm/SOURCES/NetRC.desktop %{buildroot}/usr/share/applications/NetRC.deskto
 /opt/NetRC/NetRC
 /opt/NetRC/NetRC.png
 /opt/NetRC/settings
+/opt/NetRC/style
 /usr/share/applications/NetRC.desktop
 
 %clean
@@ -66,5 +68,8 @@ cp -a rpm/SOURCES/NetRC.desktop %{buildroot}/usr/share/applications/NetRC.deskto
 %{__rm} -rf $RPM_BUILD_DIR/*
 
 %changelog
+* Wed Apr 01 2026 Ace Of Snakes <AceOfSnakes@gmail.com> - 26.04-1
+- Add wheel button
+
 * Sun Mar 01 2026 Ace Of Snakes <AceOfSnakes@gmail.com> - 26.03-1
 - Initial RPM release

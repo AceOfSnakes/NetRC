@@ -15,8 +15,9 @@ mkdir -p $RPM_ROOT/SOURCES
 cp -r ../../src $RPM_ROOT/SOURCES
 cp -r ../../*.pro $RPM_ROOT/SOURCES
 cp -r ../../settings $RPM_ROOT/SOURCES
+cp -r ../../src/commons/style $RPM_ROOT/SOURCES
 cp -r ../debian/*.desktop $RPM_ROOT/SOURCES
-export APP_VERSION_VALUE=26.03
+export APP_VERSION_VALUE=26.04
 # 3. 
 rpmbuild -ba \
   --define "_topdir $RPM_ROOT" \
