@@ -116,7 +116,6 @@ void RemoteButton::mouseReleaseEvent(QMouseEvent *event) {
     // Only trigger the signal if the user released the mouse 
     // over the same segment they originally pressed.
     if (releasedSegment != None && releasedSegment == m_pressedSegment) {
-        qDebug() << releasedSegment << "clicked";
         switch (releasedSegment) {
         case Up:
             emit up->click();
@@ -148,9 +147,6 @@ QBrush RemoteButton::getBrush(QStyleOptionButton option, DPadSegment segID) {
     QBrush color = segOption.palette.brush(QPalette::Active, QPalette::Button);
     QPushButton * button = getButton(segID);
     if (button != nullptr) {
-        qDebug() << button->objectName()
-                 << button->isEnabled()
-                 << button->isVisible();
         if(!button->isEnabled()) {
             return segOption.palette.brush(QPalette::Disabled, QPalette::Button);
         }

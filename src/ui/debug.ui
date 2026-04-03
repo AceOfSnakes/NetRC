@@ -170,6 +170,9 @@
      </property>
      <item row="0" column="4">
       <widget class="QCheckBox" name="cryptCcheckBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>Crypted ⚿</string>
        </property>
@@ -229,24 +232,17 @@
     </layout>
    </item>
    <item>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QListWidget" name="listWidget">
      <property name="minimumSize">
       <size>
-       <width>400</width>
+       <width>0</width>
        <height>480</height>
       </size>
      </property>
-     <property name="focusPolicy">
-      <enum>Qt::FocusPolicy::NoFocus</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
     </widget>
    </item>
@@ -800,7 +796,6 @@
   <tabstop>pingRs</tabstop>
   <tabstop>timeRs</tabstop>
   <tabstop>deviceRs</tabstop>
-  <tabstop>textEdit</tabstop>
  </tabstops>
  <resources>
   <include location="../resource.qrc"/>

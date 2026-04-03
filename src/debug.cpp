@@ -17,11 +17,9 @@
 #include <QListWidget>
 #include <QMetaEnum>
 #include <QDateTime>
+#include <QStringListModel>
+#include <QStandardItem>
 #include "ui_debug.h"
-
-
-
-
 
 Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
     QDialog(parent),
@@ -56,11 +54,13 @@ Debug::Debug(DeviceInterface *deviceInterface, QWidget *parent) :
 
     setMaximumSize(minimumSize());
 
-    QFont font = ui->textEdit->font();
+    QFont font = ui->listWidget->font();
     font.setFamily("Courier new");
 
     font.setStyleHint(QFont::Monospace, QFont::ForceOutline);
-    ui->textEdit->setFont(font);
+    //ui->textEdit->setFont(font);
+    ui->listWidget->setFont(font);
+
     QSettings sets(qApp->organizationName(), qApp->applicationName());
     sets.beginGroup("global");
     sets.setValue("debugEnabled", true);
@@ -123,32 +123,52 @@ void Debug::display(const Color color, const QString str, bool crypted) {
     QString htmlColor;
     QString circ = circle;
     QColor messageColor;
+    Color xcolor = color;
     if(crypted && !ui->cryptCcheckBox->isChecked()) {
         return;
     }
 
     if(ui->coloredOutputCheckBox->isChecked()) {
         messageColor = mapColored.value(color);
-        ui->textEdit->setTextColor(messageColor);
+        //ui->textEdit->setTextColor(messageColor);
     } else {
         circ = mapNonColored.value(color);
         messageColor = QColor( "lightgray" );
+        xcolor = information;
     }
-    ui->textEdit->setTextColor(messageColor);
-   // int row = ui->tableWidget->rowCount();
+    //ui->textEdit->setTextColor(messageColor);
 
-   //  ui->tableWidget->insertRow(row );
+    QString data =
+        QDateTime::currentDateTime()
+                       .time()
+                       .toString("HH:mm:ss:zzz")
+                       .append(" ")
+                       .append(QString(circ)
+                                   .append(crypted ? QString(" ⚿").append(
+                                                         str.startsWith("\n") ? "" : "\n")
+                                                   : " ")
+                                   .append(str));
+    auto list = data.split("\n");
+    foreach (auto dat, list) {
+        QLabel *label = new QLabel(dat);
+        label->setStyleSheet(QString("QLabel { color : ")
+                                 .append(mapColored.value(xcolor).name())
+                                 .append("}"));
 
-   //  ui->tableWidget->setCellWidget(row , 0, createColoredWidget(circ, color));
-   //  ui->tableWidget->setCellWidget(row , 1, createColoredWidget(QString().append(crypted? " ⚿ " :" "), color));
-   //  ui->tableWidget->setCellWidget(row , 2, createColoredWidget(QString().append(str), color));
-   // qDebug() << QDateTime::currentDateTime();
-    ui->textEdit->append(
-        QDateTime::currentDateTime().time().toString("HH:mm:ss:zzz")
-            .append(" ").append(QString(circ)
-            .append(crypted ?
-            QString(" ⚿").append(str.startsWith("\n")? "" :"\n"): " ")
-            .append(str)));
+        label->setFont(ui->listWidget->font());
+        QListWidgetItem *item = new QListWidgetItem();
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, label);
+
+    }
+    //ui->textEdit->append(data);
+
+
+    while (ui->listWidget->count() > ui->maxLines->text().toInt()) {
+        delete ui->listWidget->takeItem(0);
+    }
+    ui->listWidget->scrollToBottom();
+
 }
 
 void Debug::read(const QString str, bool crypted) {
@@ -194,7 +214,8 @@ void Debug::pauseClicked() {
 }
 
 void Debug::cleanDebugOutput() {
-    ui->textEdit->document()->clear();
+    //
+    ui->listWidget->clear();
 }
 
 void Debug::sendCommand() {
@@ -206,7 +227,7 @@ void Debug::clearCommandLine() {
 }
 
 void Debug::changeMaxLines() {
-    ui->textEdit->document()->setMaximumBlockCount(ui->maxLines->text().toInt());
+    //ui->textEdit->document()->setMaximumBlockCount(ui->maxLines->text().toInt());
 }
 
 void Debug::switchAll(int checkBoxStatus) {
