@@ -6,7 +6,6 @@ Summary:        NetRC Qt application
 URL:            https://github.com/AceOfSnakes/NetRC
 
 BuildArch:      x86_64
-Requires:       libQt6Core6 libQt6Gui6 libQt6Network6 libQt6Widgets6
 License:        GPLv3
 
 %description
