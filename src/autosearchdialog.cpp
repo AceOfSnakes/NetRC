@@ -121,8 +121,8 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
 
     connect(ui->debugCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         checked
-            ? ui->debugTextEdit->setVisible(true)
-            : ui->debugTextEdit->setVisible(false);
+            ? ui->listWidget->setVisible(true)
+            : ui->listWidget->setVisible(false);
     });
 
     //    void itemClicked(QListWidgetItem *item);
@@ -189,21 +189,24 @@ void AutoSearchDialog::changeEvent(QEvent *e) {
 void AutoSearchDialog::showDebug(const QString &value,
                                  const AutoSearchDialog::DebugColor &color) {
     QString circ = circle;
-//    if(ui->coloredOutputCheckBox->isChecked()) {
+
     QColor messageColor;
         messageColor = mapColored.value(color);
-        ui->debugTextEdit->setTextColor(messageColor);
-    // } else {
-    //     circ = mapNonColored.value(color);
-    //     messageColor = QColor( "lightgray" );
-    // }
-    ui->debugTextEdit->setTextColor(messageColor);
-    ui->debugTextEdit->append(
-        QDateTime::currentDateTime()
+    QString dat =         QDateTime::currentDateTime()
             .time()
             .toString("HH:mm:ss:zzz")
             .append(" ")
-            .append(QString(circle).append(" ").append(value)));
+                          .append(QString(circle).append(" ").append(value));
+
+    QLabel *label = new QLabel(dat);
+    label->setStyleSheet(QString("QLabel { color : ")
+                             .append(messageColor.name())
+                             .append("}"));
+
+    label->setFont(ui->listWidget->font());
+    QListWidgetItem *item = new QListWidgetItem();
+    ui->listWidget->addItem(item);
+    ui->listWidget->setItemWidget(item, label);
 }
 
 QString AutoSearchDialog::parseResponse(QNetworkReply *reply, QUrl &url) {

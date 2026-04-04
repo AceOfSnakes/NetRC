@@ -106,26 +106,16 @@ It can take some minutes, so please be patient. If after about 5 minutes your de
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="2" column="0" colspan="6">
-      <widget class="QTextEdit" name="debugTextEdit"/>
-     </item>
-     <item row="0" column="3">
-      <spacer name="horizontalSpacer_6">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+     <item row="0" column="4">
+      <widget class="QCheckBox" name="coloredDebugChackbox">
+       <property name="enabled">
+        <bool>false</bool>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="outboundLabel">
        <property name="text">
-        <string>⬤ Outbound</string>
+        <string>Colored output</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -156,16 +146,23 @@ It can take some minutes, so please be patient. If after about 5 minutes your de
        </property>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QCheckBox" name="coloredDebugChackbox">
-       <property name="enabled">
-        <bool>false</bool>
+     <item row="0" column="3">
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="outboundLabel">
        <property name="text">
-        <string>Colored output</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
+        <string>⬤ Outbound</string>
        </property>
       </widget>
      </item>
