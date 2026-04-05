@@ -13,6 +13,10 @@ NetRC also known as Network remote control. The base idea of this project is to 
 
 %define _rpmfilename %%{NAME}_%%{VERSION}_%%{ARCH}.rpm
 
+%clean
+# %{__rm} -rf $RPM_BUILD_ROOT
+# %{__rm} -rf $RPM_BUILD_DIR/*
+
 %prep
 # Do NOT assume any directory; extract tarball manually
 #%setup -q -T
@@ -62,9 +66,6 @@ cp -a rpm/SOURCES/NetRC.desktop %{buildroot}/usr/share/applications/NetRC.deskto
 /opt/NetRC/style
 /usr/share/applications/NetRC.desktop
 
-%clean
-%{__rm} -rf $RPM_BUILD_ROOT
-%{__rm} -rf $RPM_BUILD_DIR/*
 
 %changelog
 * Wed Apr 01 2026 Ace Of Snakes <AceOfSnakes@gmail.com> - 26.04-1
