@@ -4,11 +4,12 @@ What do You see from the scratch
 
 ![About W10](images/Original.png)
 
-Just click on icon with &nbsp;&nbsp;&nbsp;<img src="../../../src/images/connect-red.png" width="24" height="24"/>&nbsp;&nbsp;&nbsp; and select settings folder and file
+Just click on icon with &nbsp;&nbsp;&nbsp;<img src="../../../src/images/connect-red.png" width="24" height="24"/>&nbsp;&nbsp;&nbsp; 
 
 ![About W10](images/dev.png)
 
-Click on icon with plus udner "Device Protocol" and select desired file
+Click on icon with plus udner "Device Protocol" 
+
 ![About W10](images/Select-Device.png)
 
 ## Select file with wanted config and load it into application
