@@ -63,11 +63,15 @@ RemoteDevice::~RemoteDevice() {
     }
 }
 
-AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
-                                   QString pingResponseStart, QString pingResponseStartOff,
+AutoSearchDialog::AutoSearchDialog(QWidget *parent,
+                                   QString pingCommand,
+                                   QString pingResponseStart,
+                                   QString pingResponseStartOff,
+                                   QString trail,
                                    int prefferedPort) :
     QDialog(parent),
     result(0),
+    trailer(trail),
     selectedPort(0),
     prefferedPort(prefferedPort),
     ui(new Ui::AutoSearchDialog),
@@ -75,6 +79,7 @@ AutoSearchDialog::AutoSearchDialog(QWidget *parent, QString pingCommand,
     pingResponseStart(pingResponseStart),
     pingResponseStartOff(pingResponseStartOff),
     groupAddress("239.255.255.250")
+
 {
     setWindowFlags(WINDOW_FLAGS);
     ui->setupUi(this);
@@ -313,9 +318,10 @@ void AutoSearchDialog::tcpConnected() {
     RemoteDevice* device = dynamic_cast<RemoteDevice*>(sender);
     emit processRequest(QString("%1 %2 ").arg(device->ip).arg(device->port).append(pingCommand));
     // Write ping command
-    QByteArray sendCmd = QString().append(pingCommand).append("\r\n").toLatin1().data();
+
+    QByteArray sendCmd = QString().append(pingCommand).append(trailer).toLatin1().data();
     if(cryptoEnabled) {
-        sendCmd = cryptoEngine->encrypt(QString().append(pingCommand).append("\r").toLatin1());
+        sendCmd = cryptoEngine->encrypt(QString().append(pingCommand).append(trailer).toLatin1());
     }
     device->socket->write(sendCmd);
 }

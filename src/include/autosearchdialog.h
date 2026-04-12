@@ -75,12 +75,16 @@ public:
     };
 
     Q_ENUM(DebugColor);
-    explicit AutoSearchDialog(QWidget *parent = 0, QString pingCommand = "?RGD",
-                              QString pingResponseStart = "RGD", QString pingResponseStartOff = "",
+    explicit AutoSearchDialog(QWidget *parent = 0,
+                              QString pingCommand = "?RGD",
+                              QString pingResponseStart = "RGD",
+                              QString pingResponseStartOff = "",
+                              QString trailer = "",
                               int prefferedPort = 0);
     ~AutoSearchDialog();
 
     int                     result;
+    QString                 trailer;
     QString                 selectedFamily;
     QString                 selectedAddress;
     QString                 selectedDevice;
@@ -121,10 +125,10 @@ protected:
     QVector<QUdpSocket*>         multicatsSockets;
     QHostAddress                 groupAddress;
 
-    QString removeDevice(QMap<QString,RemoteDevice*> &remoteDevices, RemoteDevice* device);
+    QString removeDevice(QMap<QString, RemoteDevice*> &remoteDevices, RemoteDevice* device);
 
     void sendMsg();
-    void reconnect(QString & key,QString & ip,int port,RemoteDevice* device);
+    void reconnect(QString & key,QString & ip, int port, RemoteDevice* device);
 private slots:
     void newDevice(QString name, QString ip, QString location);
     void readString();

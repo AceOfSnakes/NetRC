@@ -85,20 +85,20 @@ void DeviceInterface::connectToDevice(const QString& deviceIpAddress,
     socket.abort();
 
     socket.connectToHost(deviceIpAddress,
-                         deviceIpPort,
+                         deviceIpPort/*,
                          QAbstractSocket::ReadWrite,
-                         QAbstractSocket::IPv4Protocol);
+                         QAbstractSocket::IPv4Protocol*/);
     //socket->connectToHost(ip, port);
     // try to connect ar abort after 0.5 seconds
 
-    int attempts = 0;
-    if(!socket.waitForConnected(100)) {
-        attempts ++;
-        if (attempts == 5) {
-            emit err(QString().asprintf("Connection aborted to %s").arg(deviceIpAddress));
-            socket.abort();
-        }
-    }
+    // int attempts = 0;
+    // if(!socket.waitForConnected(100)) {
+    //     attempts ++;
+    //     if (attempts == 5) {
+    //         emit err(QString().asprintf("Connection aborted to %s").arg(deviceIpAddress));
+    //         socket.abort();
+    //     }
+    // }
 
 }
 
@@ -131,6 +131,7 @@ bool DeviceInterface::isConnected() {
 
 void DeviceInterface::readString() {
     // read all available data
+
     //int count = socket.bytesAvailable();
     std::vector<char> data;
     int count = 0;
@@ -307,16 +308,19 @@ QByteArray DeviceInterface::decrypt(QByteArray& data) {
 }
 
 QString DeviceInterface::applyTrailer(QString) {
-    return QString().append(deviceSettings.value("crlf", false).toBool() ? "\r\n":
-                         deviceSettings.value("lf", false).toBool() ? "\0xD" :"\0xA");
+
+    QVariant trailer = deviceSettings.value("trailer");
+
+    return QString().append(trailer.isValid() && !trailer.toString().isEmpty()?
+                                trailer.toString() :
+                                "\r");
 }
 
 QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
     emit tx(data);
     if(crypted) {
-        //emit warn(data);
          QByteArray array = crypto->encrypt(
-            QString(data).append("\r").toUtf8());
+            applyTrailer(QString(data)).toUtf8());
         // Decrypt crypted
         // emit warn("---- Self decrypt start ----");
         // emit rx(crypto->decrypt(array));
