@@ -83,8 +83,23 @@ void DeviceInterface::connectToDevice(const QString& deviceIpAddress,
     }
     disconnect();
     socket.abort();
-    socket.connectToHost(deviceIpAddress, deviceIpPort, QAbstractSocket::ReadWrite,
+
+    socket.connectToHost(deviceIpAddress,
+                         deviceIpPort,
+                         QAbstractSocket::ReadWrite,
                          QAbstractSocket::IPv4Protocol);
+    //socket->connectToHost(ip, port);
+    // try to connect ar abort after 0.5 seconds
+
+    int attempts = 0;
+    if(!socket.waitForConnected(100)) {
+        attempts ++;
+        if (attempts == 5) {
+            emit err(QString().asprintf("Connection aborted to %s").arg(deviceIpAddress));
+            socket.abort();
+        }
+    }
+
 }
 
 void DeviceInterface::disconnect() {
@@ -116,27 +131,33 @@ bool DeviceInterface::isConnected() {
 
 void DeviceInterface::readString() {
     // read all available data
-    int count = socket.bytesAvailable();
+    //int count = socket.bytesAvailable();
     std::vector<char> data;
+    int count = 0;
+    int prevSize = 0;
+    while ((count = socket.bytesAvailable()) > 0) {
 
-    data.resize(count + 1);
-    socket.read(&data[0], count);
-    data[count] = '\0';
+        data.resize(prevSize + count + 1);
+        socket.read(&data[prevSize], count);
 
+        prevSize += count;
+        data[prevSize] = '\0';
+
+    }
     // split lines
     int lineLength = 0;
     string receivedString;
     int lineStartPos = 0;
 
     if(crypted) {
-        QByteArray response = QByteArray::fromRawData(data.data(), count);
+        QByteArray response = QByteArray::fromRawData(data.data(), data.size() -1);
         emit rxArray(response, true);
         QString res = decrypt(response);
-        res= res.trimmed();
+        res = res.trimmed();
         interpretString(res);
     }
     else {
-        for(int i = 0; i < count; i++) {
+        for(int i = 0; i < data.size(); i++) {
             if (data[i] != '\n' && data[i] != '\r') {
                 continue;
             }
@@ -157,7 +178,7 @@ void DeviceInterface::readString() {
             }
             lineStartPos = i + 1;
         }
-        if (lineStartPos < count) {
+        if (lineStartPos < data.size()) {
             receivedString.append((const char*)&data[lineStartPos]);
         }
     }
@@ -167,18 +188,25 @@ void DeviceInterface::tcpError(QAbstractSocket::SocketError socketError) {
     QString str;
     switch (socketError) {
     case QAbstractSocket::RemoteHostClosedError:
-        str = QString("Host closed connection: %1").arg(socket.errorString());
+        socket.resume();
+        str = QString("Host closed connection");
+        // socket.connectToHost(socket.peerName(),
+        //                      socket.peerPort(),
+        //                      QAbstractSocket::ReadWrite,
+        //                      QAbstractSocket::IPv4Protocol);
         break;
     case QAbstractSocket::HostNotFoundError:
-        str = QString("Host not found: %1").arg(socket.errorString());
+        str = QString("Host not found");
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        str = QString("Host refused connection: %1").arg(socket.errorString());
+        str = QString("Host refused connection");
         break;
     default:
-        str = QString("The following error occurred: %1.").arg(socket.errorString());
+        str = QString("The following error occurred");
     }
     emit err(str);
+    emit err(socket.errorString());
+    socket.abort();
     emit commError(str);
 }
 
@@ -218,7 +246,6 @@ bool DeviceInterface::isPingRs(const QString& data) {
 void DeviceInterface::interpretString(const QString& dataOrigin) {
     bool deviceNameMatch = deviceNameRegex.isValid() ?
                                deviceNameRegex.match(dataOrigin).hasMatch() : false;
-
     if(isDeviceIdRs(dataOrigin)) {
         QString newDeviceId = deviceIdRegex.match(dataOrigin).captured(1);
         if(newDeviceId != deviceId) {

@@ -1001,6 +1001,9 @@ bool RemoteControl::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void RemoteControl::specialControl(const QString control, bool enabled) {
+    if(!offlineStatus) {
+      return;
+    }
     enabledButtons.clear();
     QList<QPushButton*>value = buttonGroups.value(control);
     foreach(QPushButton* btn, value) {
