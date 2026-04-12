@@ -307,11 +307,11 @@ QByteArray DeviceInterface::decrypt(QByteArray& data) {
     return data;
 }
 
-QString DeviceInterface::applyTrailer(QString) {
+QString DeviceInterface::applyTrailer(QString data) {
 
     QVariant trailer = deviceSettings.value("trailer");
 
-    return QString().append(trailer.isValid() && !trailer.toString().isEmpty()?
+    return QString(data).append(trailer.isValid() && !trailer.toString().isEmpty()?
                                 trailer.toString() :
                                 "\r");
 }
@@ -328,7 +328,7 @@ QByteArray DeviceInterface::encrypt(const QString& data, const char *) {
         // emit tx(array.toHex(' ').toUpper());
         return array;
     }
-    return QString(data)
+    return QString()
          .append(applyTrailer(data))
          .toLatin1();
 }
