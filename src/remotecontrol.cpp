@@ -357,7 +357,7 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     QString panelName = QString().asprintf("Panel_%d", panelIdx);
     widInt->setObjectName(panelName);
     QGridLayout* layout = new QGridLayout(widInt);
-    layout->setContentsMargins(9, 6, 9, 0);
+    layout->setContentsMargins(9, 3, 9, 0);
     layout->setSpacing(3);
 
     uint row , column = 0;
