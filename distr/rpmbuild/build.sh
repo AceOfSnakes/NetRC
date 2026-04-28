@@ -31,6 +31,7 @@ cd "$RPM_ROOT/.."
 rpmbuild -ba \
   --define "_topdir $RPM_ROOT" \
   --build-in-place \
+  --define "debug_package %{nil}" \
   netrc.spec
 
 echo "========================================"
