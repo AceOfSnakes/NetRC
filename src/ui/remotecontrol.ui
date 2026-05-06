@@ -1382,7 +1382,11 @@
                <string>Volume Up</string>
               </property>
               <property name="text">
-               <string>▲</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/images/nav/circle/up.png</normaloff>:/images/nav/circle/up.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1480,7 +1484,11 @@
                <string>Volume Down</string>
               </property>
               <property name="text">
-               <string>▼</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/images/nav/circle/down.png</normaloff>:/images/nav/circle/down.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1562,7 +1570,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>12</pointsize>
+                <pointsize>18</pointsize>
                 <bold>true</bold>
                </font>
               </property>
@@ -1570,7 +1578,11 @@
                <string>Channel Up</string>
               </property>
               <property name="text">
-               <string>▲</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/images/nav/circle/up.png</normaloff>:/images/nav/circle/up.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1620,7 +1632,11 @@
                <string>eevfvrfevg</string>
               </property>
               <property name="text">
-               <string>▼</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/images/nav/circle/down.png</normaloff>:/images/nav/circle/down.png</iconset>
               </property>
               <property name="iconSize">
                <size>
