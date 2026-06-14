@@ -105,13 +105,6 @@ RemoteControl::RemoteControl(QWidget *parent) :
 
     restoreDebug();
     qApp->installEventFilter(this);
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, &RemoteControl::colorSchemeChanged);
-
-}
-
-void RemoteControl::colorSchemeChanged(Qt::ColorScheme scheme) {
-    qDebug()<< scheme;
 }
 
 QIcon RemoteControl::invertedIcon(QIcon icon) {

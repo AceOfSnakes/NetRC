@@ -23,6 +23,7 @@
 #include <QTimer>
 #include "deviceinterface.h"
 #include "debug.h"
+#include <qnamespace.h>
 #include "RemoteButton.h"
 
 namespace Ui {
@@ -120,7 +121,6 @@ private slots:
     void showMinimizedAll();
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
-    void colorSchemeChanged(Qt::ColorScheme scheme);
     void iconChanged(QPushButton& button);
 private:
     RemoteButton *circle;

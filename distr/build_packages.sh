@@ -19,7 +19,7 @@ echo "2. Compiling Binaries & Building Debian Packages (.deb & .txz)..."
 echo "================================================================="
 # -us -uc skips GPG signing, -b builds binary architecture assets only
 echo "PWD ========== $(pwd)"
-dpkg-buildpackage -us -uc -b && mv ../${PACKAGE_NAME}_$PACKAGE_VERSION* ../..
+dpkg-buildpackage -us -uc -b && mv ../${PACKAGE_NAME}*$PACKAGE_VERSION* ../..
 
 echo "================================================================="
 echo "3. Organizing RPM Sandboxed Workspace..."

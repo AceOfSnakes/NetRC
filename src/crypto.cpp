@@ -86,7 +86,8 @@ void Crypto::emitDecryptedMessage(unsigned char * label, unsigned char * data, i
 
 void Crypto::emitInfoMessage(unsigned char * label, unsigned char * data, int length) {
     QString message = genarateMessage(label, (unsigned char * ) "", 0);
-    emit info(message.append(QByteArray::fromRawData((const char*) data, length).toStdString()));
+    emit info(message.append(QString::fromUtf8((const char*) data, length)));
+//    emit info(message.append(QByteArray::fromRawData((const char*) data, length).toStdString()));
 }
 
 QString Crypto::arrayToString(const QByteArray array) {
@@ -97,7 +98,8 @@ QString Crypto::arrayToString(const QByteArray array) {
     int originalLength = ret.length();
     for(int i = 16; i < array.length(); i += 16 ) {
         ret.insert(i*3 + correction, "\n");
-        ret.removeAt(i*3 + correction + 1);
+        //ret.removeAt(i*3 + correction + 1);
+        ret.remove(i*3 + correction + 1, 1);
         correction += ret.length() - originalLength;
     }
     return ret;

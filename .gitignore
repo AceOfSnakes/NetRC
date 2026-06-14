@@ -1,7 +1,7 @@
 *.idx
 *.obj
 *.pro.user
-build/*
+build*/
 rpm/*
 rpm
 rpmbuild
@@ -12,3 +12,4 @@ rpmbuild
 */debian/*.log
 */debian/*.substvars
 *.list
+*.spec
