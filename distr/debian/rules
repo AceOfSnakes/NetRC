@@ -51,6 +51,7 @@ override_dh_auto_install:
 override_dh_install:
 	@echo ======================================================= override_dh_auto_install:
 	dh_install
+	dh_strip
 	tar --numeric-owner --owner=0 --group=0  \
 	 -cJf ../../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_BUILD_ARCH).txz \
 	 -C $(CURDIR)/debian/${DEB_SOURCE} .
@@ -63,4 +64,5 @@ override_dh_builddeb:
 override_dh_auto_clean:
 	@echo ======================================================= override_dh_auto_clean.
 	rm -rf build
+	rm -rf ../../$(DEB_SOURCE)*$(DEB_VERSION)*
 	-dh_auto_clean
