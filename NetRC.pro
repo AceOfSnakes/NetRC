@@ -8,6 +8,9 @@ unix {
     QMAKE_CC = gcc
     QMAKE_CXX = g++
     QMAKE_LINK = g++
+    TARGET = netrc
+} else {
+    TARGET = NetRC
 }
 
 static { # everything below takes effect with CONFIG += static
@@ -71,7 +74,6 @@ isEmpty(QMAKE_TARGET.arch) {
     }
 }
 
-TARGET = NetRC
 TEMPLATE = app
 INCLUDEPATH += src/include/
 INCLUDEPATH += src/commons/include/
@@ -126,17 +128,3 @@ DISTFILES += \
 
 RC_ICONS = src/NetRC.ico
 
-# ---- Install rules (required for Debian / RPM packaging) ----
-
-target.path = /opt/NetRC
-INSTALLS += target
-
-# Settings / data files
-settings.path = /opt/NetRC/settings
-settings.files = settings/*.json
-INSTALLS += settings
-
-# Desktop file (optional)
-desktop.path = /usr/share/applications
-desktop.files = netrc.desktop
-# INSTALLS += desktop

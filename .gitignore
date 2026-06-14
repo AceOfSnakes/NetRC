@@ -4,4 +4,11 @@
 build/*
 rpm/*
 rpm
+rpmbuild
+**/.debhelper/
+*/debian/debhelper-build-stamp
+*/debian/files
+*/debian/netrc/
+*/debian/*.log
+*/debian/*.substvars
 *.list

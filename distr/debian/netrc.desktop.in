@@ -1,15 +1,13 @@
 [Desktop Entry]
 Categories=Utility;Network
-Comment[en_US]=
 Comment=
-Exec=/opt/NetRC/NetRC -platform xcb
+Exec=/opt/netrc/netrc -platform xcb
 GenericName[en_US]=NetRC
 GenericName=NetRC
-Icon=/opt/NetRC/NetRC.png
+Icon=/opt/netrc/NetRC.png
 MimeType=
-Name[en_US]=NetRC
 Name=NetRC
-Path=/opt/NetRC
+Path=/opt/netrc
 StartupNotify=true
 Terminal=false
 TerminalOptions=

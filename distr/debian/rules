@@ -2,20 +2,22 @@
 
 # See debhelper(7) (uncomment to enable).
 # Output every command that modifies files on the build system.
-export DH_VERBOSE = 1
-export DEB_BUILD_ARCH=$(uname -m)
+#export DH_VERBOSE = 1
+
 
 # See FEATURE AREAS in dpkg-buildflags(1).
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 # See ENVIRONMENT in dpkg-buildflags(1).
 # Package maintainers to append CFLAGS.
 #export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
 # Package maintainers to append LDFLAGS.
 #export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
-%:
-	dh $@ --buildsystem qmake6
 
+
+%:
+	dh $@
+# --buildsystem qmake
 
 # Create binary tarball for RPM build
 
@@ -23,19 +25,42 @@ DEB_SOURCE := $(shell dpkg-parsechangelog --show-field Source)
 DEB_VERSION := $(shell dpkg-parsechangelog --show-field Version)
 DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 
+override_dh_auto_configure:
+	@echo ======================================================= override_dh_auto_configure
+	# 1. Dynamically generate the localized .desktop entries into the project root
+	mkdir -p build
+	#sed -e 's/\$$SUFFIX/-qt5/g' \
+	#    -e 's/\(Name=AVRPioRemote\)$$/\1 Qt5/g' \
+	#    debian/avrpioremote.desktop.in > build-qt5/avrpioremote-qt5.desktop
+	cp debian/${DEB_SOURCE}.desktop.in build/${DEB_SOURCE}.desktop
+	## Configure Qt5 build in its own directory
+	#cd build-qt5 && qmake QT_VERSIONC_MAJOR=5 ../*.pro
+	# Configure Qt6 build in its own directory
+	cd build && qmake6 QT_VERSION_MAJOR=6 ../../*.pro
+
+override_dh_auto_build:
+	@echo ======================================================= override_dh_auto_build
+	# Compile using standard parallel make commands
+	$(MAKE) -C build
+
 override_dh_auto_install:
-	$(MAKE) install INSTALL_ROOT=$(CURDIR)/debian/netrc
+	@echo ======================================================= override_dh_auto_install
+	$(MAKE) -C build install INSTALL_ROOT=$(CURDIR)/debian/${DEB_SOURCE}
+
 
 override_dh_install:
+	@echo ======================================================= override_dh_auto_install:
 	dh_install
 	tar --numeric-owner --owner=0 --group=0  \
-	 -cJf /tmp/NetRC/../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_BUILD_ARCH).txz \
-	 -C debian/netrc .
+	 -cJf ../../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_BUILD_ARCH).txz \
+	 -C $(CURDIR)/debian/${DEB_SOURCE} .
 
-#This is an example for Cmake (see <https://bugs.debian.org/641051>).
-#override_dh_auto_configure:
-#	dh_auto_configure -- \
-#	override_dh_builddeb:
-
+# Inside your debian/rules file
 override_dh_builddeb:
-	dh_builddeb -- -Zgzip
+	@echo ======================================================= override_dh_builddeb:
+	dh_builddeb
+
+override_dh_auto_clean:
+	@echo ======================================================= override_dh_auto_clean.
+	rm -rf build
+	-dh_auto_clean
