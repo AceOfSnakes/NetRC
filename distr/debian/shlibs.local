@@ -1,0 +1,13 @@
+libQt6Core 6 libqt6core6
+libQt6Gui 6 libqt6gui6
+libQt6Network 6 libqt6network6
+libQt6OpenGL 6 libqt6opengl6
+libQt6Widgets 6 libqt6widgets6
+libQt6Xml 6 libqt6xml6
+libQt5Core 5 libqt5core5
+libQt5Gui 5 libqt5gui5
+libQt5Network 5 libqt5network5
+libQt5Widgets 5 libqt5widgets5
+libQt5Xml 5 libqt5xml5
+libcrypto 3 libssl3
+libssl 3 libssl3
