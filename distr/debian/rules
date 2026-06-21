@@ -49,7 +49,7 @@ override_dh_auto_install:
 
 
 override_dh_install:
-	@echo ======================================================= override_dh_auto_install:
+	@echo ======================================================= override_dh_auto_install
 	dh_install
 	dh_strip
 	tar --numeric-owner --owner=0 --group=0  \
@@ -58,11 +58,15 @@ override_dh_install:
 
 # Inside your debian/rules file
 override_dh_builddeb:
-	@echo ======================================================= override_dh_builddeb:
+	@echo ======================================================= override_dh_builddeb
 	dh_builddeb
 
 override_dh_auto_clean:
-	@echo ======================================================= override_dh_auto_clean.
+	@echo ======================================================= override_dh_auto_clean
 	rm -rf build
 	rm -rf ../../$(DEB_SOURCE)*$(DEB_VERSION)*
 	-dh_auto_clean
+override_dh_gencontrol:
+	@echo ======================================================= override_dh_gencontrol
+	dh_gencontrol
+	find debian/ -type f -name "control" -exec sed -i 's/t64//g' {} +
