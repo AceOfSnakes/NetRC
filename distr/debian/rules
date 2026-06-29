@@ -69,4 +69,4 @@ override_dh_auto_clean:
 override_dh_gencontrol:
 	@echo ======================================================= override_dh_gencontrol
 	dh_gencontrol
-	find debian/ -type f -name "control" -exec sed -i 's/t64//g' {} +
+	find debian/ -type f -name "control" -exec sed -i 's/\(lib[a-zA-Z0-9+-]*\)t64/\0 | \1/g' {} +
