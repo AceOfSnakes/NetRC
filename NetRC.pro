@@ -5,10 +5,30 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 unix {
-    QMAKE_CC = gcc
-    QMAKE_CXX = g++
-    QMAKE_LINK = g++
+    # 1. Allow the Debian environment toolchain overrides
+    isEmpty(QMAKE_CC): QMAKE_CC = gcc
+    isEmpty(QMAKE_CXX): QMAKE_CXX = g++
+    isEmpty(QMAKE_LINK): QMAKE_LINK = g++
     TARGET = netrc
+
+    # 2. Get the Multiarch triplet dynamically from the build system
+    DEB_HOST_MULTIARCH = $$(DEB_HOST_MULTIARCH)
+    isEmpty(DEB_HOST_MULTIARCH) {
+        DEB_HOST_MULTIARCH = $$system(dpkg-architecture -qDEB_HOST_MULTIARCH 2>/dev/null)
+    }
+
+    # 3. Add the active architecture's system header folder
+    !isEmpty(DEB_HOST_MULTIARCH) {
+        # This will resolve to /usr/include/x86_64-linux-gnu for amd64 
+        # and /usr/include/aarch64-linux-gnu for arm64
+        INCLUDEPATH += /usr/include/$$DEB_HOST_MULTIARCH
+        DEPENDPATH  += /usr/include/$$DEB_HOST_MULTIARCH
+        LIBS        += -L/usr/lib/$$DEB_HOST_MULTIARCH
+    }
+    
+    # 4. Clean way to link OpenSSL dynamically via pkg-config
+    CONFIG += link_pkgconfig
+    PKGCONFIG += openssl
 } else {
     TARGET = NetRC
 }
