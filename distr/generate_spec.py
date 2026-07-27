@@ -105,6 +105,14 @@ def generate_spec():
 {pct}define _build_id_links none
 {pct}undefine _missing_build_ids_terminate_build
 
+# Translate RPM architectures to matching Debian .txz source file structures
+{pct}ifarch aarch64
+{pct}define deb_arch arm64
+{pct}endif
+{pct}ifarch x86_64
+{pct}define deb_arch amd64
+{pct}endif
+
 
 Name:           {name}
 Version:        {version}
@@ -114,7 +122,8 @@ Summary:        {summary}
 License:        GPLv3+
 URL:            {url}
 
-Source0:        {name}_{version}_x86_64.txz
+# Dynamically resolves file requirements based on the current --target platform loop
+Source0:        {name}_{version}_{pct}{{deb_arch}}.txz
 """
 
     # Conditionally include Source1 depending on qt5 presence

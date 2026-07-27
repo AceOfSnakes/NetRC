@@ -13,7 +13,38 @@
 #export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
 # Package maintainers to append LDFLAGS.
 #export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+# Read architecture variables from the build system environment
+DEB_HOST_ARCH         ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_GNU_TYPE     ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_HOST_MULTIARCH    ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+# Configure version mapping tags
+#GCC_VERSION = -14
+GCC_VERSION = -14
 
+# Dynamically set the qmake command name and configuration profile
+ifeq ($(DEB_HOST_ARCH),arm64)
+    QMAKE_CMD  = aarch64-linux-gnu-qmake6
+    QMAKE_SPEC = linux-aarch64-gnu-g++
+    # Resolves to aarch64-linux-gnu-gcc-14
+    CC_EXEC    = /usr/local/gcc-16.1.0-arm64/bin/aarch64-linux-gnu-gcc-16.1
+    CXX_EXEC   = /usr/local/gcc-16.1.0-arm64/bin/aarch64-linux-gnu-g++-16.1
+    # Force the use of the system cross-assembler to fix the '-EL' error
+    AS_EXEC    = /usr/bin/aarch64-linux-gnu-as
+#    CC_EXEC    = $(DEB_HOST_GNU_TYPE)-gcc$(GCC_VERSION)
+#    CXX_EXEC   = $(DEB_HOST_GNU_TYPE)-g++$(GCC_VERSION)
+    export C_INCLUDE_PATH=/usr/include/$(DEB_HOST_MULTIARCH):/usr/include
+    export CPLUS_INCLUDE_PATH=/usr/include/$(DEB_HOST_MULTIARCH):/usr/include
+    export DEB_CXXFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.1.0-arm64/bin/
+    export DEB_CFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.1.0-arm64/bin/
+else
+    QMAKE_CMD  = qmake6
+    QMAKE_SPEC = linux-g++
+    AS_EXEC    = as
+    CC_EXEC    = gcc
+    CXX_EXEC   = g++
+    unexport C_INCLUDE_PATH
+    unexport CPLUS_INCLUDE_PATH
+endif
 
 %:
 	dh $@
@@ -29,18 +60,26 @@ override_dh_auto_configure:
 	@echo ======================================================= override_dh_auto_configure
 	# 1. Dynamically generate the localized .desktop entries into the project root
 	mkdir -p build
-	#sed -e 's/\$$SUFFIX/-qt5/g' \
-	#    -e 's/\(Name=AVRPioRemote\)$$/\1 Qt5/g' \
-	#    debian/avrpioremote.desktop.in > build-qt5/avrpioremote-qt5.desktop
-	cp debian/${DEB_SOURCE}.desktop.in build/${DEB_SOURCE}.desktop
-	## Configure Qt5 build in its own directory
-	#cd build-qt5 && qmake QT_VERSIONC_MAJOR=5 ../*.pro
-	# Configure Qt6 build in its own directory
-	cd build && qmake6 QT_VERSION_MAJOR=6 ../../*.pro
+	# Extracts package name natively via debian/control tracking if DEB_SOURCE is unset
+	$(eval PKG_NAME := $(shell dh_listpackages | head -n1))
+	cp debian/$(PKG_NAME).desktop.in build/$(PKG_NAME).desktop
+	cd build && \
+	QMAKE_MOC=/usr/lib/qt6/libexec/moc \
+	QMAKE_UIC=/usr/lib/qt6/libexec/uic \
+	QMAKE_RCC=/usr/lib/qt6/libexec/rcc \
+	$(QMAKE_CMD) -spec $(QMAKE_SPEC) \
+		QMAKE_CC=$(CC_EXEC) \
+		QMAKE_CXX=$(CXX_EXEC) \
+		QMAKE_LINK=$(CXX_EXEC) \
+		QMAKE_AS=$(AS_EXEC) \
+		PKG_CONFIG="pkg-config" \
+		PKG_CONFIG_LIBDIR="/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig:/usr/share/pkgconfig" \
+		QT_VERSION_MAJOR=6 \
+		../../*.pro
 
 override_dh_auto_build:
 	@echo ======================================================= override_dh_auto_build
-	# Compile using standard parallel make commands
+	# Compile using make inside the custom build directory
 	$(MAKE) -C build
 
 override_dh_auto_install:
@@ -49,18 +88,24 @@ override_dh_auto_install:
 
 
 override_dh_install:
-	@echo ======================================================= override_dh_auto_install:
+	@echo ======================================================= override_dh_auto_install
 	dh_install
+	dh_strip
 	tar --numeric-owner --owner=0 --group=0  \
-	 -cJf ../../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_BUILD_ARCH).txz \
+	 -cJf ../../$(DEB_SOURCE)_$(DEB_VERSION)_$(DEB_HOST_ARCH).txz \
 	 -C $(CURDIR)/debian/${DEB_SOURCE} .
 
-# Inside your debian/rules file
 override_dh_builddeb:
-	@echo ======================================================= override_dh_builddeb:
+	@echo ======================================================= override_dh_builddeb
 	dh_builddeb
 
 override_dh_auto_clean:
-	@echo ======================================================= override_dh_auto_clean.
+	@echo ======================================================= override_dh_auto_clean
 	rm -rf build
+	rm -rf ../../$(DEB_SOURCE)*$(DEB_VERSION)_$(DEB_HOST_ARCH)*
 	-dh_auto_clean
+
+override_dh_gencontrol:
+	@echo ======================================================= override_dh_gencontrol
+	dh_gencontrol
+	find debian/ -type f -name "control" -exec sed -i 's/\(lib[a-zA-Z0-9+-]*\)t64/\0 | \1/g' {} +
