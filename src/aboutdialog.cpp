@@ -29,8 +29,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(WINDOW_FLAGS);
     setFixedSize(width(), height());
-    ui->label->setText(qApp->applicationName() + ". Version: " + qApp->applicationVersion()
-                       .append(" / ").append(SSLeay_version(SSLEAY_VERSION)));
+    ui->label->setText(qApp->applicationName() + ". Version: " + qApp->applicationVersion());
     ui->label_os->setText(
                 QString("OS: ")
                 .append(Commons::prettyProductName())

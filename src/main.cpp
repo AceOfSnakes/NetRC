@@ -48,10 +48,12 @@ int main(int argc, char *argv[]) {
                           #ifdef STATIC                                   
                               .append(" (static)" )
                           #endif
+                              .append(" / ").append(QSysInfo::currentCpuArchitecture())
                               .append(" based on Qt " ).append(qVersion())
                           #if Q_PROCESSOR_WORDSIZE == 8
                               .append(" x64")
                           #endif
+                               .append(" / ").append(SSLeay_version(SSLEAY_VERSION))
                               );
     w.show();
     int ret = app.exec();

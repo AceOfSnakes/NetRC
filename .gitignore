@@ -1,6 +1,6 @@
 *.idx
 *.obj
-*.pro.user
+*.pro.user*
 build*/
 rpm/*
 rpm
