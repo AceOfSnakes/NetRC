@@ -20,7 +20,9 @@ echo "================================================================="
 # -us -uc skips GPG signing, -b builds binary architecture assets only
 echo "PWD ========== $(pwd)"
 dpkg-buildpackage -a amd64 -us -uc -b && mv ../${PACKAGE_NAME}*$PACKAGE_VERSION* ../..
-dpkg-buildpackage -a arm64 -us -uc -b && mv ../${PACKAGE_NAME}*$PACKAGE_VERSION* ../..
+if command -v aarch64-linux-gnu-qmake6 >/dev/null 2>&1; then
+  dpkg-buildpackage -a arm64 -us -uc -b && mv ../${PACKAGE_NAME}*$PACKAGE_VERSION* ../..
+fi
 
 echo "================================================================="
 echo "3. Organizing RPM Sandboxed Workspace..."
@@ -45,13 +47,14 @@ rpmbuild --target=x86_64 \
          --define "_topdir $(pwd)/rpmbuild" \
          --define "_dbpath $(pwd)/rpmbuild/db" \
          --nodeps -bb "${PACKAGE_NAME}.spec"
-
-# LOOP 2: Build the cross-compiled ARM64 RPM package
-echo ">>> Packaging RPM for target architecture: aarch64"
-rpmbuild --target=aarch64 \
+if command -v aarch64-linux-gnu-qmake6 >/dev/null 2>&1; then
+    # LOOP 2: Build the cross-compiled ARM64 RPM package
+    echo ">>> Packaging RPM for target architecture: aarch64"
+    rpmbuild --target=aarch64 \
          --define "_topdir $(pwd)/rpmbuild" \
          --define "_dbpath $(pwd)/rpmbuild/db" \
          --nodeps -bb "${PACKAGE_NAME}.spec"
+fi
 
 echo "================================================================="
 echo "5. Execution Complete! Summary of Generated Packages:"
