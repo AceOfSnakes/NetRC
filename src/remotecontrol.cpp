@@ -693,11 +693,16 @@ void RemoteControl::commConnected() {
     clearInformationPanel();
     checkOnline();
     if(deviceInterface.isConnected()) {
-        QString app = qApp->applicationName().append(". ").append(deviceName);
-        this->setWindowTitle(app);
+        QString appTitleText = QString("%1. %2").arg(qApp->applicationName(), deviceName);
+        this->setWindowTitle(appTitleText);
+        QIcon customIcon = QIcon::fromTheme("NetRC");
+
+        if (customIcon.isNull()) {
+            customIcon = QIcon::fromTheme("dialog-information");
+        }
         if (RCSettings::isMinimizeToTrayEnabled()) {
-            trayIcon->showMessage(deviceName, "Connected", QIcon(QString(":/images/").append(qApp->applicationName()).append(".png")));
-            trayIcon->setToolTip(app);
+            trayIcon->showMessage(deviceName, "Connected", customIcon);
+            trayIcon->setToolTip(appTitleText);
         }
     }
 }

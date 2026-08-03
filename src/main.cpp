@@ -23,10 +23,12 @@
 
 int main(int argc, char *argv[]) {
 
-    QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication app(argc, argv);
+    Q_INIT_RESOURCE(resource);
     app.setApplicationName("NetRC");
     app.setOrganizationName("Ace Of Snakes");
+    app.setDesktopFileName("netrc");
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
     //QFontDatabase::addApplicationFont(":/fonts/font.ttf");
     RemoteControl w;
 

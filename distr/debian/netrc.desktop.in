@@ -14,3 +14,4 @@ TerminalOptions=
 Type=Application
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+StartupWMClass=NetRC
