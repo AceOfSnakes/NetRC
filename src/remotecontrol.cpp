@@ -696,13 +696,17 @@ void RemoteControl::commConnected() {
         QString appTitleText = QString("%1. %2").arg(qApp->applicationName(), deviceName);
         this->setWindowTitle(appTitleText);
         QIcon customIcon = QIcon::fromTheme("NetRC");
-
+        qDebug() << customIcon;
         if (customIcon.isNull()) {
-            customIcon = QIcon::fromTheme("dialog-information");
+            customIcon = QIcon(QString(":/images/").append(qApp->applicationName()).append(".png"));
+            if (customIcon.isNull()) {
+                customIcon = QIcon::fromTheme("dialog-information");
+            }
         }
         if (RCSettings::isMinimizeToTrayEnabled()) {
-            trayIcon->showMessage(deviceName, "Connected", customIcon);
+            qApp->setApplicationDisplayName("Yahoo");
             trayIcon->setToolTip(appTitleText);
+            trayIcon->showMessage(appTitleText, "Connected", customIcon);
         }
     }
 }
