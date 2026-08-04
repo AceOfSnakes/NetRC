@@ -3,3 +3,6 @@ build/netrc opt/netrc
 ../src/commons/style/*  opt/netrc/style
 ../src/images/NetRC.png opt/netrc
 build/*.desktop usr/share/applications
+../src/images/NetRC.png        usr/share/icons/hicolor/256x256/apps/
+../src/images/NetRC.png        usr/share/icons/hicolor/48x48/apps/
+../src/images/NetRC.png        usr/share/icons/hicolor/32x32/apps

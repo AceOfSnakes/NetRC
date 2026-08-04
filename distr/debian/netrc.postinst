@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+# dh_installdeb will replace this with shell code automatically
+# to register menu entries, desktop files, and icon caches.
+#DEBHELPER#
+
+if [ "$1" = "configure" ]; then
+    echo "Updating system-wide icon caches for AVRPioRemote..."
+    if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        gtk-update-icon-cache -f -q /usr/share/icons/hicolor || true
+    fi
+    if command -v update-desktop-database >/dev/null 2>&1; then
+        update-desktop-database -q /usr/share/applications || true
+    fi
+fi
+
+exit 0
