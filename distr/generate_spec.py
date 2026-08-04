@@ -104,10 +104,10 @@ def generate_spec():
     # 2. TRANSFORM ANY NAME TO A DYNAMIC CASE-INSENSITIVE RPM WILDCARD
     # Strips typical package naming variants, then converts "netrc" to "[Nn][Ee][Tt][Rr][Cc]*.png"
     clean_base_string = name.replace("-qt5", "").replace("-qt6", "")
-    icon_wildcard = "".join([f"[{c.upper()}{c.lower()}]" for c in clean_base_string]) + "*.png"
+    icon_wildcard = "".join([f"[{c.upper()}{c.lower()}]" for c in clean_base_string]) + ".png"
     
     # EXCLUSION MAPPING: Forces the base package to reject any file ending in a 5 right before the .png extension
-    qt6_icon_filter = icon_wildcard.replace(".png", "[!5].png")
+    qt6_icon_filter = icon_wildcard.replace(".png", ".png")
     
     # Generate the string layout
     spec_content = f"""{pct}define _rpmfilename {pct}{pct}{{NAME}}_{pct}{pct}{{VERSION}}_{pct}{pct}{{ARCH}}.rpm
@@ -116,17 +116,25 @@ def generate_spec():
 {pct}define _build_id_links none
 {pct}undefine _missing_build_ids_terminate_build
 
+# Translate RPM architectures to matching Debian .txz source file structures
+{pct}ifarch aarch64
+{pct}define deb_arch arm64
+{pct}endif
+{pct}ifarch x86_64
+{pct}define deb_arch amd64
+{pct}endif
+
 Name: {name}
 Version: {version}
 Release: 1{pct}{{?dist}}
 Summary: {summary}
 License: GPLv3+
 URL: {url}
-Source0: {name}_{version}_x86_64.txz
+Source0: {name}_{version}_{pct}{{deb_arch}}.txz
 """
 
     if has_qt5_package:
-        spec_content += f"Source1: {name}-qt5_{version}_x86_64.txz\n"
+        spec_content += f"Source1: {name}-qt5_{version}_{pct}{{deb_arch}}.txz\n"
 
     spec_content += f"""
 BuildRequires: tar
