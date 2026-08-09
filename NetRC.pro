@@ -101,6 +101,7 @@ SOURCES += src/main.cpp\
         src/commons/commons.cpp \
         src/commons/filedialogwithhistory.cpp \
         src/commons/settings.cpp \
+        src/commons/singleapplication.cpp \
         src/debug.cpp \
         src/aboutdialog.cpp \
         src/autosearchdialog.cpp \
@@ -116,6 +117,7 @@ HEADERS  += src/include/remotecontrol.h \
     src/commons/include/commons.h \
     src/commons/include/filedialogwithhistory.h \
     src/commons/include/settings.h \
+    src/commons/include/singleapplication.h \
     src/include/RemoteButton.h \
     src/include/appsettings.h \
     src/include/debug.h \

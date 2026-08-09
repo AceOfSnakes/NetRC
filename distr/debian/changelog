@@ -1,3 +1,10 @@
+netrc (26.08) RELEASED; urgency=medium
+
+  * Add application single instance
+  * Add aarch64 linux distribution
+
+ -- Ace Of Snakes <AceOfSnakesMain@gmail.com>  Sat, 01 Aug 2026 03:00:00 +0300
+
 netrc (26.06) RELEASED; urgency=medium
 
   * Change linux distribution

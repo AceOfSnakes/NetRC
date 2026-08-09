@@ -20,17 +20,42 @@
 #include <QFontDatabase>
 #include <QStyleFactory>
 #include <QNetworkProxyFactory>
+#include "singleapplication.h"
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <shobjidl.h>
 
+void registerAppId() {
+    // Replace with your company and app name
+    //SetCurrentProcessExplicitAppUserModelID(L"NetRC");
+}
+#endif
 int main(int argc, char *argv[]) {
+#ifdef Q_OS_WIN
+    registerAppId();
+    QCoreApplication::setOrganizationName("Ace Of Snakes");
+    QCoreApplication::setApplicationName("NetRC");
+    QCoreApplication::setApplicationVersion("1.0");
 
+#endif
     QApplication app(argc, argv);
+    SingleApplication singleApp(QString("com.github.AceOfSnakes.")
+                                    .append(QCoreApplication::applicationName()));
+    if(RemoteControl::isSingleApp()) {
+        if (!singleApp.checkInstance()) {
+            return 0; // Secondary copy exits instantly, giving focus back to Windows
+        }
+    }
+
     Q_INIT_RESOURCE(resource);
     app.setApplicationName("NetRC");
     app.setOrganizationName("Ace Of Snakes");
+    // app.setApplicationDisplayName("Ace Of Snakes. NetRC");
     app.setDesktopFileName("netrc");
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     //QFontDatabase::addApplicationFont(":/fonts/font.ttf");
     RemoteControl w;
+    QObject::connect(&singleApp, &SingleApplication::wakeUpRequested, &w, &RemoteControl::wakeUp);
 
     QLocale::setDefault(QLocale::English);
     QLocale myLoc;

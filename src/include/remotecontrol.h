@@ -17,6 +17,7 @@
 
 #include <QMainWindow>
 #include <QRegularExpression>
+#include <QCoreApplication>
 #include <QSignalMapper>
 #include <QSystemTrayIcon>
 #include <QStyle>
@@ -83,7 +84,14 @@ public:
     void enableSpecialControls(bool enabled=false);
     
     void displayNear(QDialog & dialog, QDialog * debug = nullptr);
-    
+    static bool isSingleApp() {
+        QSettings sSettings(QSettings::IniFormat, QSettings::UserScope,
+                            QCoreApplication::organizationName(),
+                            QCoreApplication::applicationName());
+        return sSettings.value("SingleApplicationInstance", true).toBool();
+    }
+    void showTrayNotification(const QString title, const QString &message);
+
 protected:
      void changeEvent(QEvent *e);
      void closeEvent(QCloseEvent *event);
@@ -122,6 +130,8 @@ private slots:
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
     void iconChanged(QPushButton& button);
+public slots:
+    void wakeUp();
 private:
     RemoteButton *circle;
     QAction *minimizeAction;

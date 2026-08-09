@@ -74,7 +74,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     restoreSettings();
     ui->mainWidget->setVisible(true);
     loadSettings();
-
+    this->setFocusPolicy(Qt::StrongFocus);
     QFont font = ui->statusDisplayWidget->font();
     font.setFamily("Courier New");
     font.setBold(true);
@@ -427,11 +427,21 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
 }
 
 void RemoteControl::showAll( ) {
-    show();
+    showNormal();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
         child->showNormal();
+        child->raise();
     }
-}
+    raise();
+    activateWindow();
+    QTimer::singleShot(0, this, [this]() {
+        // Target the interactive area inside the QMainWindow
+        if (this->centralWidget()) {
+            this->centralWidget()->setFocus(Qt::ActiveWindowFocusReason);
+        } else {
+            this->setFocus(Qt::ActiveWindowFocusReason);
+        }
+    });}
 
 void RemoteControl::showMinimizedAll( ) {
     showMinimized();
@@ -673,6 +683,23 @@ void RemoteControl::clearInformationPanel() {
     updateDeviceInfo();
 }
 
+void RemoteControl::showTrayNotification(const QString title, const QString &message) {
+    //QString appTitleText = QString("%1. %2").arg(qApp->applicationName(), deviceName);
+    this->setWindowTitle(title);
+    QIcon customIcon = QIcon::fromTheme("NetRC");
+    qDebug() << customIcon;
+    if (customIcon.isNull()) {
+        customIcon = QIcon(QString(":/images/").append(qApp->applicationName()).append(".png"));
+        if (customIcon.isNull()) {
+            customIcon = QIcon::fromTheme("dialog-information");
+        }
+    }
+    if (RCSettings::isMinimizeToTrayEnabled()) {
+        trayIcon->setToolTip(title);
+        trayIcon->showMessage(title, message, customIcon);
+    }
+}
+
 void RemoteControl::commConnected() {
     ui->connectButton->setChecked(true);
     ui->connectButton->setEnabled(true);
@@ -690,24 +717,12 @@ void RemoteControl::commConnected() {
     enableControls(true);
     ui->connectButton->setIcon(connectButtonOnIcon);
     originalIcons.insert(ui->connectButton->objectName(), ui->connectButton->icon());
+
     clearInformationPanel();
     checkOnline();
+
     if(deviceInterface.isConnected()) {
-        QString appTitleText = QString("%1. %2").arg(qApp->applicationName(), deviceName);
-        this->setWindowTitle(appTitleText);
-        QIcon customIcon = QIcon::fromTheme("NetRC");
-        qDebug() << customIcon;
-        if (customIcon.isNull()) {
-            customIcon = QIcon(QString(":/images/").append(qApp->applicationName()).append(".png"));
-            if (customIcon.isNull()) {
-                customIcon = QIcon::fromTheme("dialog-information");
-            }
-        }
-        if (RCSettings::isMinimizeToTrayEnabled()) {
-            qApp->setApplicationDisplayName("Yahoo");
-            trayIcon->setToolTip(appTitleText);
-            trayIcon->showMessage(appTitleText, "Connected", customIcon);
-        }
+        showTrayNotification(QString("%1. %2").arg(qApp->applicationName(), deviceName), QString("Connected"));
     }
 }
 
@@ -1033,3 +1048,13 @@ void RemoteControl::restoreDebug() {
     sets.endGroup();
 }
 
+void RemoteControl::wakeUp() {
+    if (trayIcon->isVisible()) {
+        showTrayNotification(QString("%1.").arg(qApp->applicationName()), "Waked up");
+    }
+    if (this->windowFlags() & Qt::Tool) {
+        this->setWindowFlags(this->windowFlags() & ~Qt::Tool);
+    }
+    QTimer::singleShot(20, this, [this]() {
+        showAll(); });
+}
