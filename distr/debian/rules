@@ -26,16 +26,17 @@ ifeq ($(DEB_HOST_ARCH),arm64)
     QMAKE_CMD  = aarch64-linux-gnu-qmake6
     QMAKE_SPEC = linux-aarch64-gnu-g++
     # Resolves to aarch64-linux-gnu-gcc-14
-    CC_EXEC    = /usr/local/gcc-16.1.0-arm64/bin/aarch64-linux-gnu-gcc-16.1
-    CXX_EXEC   = /usr/local/gcc-16.1.0-arm64/bin/aarch64-linux-gnu-g++-16.1
+    CC_EXEC    = /usr/local/gcc-16.2.0-arm64/bin/aarch64-linux-gnu-gcc-16.2
+    CXX_EXEC   = /usr/local/gcc-16.2.0-arm64/bin/aarch64-linux-gnu-g++-16.2
     # Force the use of the system cross-assembler to fix the '-EL' error
-    AS_EXEC    = /usr/bin/aarch64-linux-gnu-as
+    AS_EXEC    = /usr/aarch64-linux-gnu/bin/as
+    AS_EXEC  := /usr/local/gcc-16.2.0-arm64/bin/as
 #    CC_EXEC    = $(DEB_HOST_GNU_TYPE)-gcc$(GCC_VERSION)
 #    CXX_EXEC   = $(DEB_HOST_GNU_TYPE)-g++$(GCC_VERSION)
     export C_INCLUDE_PATH=/usr/include/$(DEB_HOST_MULTIARCH):/usr/include
     export CPLUS_INCLUDE_PATH=/usr/include/$(DEB_HOST_MULTIARCH):/usr/include
-    export DEB_CXXFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.1.0-arm64/bin/
-    export DEB_CFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.1.0-arm64/bin/
+    export DEB_CXXFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.2.0-arm64/bin/
+    export DEB_CFLAGS_MAINT_APPEND = -B/usr/local/gcc-16.2.0-arm64/bin/
 else
     QMAKE_CMD  = qmake6
     QMAKE_SPEC = linux-g++
@@ -72,6 +73,7 @@ override_dh_auto_configure:
 		QMAKE_CXX=$(CXX_EXEC) \
 		QMAKE_LINK=$(CXX_EXEC) \
 		QMAKE_AS=$(AS_EXEC) \
+		QMAKE_SET_BUILD_FLAGS=no \
 		PKG_CONFIG="pkg-config" \
 		PKG_CONFIG_LIBDIR="/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig:/usr/share/pkgconfig" \
 		QT_VERSION_MAJOR=6 \
