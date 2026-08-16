@@ -349,8 +349,6 @@ void RemoteControl::showWidget(QWidget *widget, bool flag) {
 
         // Force the core top-level window to adjust its dimensions
         this->adjustSize();
-    }
-        }
     });
 }
 
