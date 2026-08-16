@@ -419,8 +419,8 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     layout->addItem(item, rows, 0, 1, buttons_count);
     layout->addWidget(lineA, rows + 1, 0, 1, buttons_count);
 
-    int position = panelPosition > 0? panelPosition: 1;
-    int max = ui->centralWidget->layout()->count() - 1; // one is for footer
+    int position = panelPosition > 0? panelPosition: 1; // first is reserved for footer
+    int max = ui->centralWidget->layout()->count() - 1; // last is reserved for footer
     position = position < max?
                    position: max;
     qDebug() << "insert At" << (panelPosition > 0? panelPosition: 1)<<"max"<<ui->centralWidget->layout()->count();
