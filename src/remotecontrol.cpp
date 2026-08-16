@@ -64,7 +64,7 @@ RemoteControl::RemoteControl(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     ui->setupUi(this);
 
-    ui->logoSpacer->changeSize(20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    //ui->logoSpacer->changeSize(20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     foreach(QPushButton *action, ui->centralWidget->findChildren<QPushButton*>(
                                       Qt::FindChildrenRecursively)) {
