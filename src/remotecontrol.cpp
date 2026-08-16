@@ -803,7 +803,8 @@ void RemoteControl::removeEmpty() {
                 break;
             }
         }
-        showWidget(wd->parentWidget(),visible);
+        wd->parentWidget()->setVisible(visible);
+        //showWidget(wd, visible);
     }
 }
 
