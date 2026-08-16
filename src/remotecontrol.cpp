@@ -344,17 +344,17 @@ void RemoteControl::switchPanel() {
 }
 
 void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
-    QWidget *widInt = new QWidget(ui->centralWidget);
-    widInt->setEnabled(true);
-    widInt->setVisible(true);
+    QWidget *widgetInternal = new QWidget(ui->centralWidget);
+    widgetInternal->setEnabled(true);
+    widgetInternal->setVisible(true);
     QString panelName = QString().asprintf("Panel_%d", panelIdx);
-    widInt->setObjectName(panelName);
-    QGridLayout* layout = new QGridLayout(widInt);
+    widgetInternal->setObjectName(panelName);
+    QGridLayout* layout = new QGridLayout(widgetInternal);
     layout->setContentsMargins(9, 3, 9, 0);
     layout->setSpacing(3);
 
     uint row , column = 0;
-    widInt->setLayout(layout);
+    widgetInternal->setLayout(layout);
     QFrame *vline = new QFrame();
     vline->setFrameShape(QFrame::HLine);
     vline->setFrameShadow(QFrame::Sunken);
@@ -368,6 +368,7 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     uint columns = sets.value("columns").toUInt();
     QString group = sets.value("group").toString();
     uint panelPosition = sets.value("position").toUInt();
+    qDebug() << "panelPosition" << panelPosition << sets.value("position");
     QList<QPushButton *> list;
     if(columns > 0 || panelPosition > 0) {
         buttons_count = columns;
@@ -418,9 +419,13 @@ void RemoteControl::addPanel(int panelIdx, const QJsonArray &buttons) {
     layout->addItem(item, rows, 0, 1, buttons_count);
     layout->addWidget(lineA, rows + 1, 0, 1, buttons_count);
 
-    ((QBoxLayout*)ui->centralWidget->layout())->insertWidget(panelPosition > 0? panelPosition: 1, widInt);
+    int position = panelPosition > 0? panelPosition: 1;
+    int max = ui->centralWidget->layout()->count() - 1; // one is for footer
+    position = position < max?
+                   position: max;
+    qDebug() << "insert At" << (panelPosition > 0? panelPosition: 1)<<"max"<<ui->centralWidget->layout()->count();
 
-
+    ((QBoxLayout*)ui->centralWidget->layout())->insertWidget(position, widgetInternal);
     QVariant truex(true);
 
     initSetting(panelName, truex);
