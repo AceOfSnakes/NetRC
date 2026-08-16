@@ -63,6 +63,9 @@ RemoteControl::RemoteControl(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint | Qt::Window | Qt::WindowMinimizeButtonHint);
     setAttribute(Qt::WA_TranslucentBackground);
     ui->setupUi(this);
+
+    ui->logoSpacer->changeSize(20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
     foreach(QPushButton *action, ui->centralWidget->findChildren<QPushButton*>(
                                       Qt::FindChildrenRecursively)) {
         originalIcons.insert(action->objectName(), action->icon());
@@ -804,6 +807,7 @@ void RemoteControl::removeEmpty() {
             }
         }
         wd->parentWidget()->setVisible(visible);
+        //ui->logoSpacer->widget()->adjustSize();
         //showWidget(wd, visible);
     }
 }
