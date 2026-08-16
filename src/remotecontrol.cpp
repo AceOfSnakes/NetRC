@@ -803,10 +803,11 @@ void RemoteControl::removeEmpty() {
                 break;
             }
         }
-        wd->parentWidget()->setVisible(visible);
+        /*wd->parentWidget()->setVisible(visible);
     QTimer::singleShot(0, this, [this]() {
       this->adjustSize();
         });
+        */
         //showWidget(wd->parentWidget(),false);
     }
 }
