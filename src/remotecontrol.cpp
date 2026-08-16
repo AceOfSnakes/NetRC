@@ -330,6 +330,17 @@ void RemoteControl::loadSettings() {
 void RemoteControl::showWidget(QWidget *widget, bool flag) {
     widget->setVisible(flag);
     widget->setEnabled(ui->actionView_Enabled->isChecked());
+    // Defer the sizing adjustment slightly so Qt finishes processing the visibility flag
+    QTimer::singleShot(0, this, [widget]() {
+        // Ensure the widget and its parent are still valid before calling methods
+        if (widget && widget->parentWidget()) {
+            if (widget->parentWidget()->layout()) {
+                widget->parentWidget()->layout()->invalidate();
+                widget->parentWidget()->layout()->activate();
+            }
+            widget->parentWidget()->adjustSize();
+        }
+    });
 }
 
 void RemoteControl::switchPanel() {
