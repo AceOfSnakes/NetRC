@@ -331,14 +331,25 @@ void RemoteControl::showWidget(QWidget *widget, bool flag) {
     widget->setVisible(flag);
     widget->setEnabled(ui->actionView_Enabled->isChecked());
     // Defer the sizing adjustment slightly so Qt finishes processing the visibility flag
-    QTimer::singleShot(0, this, [widget]() {
-        // Ensure the widget and its parent are still valid before calling methods
-        if (widget && widget->parentWidget()) {
-            if (widget->parentWidget()->layout()) {
-                widget->parentWidget()->layout()->invalidate();
-                widget->parentWidget()->layout()->activate();
+    QTimer::singleShot(0, this, [this, widget]() {
+        QWidget *pWidget = widget->parentWidget();
+        while (pWidget) {
+            if (pWidget->layout()) {
+                pWidget->layout()->invalidate();
+                pWidget->layout()->activate();
             }
-            widget->parentWidget()->adjustSize();
+            pWidget->adjustSize();
+
+            // If we've reached the main window container or central widget, break or adjust top-level
+            if (pWidget == this || pWidget == ui->centralWidget) {
+                break;
+            }
+            pWidget = pWidget->parentWidget();
+        }
+
+        // Force the core top-level window to adjust its dimensions
+        this->adjustSize();
+    }
         }
     });
 }
