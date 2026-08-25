@@ -1,0 +1,97 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"     
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="NetRC x64" 
+           Manufacturer="Ace Of Snakes" 
+           Version="26.09" 
+           UpgradeCode="EE2301F1-462B-4073-ACB0-23F5D562A517"> 
+    
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="AppIcon" SourceFile="assets\NetRC.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="assets\gpl-3.0.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="assets\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="assets\dialog.bmp" />
+
+    <!-- CHANGE: Use WixUI_Mondo to show the full customization/features checkbox page -->
+    <!-- Property to link the "Browse" target location -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <ui:WixUI Id="WixUI_FeatureTree" />
+    
+
+    <!-- Directory Layout Configuration -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="NetRC x64">
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="NetRC x64" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+    <!-- Components Configuration -->
+    <ComponentGroup Id="CoreComponents" Directory="INSTALLFOLDER">
+      <!-- 1. Explicitly define the main EXE so the shortcuts can find it -->
+      <Component Id="ExecutableComponent" Guid="DBCC41BF-3E20-48EE-A9C5-7470A4A724F0">
+        <File Id="MainAppExe" Source="build\NetRC.exe" KeyPath="yes" />
+      </Component>
+
+      <!-- 2. Dynamically harvest everything ELSE (DLLs, archives, subfolders) -->
+      <!-- Exclude the main EXE here since it's already defined above -->
+      <Files Include="build\**">
+        <Exclude Files="build\NetRC.exe" />
+      </Files>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ShortcutComponents">
+      <!-- Optional Start Menu Shortcut Component -->
+      <Component Id="StartMenuShortcutComponent" Guid="468C0C6C-0938-47B7-8FEA-3C36491B5716" Directory="ApplicationProgramsFolder">
+        <!-- Target maps to NetRC.exe inside your build path -->
+        <Shortcut Id="StartMenuShortcut" 
+                  Name="NetRC x64" 
+                  Target="[#MainAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="CleanUpStartMenuFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\Ace Of Snakes\NetRC" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+
+      <!-- Optional Desktop Shortcut Component -->
+      <Component Id="DesktopShortcutComponent" Guid="AE2E2894-E7CB-4825-B7CA-F9B730CA5D92" Directory="DesktopFolder">
+        <Shortcut Id="DesktopShortcut" 
+                  Name="NetRC x64" 
+                  Target="[#MainAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Ace Of Snakes\NetRC" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+
+    <!-- Feature Tree Mapping (This builds the choices screen) -->
+    <!--Feature Id="ProductFeature" Title="Application Core" Level="1" AllowAbsent="no" Description="The core application files required to run the program.">
+      <ComponentGroupRef Id="CoreComponents" /-->
+
+    <Feature Id="ProductFeature" 
+             Title="Application Core" 
+             Level="1" 
+             AllowAbsent="no" 
+             ConfigurableDirectory="INSTALLFOLDER" 
+             Description="The core application files required to run the program.">
+
+      <ComponentGroupRef Id="CoreComponents" />
+      
+      <!-- Optional Sub-Feature: Start Menu Shortcut -->
+      <Feature Id="StartMenuFeature" Title="Start Menu Shortcut" Level="1" Description="Create a shortcut for the application in the Start Menu.">
+        <ComponentRef Id="StartMenuShortcutComponent" />
+      </Feature>
+
+      <!-- Optional Sub-Feature: Desktop Shortcut -->
+      <Feature Id="DesktopFeature" Title="Desktop Shortcut" Level="1" Description="Create a launch icon on your Desktop.">
+        <ComponentRef Id="DesktopShortcutComponent" />
+      </Feature>
+    </Feature>
+  </Package>
+</Wix>
