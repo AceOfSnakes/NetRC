@@ -3,7 +3,8 @@ APPName = MtkFwTool
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+#message("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")                                                               
+message("Arch $${QMAKE_TARGET.arch}")
 unix {
     # 1. Allow the Debian environment toolchain overrides
     isEmpty(QMAKE_CC): QMAKE_CC = gcc
@@ -31,6 +32,23 @@ unix {
     PKGCONFIG += openssl
 } else {
     TARGET = NetRC
+    contains(QMAKE_TARGET.arch, arm64) {
+      message("libarm64")
+      INCLUDEPATH += f:/usr/libarm64/openssl3/include
+      LIBS += -Lf:/usr/libarm64/openssl3/lib
+      LIBS += -Lf:/usr/libarm64/openssl3/bin
+    }
+    else:contains(QMAKE_TARGET.arch, x86_64) {
+      message("lib64")
+      INCLUDEPATH += f:/usr/lib64/openssl3/include
+      LIBS += -Lf:/usr/lib64/openssl3/lib
+      LIBS += -Lf:/usr/lib64/openssl3/bin
+    } else {
+      message("lib32")
+      INCLUDEPATH += f:/usr/lib32/openssl3/include
+      LIBS += -Lf:/usr/lib32/openssl3/lib
+      LIBS += -Lf:/usr/lib32/openssl3/bin
+    }
 }
 
 static { # everything below takes effect with CONFIG += static
@@ -57,17 +75,7 @@ contains(QMAKE_TARGET.arch, x86_64) {
     X64 = true
 }
 #CONFIG += c++17
-isEmpty(X64) {
-  INCLUDEPATH += f:/usr/lib32/openssl3/include
-  LIBS += -L/usr/local/lib
-  LIBS += -Lf:/usr/lib32/openssl3/lib
-  LIBS += -Lf:/usr/lib32/openssl3/bin
-} else {
-  INCLUDEPATH += f:/usr/lib64/openssl3/include
-  LIBS += -L/usr/local/lib64
-  LIBS += -Lf:/usr/lib64/openssl3/lib
-  LIBS += -Lf:/usr/lib64/openssl3/bin
-}
+
 
 #message("~~~ APP_VER $$((APPVERSION)) ~~~")
 !isEmpty(FORCEDAPPVERSION) {

@@ -1,0 +1,112 @@
+<?define ProductVersion="%APP_VERSION%" ?>
+<?define ShortcutName="%SOURCE% %VSCMD_ARG_TGT_ARCH% $(var.ProductVersion)" ?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"     
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="%SOURCE% %VSCMD_ARG_TGT_ARCH% $(var.ProductVersion)" 
+           Id="%SOURCE%%VSCMD_ARG_TGT_ARCH%Package"
+           Manufacturer="Ace Of Snakes" 
+           Version="$(var.ProductVersion)" 
+           UpgradeCode="%UpgradeCodeGuid%">
+    
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="AppIcon" SourceFile="assets\%SOURCE%.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="assets\gpl-3.0.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="assets\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="assets\dialog.bmp" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <Property Id="SAVED_INSTALL_PATH">
+      <RegistrySearch Id="FindSavedInstallFolder" 
+                      Root="HKCU" 
+                      Key="Software\Ace Of Snakes\%SOURCE%\%VSCMD_ARG_TGT_ARCH%" 
+                      Name="LastInstalledPath" 
+                      Type="raw" />
+    </Property>
+
+    <SetDirectory Id="INSTALLFOLDER" Value="[SAVED_INSTALL_PATH]" Condition="SAVED_INSTALL_PATH" Sequence="first" />
+    <ui:WixUI Id="WixUI_FeatureTree" />
+    
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="%SOURCE% %VSCMD_ARG_TGT_ARCH%">
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="%SOURCE% %VSCMD_ARG_TGT_ARCH%" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+    <ComponentGroup Id="CoreComponents" Directory="INSTALLFOLDER">
+      <Component Id="ExecutableComponent" Guid="%ExecutableComponentGuid%">
+        <File Id="MainAppExe" Source="build\%SOURCE%.exe" KeyPath="yes" />
+      </Component>
+      <Component Id="SavePathToRegistryComponent" Guid="%SavePathToRegistryComponentGuid%">
+        <RegistryValue Root="HKCU" 
+                       Key="Software\Ace Of Snakes\%SOURCE%\%VSCMD_ARG_TGT_ARCH%" 
+                       Name="LastInstalledPath" 
+                       Type="string" 
+                       Value="[INSTALLFOLDER]" 
+                       KeyPath="yes" />
+      </Component>
+
+      <Files Include="build\**">
+        <Exclude Files="build\%SOURCE%.exe" />
+      </Files>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ShortcutComponents">
+      <!-- Optional Start Menu Shortcut Component -->
+      <Component Id="StartMenuShortcutComponent" Guid="%StartMenuShortcutComponentGuid%" 
+                 Directory="ApplicationProgramsFolder">
+        <Shortcut Id="StartMenuShortcut" 
+                  Name="$(var.ShortcutName)"
+                  Target="[#MainAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="CleanUpStartMenuFolder" Directory="ApplicationProgramsFolder" 
+                      On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\Ace Of Snakes\%SOURCE%\%VSCMD_ARG_TGT_ARCH%" 
+                       Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+
+      <!-- Optional Desktop Shortcut Component -->
+      <Component Id="DesktopShortcutComponent" Guid="%DesktopShortcutComponentGuid%" 
+                 Directory="DesktopFolder">
+        <Shortcut Id="DesktopShortcut" 
+                  Name="$(var.ShortcutName)"
+                  Target="[#MainAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Ace Of Snakes\%SOURCE%\%VSCMD_ARG_TGT_ARCH%" 
+                       Name="DesktopShortcut" 
+                       Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <Feature Id="ProductFeature" 
+             Title="Application Core" 
+             Level="1" 
+             AllowAbsent="no" 
+             ConfigurableDirectory="INSTALLFOLDER" 
+             Description="The core application files required to run the program.">
+
+      <ComponentGroupRef Id="CoreComponents" />
+      
+      <!-- Optional Sub-Feature: Start Menu Shortcut -->
+      <Feature Id="StartMenuFeature" Title="Start Menu Shortcut" Level="1" 
+               Description="Create a shortcut for the application in the Start Menu.">
+        <ComponentRef Id="StartMenuShortcutComponent" />
+      </Feature>
+
+      <!-- Optional Sub-Feature: Desktop Shortcut -->
+      <Feature Id="DesktopFeature" Title="Desktop Shortcut" Level="1" 
+               Description="Create a launch icon on your Desktop.">
+        <ComponentRef Id="DesktopShortcutComponent" />
+      </Feature>
+    </Feature>
+  </Package>
+</Wix>

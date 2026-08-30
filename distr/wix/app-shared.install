@@ -1,0 +1,7 @@
+bin\Qt6Core.dll
+bin\Qt6Gui.dll
+bin\Qt6Network.dll
+bin\Qt6Widgets.dll 
+bin\Qt6Xml.dll
+plugins\platforms\qwindows.dll plugins\platforms\
+\usr\lib%PLATFORM%\openssl3\bin\libcrypto-3*.dll .

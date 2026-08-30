@@ -1,0 +1,21 @@
+<?define ProductVersion="%APP_VERSION%" ?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+
+  <Bundle Name="%SOURCE% %VSCMD_ARG_TGT_ARCH% $(var.ProductVersion)" 
+          Manufacturer="Ace Of Snakes" 
+          Version="$(var.ProductVersion)" 
+          UpgradeCode="%UpgradeCodeGuid%"
+          IconSourceFile="assets\%SOURCE%.ico">
+    <BootstrapperApplication>
+      <bal:WixInternalUIBootstrapperApplication />
+    </BootstrapperApplication>
+    <Chain>
+      <MsiPackage SourceFile="build\%SOURCE%_%VSCMD_ARG_TGT_ARCH%.msi" 
+                  Id="MainApplicationMsi" 
+                  bal:DisplayInternalUICondition="true"
+                  Vital="yes">
+      </MsiPackage>
+    </Chain>
+  </Bundle>
+</Wix>

@@ -2,6 +2,7 @@
 ```
 dotnet tool install --global wix
 wix extension add -acceptEula wix7 WixToolset.UI.wixext --global
+wix extension add -acceptEula wix7 WixToolset.BootstrapperApplications.wixext --global
 ```
 # Make msi archive
 ```

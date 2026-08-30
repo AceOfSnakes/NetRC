@@ -1,9 +1,12 @@
+<?define ProductVersion="26.10" ?>
+<?define ShortcutName="NetRC x64 $(var.ProductVersion)" ?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"     
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 
-  <Package Name="NetRC x64" 
+  <Package Name="NetRC x64 $(var.ProductVersion)" 
+           Id="NetRCx64Package"
            Manufacturer="Ace Of Snakes" 
-           Version="26.09" 
+           Version="$(var.ProductVersion)" 
            UpgradeCode="EE2301F1-462B-4073-ACB0-23F5D562A517"> 
     
     <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
@@ -52,7 +55,7 @@
       <Component Id="StartMenuShortcutComponent" Guid="468C0C6C-0938-47B7-8FEA-3C36491B5716" Directory="ApplicationProgramsFolder">
         <!-- Target maps to NetRC.exe inside your build path -->
         <Shortcut Id="StartMenuShortcut" 
-                  Name="NetRC x64" 
+                  Name="$(var.ShortcutName)"
                   Target="[#MainAppExe]"
                   WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="CleanUpStartMenuFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
@@ -62,7 +65,7 @@
       <!-- Optional Desktop Shortcut Component -->
       <Component Id="DesktopShortcutComponent" Guid="AE2E2894-E7CB-4825-B7CA-F9B730CA5D92" Directory="DesktopFolder">
         <Shortcut Id="DesktopShortcut" 
-                  Name="NetRC x64" 
+                  Name="$(var.ShortcutName)"
                   Target="[#MainAppExe]"
                   WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKCU" Key="Software\Ace Of Snakes\NetRC" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
