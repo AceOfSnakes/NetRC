@@ -35,19 +35,19 @@ unix {
     contains(QMAKE_TARGET.arch, arm64) {
       message("libarm64")
       INCLUDEPATH += f:/usr/libarm64/openssl3/include
-      LIBS += -Lf:/usr/libarm64/openssl3/lib
-      LIBS += -Lf:/usr/libarm64/openssl3/bin
+      LIBS += -Lf:/usr/libarm64/shared/openssl3/lib
+      LIBS += -Lf:/usr/libarm64/shared/openssl3/bin
     }
     else:contains(QMAKE_TARGET.arch, x86_64) {
       message("lib64")
-      INCLUDEPATH += f:/usr/lib64/openssl3/include
-      LIBS += -Lf:/usr/lib64/openssl3/lib
-      LIBS += -Lf:/usr/lib64/openssl3/bin
+      INCLUDEPATH += f:/usr/libx86_64/shared/openssl3/include
+      LIBS += -Lf:/usr/libx86_64/shared/openssl3/lib
+      LIBS += -Lf:/usr/libx86_64/shared/openssl3/bin
     } else {
       message("lib32")
-      INCLUDEPATH += f:/usr/lib32/openssl3/include
-      LIBS += -Lf:/usr/lib32/openssl3/lib
-      LIBS += -Lf:/usr/lib32/openssl3/bin
+      INCLUDEPATH += f:/usr/libx86/shared/openssl3/include
+      LIBS += -Lf:/usr/libx86/shared/openssl3/lib
+      LIBS += -Lf:/usr/libx86/shared/openssl3/bin
     }
 }
 

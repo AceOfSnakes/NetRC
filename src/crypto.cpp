@@ -51,7 +51,7 @@ void  Crypto::updateCryptoSettings(CryptoSettings csets) {
     qDebug() << "Crypto::updateCryptoSettings" << csets;
     cryptoSettings = csets;
 
-    //qDebug() << cryptoSettings;
+    qDebug() << "updateCryptoSettings" << cryptoSettings;
 
     OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
     ERR_load_crypto_strings();

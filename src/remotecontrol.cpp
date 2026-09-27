@@ -591,6 +591,7 @@ void RemoteControl::newDevice() {
             settings.swap(deviceConnector.settings);
             deviceFamily = deviceConnector.deviceFamily;
             deviceIpPort = deviceConnector.devicePort;
+            cryptoSettings = deviceConnector.cryptoSettings;
             reloadLogo(deviceConnector.img);
             reconnect();
             checkOnline();
@@ -896,18 +897,19 @@ void RemoteControl::reconnect() {
         }
     }
     currentPingIndex = 0;
+    if(settings.isValid()) {
+        deviceInterface.reloadDeviceSettings(settings.toMap());
+        qDebug() << "reconnect()" << deviceName;
 
-    deviceInterface.reloadDeviceSettings(settings.toMap());
-    qDebug() << "reconnect()" << deviceName;
-
-    deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
-    if(deviceInterface.sendOnePingAtTime ) {
-        timer->setInterval(1000 / deviceInterface.pingCommands.size());
+        deviceInterface.connectToDevice(deviceIpAddress, deviceIpPort, cryptoSettings);
+        if(deviceInterface.sendOnePingAtTime ) {
+            timer->setInterval(1000 / deviceInterface.pingCommands.size());
+        }
+        else {
+            timer->setInterval(1000);
+        }
+        enabledButtons.clear();
     }
-    else {
-        timer->setInterval(1000);
-    }
-    enabledButtons.clear();
 }
 void RemoteControl::iconChanged(QPushButton & button) {
     qDebug() << "IconChanged";
@@ -950,7 +952,7 @@ void RemoteControl::reloadAndReconnect(QString device) {
     sets.beginGroup(AppSettings::DEVICES_SECTION);
 
     sets.beginGroup(device);
-
+    if(!sets.value("deviceFamily").isValid()) return;
     deviceFamily = sets.value("deviceFamily", "").toString();
     deviceName = sets.value("deviceName", "").toString();
     deviceIpPort = sets.value("devicePort", deviceIpPort).toUInt();
