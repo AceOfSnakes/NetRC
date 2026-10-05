@@ -34,7 +34,7 @@ unix {
     TARGET = NetRC
     contains(QMAKE_TARGET.arch, arm64) {
       message("libarm64")
-      INCLUDEPATH += f:/usr/libarm64/openssl3/include
+      INCLUDEPATH += f:/usr/libarm64/shared/openssl3/include
       LIBS += -Lf:/usr/libarm64/shared/openssl3/lib
       LIBS += -Lf:/usr/libarm64/shared/openssl3/bin
     }

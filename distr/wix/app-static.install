@@ -1,3 +1,3 @@
-\usr\lib%PLATFORM%\openssl3\bin\libcrypto-3*.dll .
-%WIN_APPS_DIR%%SOURCE%\settings .\settings
-%WIN_APPS_DIR%%SOURCE%\src\commons\style .\style
+\usr\lib%ARCH%\shared\openssl3\bin\libcrypto-3*.dll .
+%WIN_APPS_DIR%%APPLICATION_NAME%\settings .\settings
+%WIN_APPS_DIR%%APPLICATION_NAME%\src\commons\style .\style

@@ -4,4 +4,6 @@ bin\Qt6Network.dll
 bin\Qt6Widgets.dll 
 bin\Qt6Xml.dll
 plugins\platforms\qwindows.dll plugins\platforms\
-\usr\lib%PLATFORM%\openssl3\bin\libcrypto-3*.dll .
+\usr\lib%ARCH%\shared\openssl3\bin\libcrypto-3*.dll .
+%WIN_APPS_DIR%%APPLICATION_NAME%\settings .\settings
+%WIN_APPS_DIR%%APPLICATION_NAME%\src\commons\style .\style
