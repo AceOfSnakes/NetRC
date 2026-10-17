@@ -64,6 +64,7 @@ override_dh_auto_configure:
 	# Extracts package name natively via debian/control tracking if DEB_SOURCE is unset
 	$(eval PKG_NAME := $(shell dh_listpackages | head -n1))
 	cp debian/$(PKG_NAME).desktop.in build/$(PKG_NAME).desktop
+	sed -i 's/^Name=\(.*\)/Name=\1 $(DEB_VERSION)/' build/$(PKG_NAME).desktop
 	cd build && \
 	QMAKE_MOC=/usr/lib/qt6/libexec/moc \
 	QMAKE_UIC=/usr/lib/qt6/libexec/uic \
