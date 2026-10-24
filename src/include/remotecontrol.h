@@ -93,8 +93,8 @@ public:
     void showTrayNotification(const QString title, const QString &message);
 
 protected:
-     void changeEvent(QEvent *e);
-     void closeEvent(QCloseEvent *event);
+     void changeEvent(QEvent *e) override;
+     void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void closeDebug();
@@ -126,7 +126,6 @@ private slots:
     void connectCustomMenuRequested(const QPoint &pos);
     void hideAll();
     void showAll();
-    void showMinimizedAll();
     void specialControl(const QString control, bool enabled);
     void changeTheme(QByteArray style);
     void iconChanged(QPushButton& button);

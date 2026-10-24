@@ -471,29 +471,20 @@ void RemoteControl::showAll( ) {
         }
     });}
 
-void RemoteControl::showMinimizedAll( ) {
-    showMinimized();
-    foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
-        child->showMinimized();
-    }
-}
-
 void RemoteControl::hideAll( ) {
     hide();
     foreach(QWidget *child, this->findChildren<QDialog*>(Qt::FindChildrenRecursively)) {
         child->showMinimized();
+        if (RCSettings::isMinimizeToTrayEnabled() ) {
+            child->hide();
+        }
+
     }
 }
 
 void RemoteControl::showHide( ) {
-    if (RCSettings::isMinimizeToTrayEnabled() ) {
-        isVisible() ? hideAll() : showAll();
-        activateWindow();
-    }
-    else {
-        isVisible() ? showMinimizedAll()  : showAll();
-        activateWindow();
-    }
+    isVisible() ? hideAll() : showAll();
+    activateWindow();
 }
 
 void RemoteControl::showHideWithReason(QSystemTrayIcon::ActivationReason reason) {
